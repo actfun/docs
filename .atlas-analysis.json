@@ -1,0 +1,112 @@
+{
+  "projectType": "saas",
+  "projectName": "ACTFUN",
+  "projectDescription": "A Pump.fun-style token launchpad on Arc Testnet where the community earns tokens by writing funny posts, and fully-mined tokens auto-graduate into a built-in DEX.",
+  "theme": "luma",
+  "primaryColor": "#3b8ef3",
+  "lightColor": null,
+  "darkColor": null,
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/mine-to-launch",
+              "concepts/tokenomics",
+              "concepts/graduation-amm"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/connect-wallet",
+              "guides/launch-token",
+              "guides/mining",
+              "guides/trading",
+              "guides/claim-refund"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/arc-testnet",
+              "reference/contract-addresses",
+              "reference/faq"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Smart Contracts",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "contracts/overview"
+            ]
+          },
+          {
+            "group": "LaunchpadFactory",
+            "pages": [
+              "contracts/launchpad-factory/create-token",
+              "contracts/launchpad-factory/read-tokens"
+            ]
+          },
+          {
+            "group": "TokenLauncher",
+            "pages": [
+              "contracts/token-launcher/mining",
+              "contracts/token-launcher/trading",
+              "contracts/token-launcher/refunds",
+              "contracts/token-launcher/views"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Mine-to-Launch: community earns 95% of token supply by writing funny posts",
+    "Auto-graduation: fully-mined tokens automatically open as a constant-product AMM (x*y=k)",
+    "Built-in DEX: no external exchange needed — buy and sell tokens in the same contract",
+    "Fee-seeded liquidity: ARC fees paid during mining become the initial DEX liquidity pool",
+    "Zero backend: fully onchain dApp with no server, no database, no admin keys",
+    "Per-wallet cooldown and daily mining cap enforced entirely in smart contracts",
+    "ARC fee refunds available to miners before token graduation",
+    "Token creator sets supply, mine amount, cooldown, and fee per mine",
+    "Activity feed and miner leaderboard on each token page",
+    "Live price chart for graduated tokens"
+  ],
+  "publicApiSurface": [
+    "LaunchpadFactory.createToken(name, symbol, imageUri, maxSupply, mineAmount, cooldown, dailyMax, feePerMine)",
+    "LaunchpadFactory.getTokens(from, count)",
+    "LaunchpadFactory.getToken(index)",
+    "LaunchpadFactory.getTokenCount()",
+    "TokenLauncher.mine(funnyPost)",
+    "TokenLauncher.buyTokens(minTokensOut)",
+    "TokenLauncher.sellTokens(tokenAmount, minArcOut)",
+    "TokenLauncher.claimRefund()",
+    "TokenLauncher.claimableRefund(user)",
+    "TokenLauncher.getMiningProgress()",
+    "TokenLauncher.getTokenPrice()",
+    "TokenLauncher.estimateBuy(tokensOut)",
+    "TokenLauncher.estimateSell(tokensIn)",
+    "TokenLauncher.getTimeUntilNextMine(user)",
+    "TokenLauncher.getRemainingDailyAllowance(user)",
+    "Event: ActedFun(user, funnyPost, amount, timestamp)",
+    "Event: TokenGraduated(token, tokenReserve, arcReserve, timestamp)",
+    "Event: TokensBought(buyer, arcIn, tokensOut, timestamp)",
+    "Event: TokensSold(seller, tokensIn, arcOut, timestamp)",
+    "Event: ArcRefundClaimed(user, amount, timestamp)"
+  ]
+}

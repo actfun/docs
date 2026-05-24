@@ -1,0 +1,210 @@
+---
+title: "TokenLauncher read-only functions and public state"
+description: "Read mining progress, token price, trade estimates, cooldowns, and daily allowances from any TokenLauncher contract without spending gas."
+---
+
+Every `TokenLauncher` exposes a set of read-only functions and public state variables you can query at no cost. Use them to build dashboards, preflight transactions, and display real-time state in your UI. None of these calls modify state or emit events.
+
+## Mining progress
+
+```solidity
+function getMiningProgress() external view returns (uint256 mined, uint256 total)
+```
+
+Returns how many tokens have been mined so far (`totalMined`) and the total mineable supply (`mineableSupply`). Progress is complete when `mined == total`, at which point the token has graduated (or will graduate on the next mine call).
+
+**Example:**
+
+```typescript
+const [mined, total] = await publicClient.readContract({
+  address: launcherAddress,
+  abi: LAUNCHER_ABI,
+  functionName: "getMiningProgress",
+});
+
+const pct = total > 0n ? Number((mined * 100n) / total) : 0;
+console.log(`${pct}% mined (${mined} / ${total})`);
+```
+
+## Token price
+
+```solidity
+function getTokenPrice() external view returns (uint256)
+```
+
+Returns the current price of one full token (1e18 units) denominated in ARC wei, calculated from the live AMM reserves:
+
+```
+price = arcReserve * 1e18 / tokenReserve
+```
+
+Returns `0` if the token has not graduated yet (`!graduated`) or if `tokenReserve == 0`.
+
+**Example:**
+
+```typescript
+const price = await publicClient.readContract({
+  address: launcherAddress,
+  abi: LAUNCHER_ABI,
+  functionName: "getTokenPrice",
+});
+
+console.log(`Price: ${formatEther(price)} ARC per token`);
+```
+
+## Trade estimation
+
+### estimateBuy
+
+```solidity
+function estimateBuy(uint256 tokensOut) external view returns (uint256 arcIn)
+```
+
+Returns the ARC (in wei) you need to send to receive exactly `tokensOut` tokens. Reverts with `"Insufficient liquidity"` if `tokensOut >= tokenReserve`.
+
+<ParamField path="tokensOut" type="uint256" required>
+  Desired token output in units with 18 decimals.
+</ParamField>
+
+### estimateSell
+
+```solidity
+function estimateSell(uint256 tokensIn) external view returns (uint256 arcOut)
+```
+
+Returns the ARC (in wei) you will receive for selling `tokensIn` tokens. Does not revert for any input value.
+
+<ParamField path="tokensIn" type="uint256" required>
+  Tokens to sell in units with 18 decimals.
+</ParamField>
+
+**Example — quote both directions:**
+
+```typescript
+import { parseUnits, formatEther } from "viem";
+
+const tokens = parseUnits("100", 18); // 100 tokens
+
+const [arcNeeded, arcReceived] = await Promise.all([
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "estimateBuy",
+    args: [tokens],
+  }),
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "estimateSell",
+    args: [tokens],
+  }),
+]);
+
+console.log(`Buy  100 tokens: ${formatEther(arcNeeded)} ARC`);
+console.log(`Sell 100 tokens: ${formatEther(arcReceived)} ARC`);
+```
+
+## Per-wallet mining limits
+
+### getTimeUntilNextMine
+
+```solidity
+function getTimeUntilNextMine(address user) external view returns (uint256)
+```
+
+Returns the number of seconds until `user` can mine again. Returns `0` if the cooldown has elapsed or if `user` has never mined.
+
+<ParamField path="user" type="address" required>
+  Wallet address to check.
+</ParamField>
+
+### getRemainingDailyAllowance
+
+```solidity
+function getRemainingDailyAllowance(address user) external view returns (uint256)
+```
+
+Returns how many tokens `user` can still mine within the current 24-hour rolling window, in units with 18 decimals. Returns `dailyMax` if the window has fully reset (i.e. `block.timestamp >= dailyWindowStart[user] + 24 hours`).
+
+<ParamField path="user" type="address" required>
+  Wallet address to check.
+</ParamField>
+
+**Example — check both limits:**
+
+```typescript
+const [cooldownLeft, remainingDaily] = await Promise.all([
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "getTimeUntilNextMine",
+    args: [myAddress],
+  }),
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "getRemainingDailyAllowance",
+    args: [myAddress],
+  }),
+]);
+
+if (cooldownLeft > 0n) {
+  console.log(`Cooldown: ${cooldownLeft}s remaining`);
+} else if (remainingDaily === 0n) {
+  console.log("Daily cap reached — reset in up to 24h");
+} else {
+  console.log("Ready to mine");
+}
+```
+
+## Public state variables
+
+The following variables are `public` and readable via their auto-generated getters. All values with 18-decimal token units are noted.
+
+| Variable | Type | Description |
+|---|---|---|
+| `graduated` | `bool` | `true` after Phase 1 mining is complete and the AMM is active. |
+| `totalMined` | `uint256` | Total tokens minted through `mine()` so far (18 decimals). |
+| `mineableSupply` | `uint256` | 95% of `maxSupply`, rounded to a whole multiple of `mineAmount` (18 decimals). |
+| `lpReserve` | `uint256` | 5% of `maxSupply` reserved for AMM seeding on graduation (18 decimals). |
+| `tokenReserve` | `uint256` | Current token balance of the AMM pool (18 decimals). `0` before graduation. |
+| `arcReserve` | `uint256` | Current ARC balance of the AMM pool (wei). `0` before graduation. |
+| `mineAmount` | `uint256` | Tokens minted per `mine()` call (18 decimals). Immutable. |
+| `cooldownSeconds` | `uint256` | Per-wallet cooldown between mine calls in seconds. Immutable. |
+| `dailyMax` | `uint256` | Per-wallet 24h mining cap in tokens (18 decimals). Immutable. |
+| `feePerMine` | `uint256` | ARC (wei) required per `mine()` call. Immutable. |
+| `creator` | `address` | Wallet that deployed this token via `createToken`. Immutable. |
+| `createdAt` | `uint256` | Unix timestamp of the block in which this launcher was deployed. Immutable. |
+
+**Example — read core AMM state:**
+
+```typescript
+const [graduated, tokenReserve, arcReserve, mineableSupply] = await Promise.all([
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "graduated",
+  }),
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "tokenReserve",
+  }),
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "arcReserve",
+  }),
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "mineableSupply",
+  }),
+]);
+
+console.log({ graduated, tokenReserve, arcReserve, mineableSupply });
+```
+
+<Note>
+  `tokenReserve` and `arcReserve` are `0` before graduation. Do not use `getTokenPrice`, `estimateBuy`, or `estimateSell` before `graduated == true` — `getTokenPrice` returns `0`, while `estimateBuy` and `estimateSell` will return `0` or compute against zero reserves.
+</Note>

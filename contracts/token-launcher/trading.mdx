@@ -1,0 +1,177 @@
+---
+title: "buyTokens and sellTokens on the graduated ACTFUN AMM"
+sidebarTitle: "Buy / Sell"
+description: "Use buyTokens and sellTokens on a graduated TokenLauncher to trade against the built-in constant-product AMM with slippage protection."
+---
+
+After a token graduates from Phase 1, its `TokenLauncher` contract operates as a constant-product AMM (`x * y = k`). You can buy tokens by sending ARC via `buyTokens`, or sell tokens back for ARC via `sellTokens`. Both functions revert if you are not graduated yet, and both accept a slippage protection parameter so your transaction does not execute at a worse price than you expect.
+
+<Warning>
+  Both functions are only available after graduation (`graduated == true`). Calling either before graduation reverts with `"TokenLauncher: not graduated yet"`.
+</Warning>
+
+## buyTokens
+
+```solidity
+function buyTokens(uint256 minTokensOut) external payable
+```
+
+Send ARC as `msg.value`. The contract calculates how many tokens to send you using the constant-product formula and transfers them to your wallet. The call reverts if the output would be zero, fall below `minTokensOut`, or exceed the available token reserve.
+
+**Formula:**
+
+```text
+tokensOut = arcIn * tokenReserve / (arcReserve + arcIn)
+```
+
+where `arcIn = msg.value`.
+
+<ParamField path="minTokensOut" type="uint256" required>
+  Minimum tokens you are willing to receive (18-decimal units). Acts as slippage protection. The transaction reverts with `"TokenLauncher: slippage exceeded"` if `tokensOut < minTokensOut`. Pass `0` to skip slippage protection, though this is not recommended on a live market.
+</ParamField>
+
+### TokensBought event
+
+```solidity
+event TokensBought(
+    address indexed buyer,
+    uint256 arcIn,
+    uint256 tokensOut,
+    uint256 timestamp
+);
+```
+
+## sellTokens
+
+```solidity
+function sellTokens(uint256 tokenAmount, uint256 minArcOut) external
+```
+
+Transfer tokens from your wallet to the launcher and receive ARC. You must approve the launcher contract to spend your tokens before calling this function.
+
+**Formula:**
+
+```text
+arcOut = tokenAmount * arcReserve / (tokenReserve + tokenAmount)
+```
+
+<ParamField path="tokenAmount" type="uint256" required>
+  Number of tokens to sell in units with 18 decimals. Must be greater than zero. The launcher calls `transferFrom` to pull exactly this amount from your wallet.
+</ParamField>
+
+<ParamField path="minArcOut" type="uint256" required>
+  Minimum ARC (in wei) you are willing to receive. The transaction reverts with `"TokenLauncher: slippage exceeded"` if `arcOut < minArcOut`. Pass `0` to skip slippage protection.
+</ParamField>
+
+### Approve before selling
+
+`sellTokens` calls `token.transferFrom(msg.sender, address(this), tokenAmount)`. You must grant an allowance to the launcher contract before submitting the sell:
+
+```typescript
+// Step 1 — approve the launcher to spend your tokens
+await walletClient.writeContract({
+  address: tokenAddress,
+  abi: ERC20_ABI,
+  functionName: "approve",
+  args: [launcherAddress, tokenAmount],
+});
+
+// Step 2 — sell
+await walletClient.writeContract({
+  address: launcherAddress,
+  abi: LAUNCHER_ABI,
+  functionName: "sellTokens",
+  args: [tokenAmount, minArcOut],
+});
+```
+
+### TokensSold event
+
+```solidity
+event TokensSold(
+    address indexed seller,
+    uint256 tokensIn,
+    uint256 arcOut,
+    uint256 timestamp
+);
+```
+
+## Estimating trades before submitting
+
+Use the view functions `estimateBuy` and `estimateSell` to calculate expected output off-chain before sending a transaction. See [TokenLauncher view functions reference](/contracts/token-launcher/views) for details.
+
+## Full code example
+
+```typescript
+import {
+  createPublicClient,
+  createWalletClient,
+  http,
+  parseEther,
+  parseUnits,
+  maxUint256,
+} from "viem";
+import { arcTestnet } from "./chains";
+import { LAUNCHER_ABI, ERC20_ABI } from "./contracts";
+
+const publicClient = createPublicClient({ chain: arcTestnet, transport: http() });
+const walletClient = createWalletClient({ chain: arcTestnet, transport: http(), account: myAccount });
+
+// ── Buy tokens ──────────────────────────────────────────────────────────────
+
+const arcIn = parseEther("1"); // 1 ARC
+
+// For "I'm sending arcIn, how many tokens do I get?" compute client-side
+// using the AMM formula against the current pool reserves:
+const [tokenReserve, arcReserve] = await Promise.all([
+  publicClient.readContract({ address: launcherAddress, abi: LAUNCHER_ABI, functionName: "tokenReserve" }),
+  publicClient.readContract({ address: launcherAddress, abi: LAUNCHER_ABI, functionName: "arcReserve" }),
+]);
+
+const tokensOut = (arcIn * tokenReserve) / (arcReserve + arcIn);
+const minTokensOut = (tokensOut * 99n) / 100n; // 1% slippage
+
+const buyHash = await walletClient.writeContract({
+  address: launcherAddress,
+  abi: LAUNCHER_ABI,
+  functionName: "buyTokens",
+  args: [minTokensOut],
+  value: arcIn,
+});
+await publicClient.waitForTransactionReceipt({ hash: buyHash });
+
+// ── Sell tokens ─────────────────────────────────────────────────────────────
+
+const tokenAmount = parseUnits("500", 18); // sell 500 tokens
+
+// Estimate ARC output
+const arcOut = await publicClient.readContract({
+  address: launcherAddress,
+  abi: LAUNCHER_ABI,
+  functionName: "estimateSell",
+  args: [tokenAmount],
+});
+const minArcOut = (arcOut * 99n) / 100n; // 1% slippage
+
+// Approve the launcher
+const approveHash = await walletClient.writeContract({
+  address: tokenAddress,
+  abi: ERC20_ABI,
+  functionName: "approve",
+  args: [launcherAddress, tokenAmount],
+});
+await publicClient.waitForTransactionReceipt({ hash: approveHash });
+
+// Sell
+const sellHash = await walletClient.writeContract({
+  address: launcherAddress,
+  abi: LAUNCHER_ABI,
+  functionName: "sellTokens",
+  args: [tokenAmount, minArcOut],
+});
+await publicClient.waitForTransactionReceipt({ hash: sellHash });
+```
+
+<Tip>
+  Always read `estimateSell` or `estimateBuy` in the same block as your trade to get the most accurate quote. Reserve values change with every trade, so quotes go stale quickly on active tokens.
+</Tip>

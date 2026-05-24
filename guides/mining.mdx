@@ -1,0 +1,72 @@
+---
+title: "How to mine  ACTFUN tokens: posts, fees, cooldowns"
+sidebarTitle: "Mine Tokens"
+description: "Earn tokens on ACTFUN by submitting a funny post, paying the ARC mining fee, and confirming the transaction  tokens land in your wallet instantly."
+---
+
+Mining is how tokens distribute onACTFUN . Instead of buying a token at launch, you earn it by writing a funny post and paying a small ARC fee. Each successful mine call mints tokens directly to your wallet. Once 95% of the supply is mined out, the token graduates automatically and trading opens.
+
+## Find a token to mine
+
+Browse tokens on [actfun.](https://actfun.fun)xyz and click any token card that interests you. This opens the token's detail page, where you can see its mining progress, activity feed, and the mining panel on the right.
+
+## Read the mining panel
+
+Before you mine, the panel shows everything you need to know:
+
+| Field | What it tells you |
+| --- | --- |
+| Fee required | The ARC amount you must send with each mine call |
+| Tokens you'll receive | The fixed token amount minted to your wallet on success |
+| Your cooldown | Time remaining before you can mine again (resets to zero when eligible) |
+| Remaining today | How many tokens you can still mine in the current 24-hour window |
+
+If your cooldown timer is still running, the **Mine** button is disabled until it expires.
+
+## Mine a token
+
+<Steps>
+  <Step title="Write your post">
+    Type something funny in the text box in the mining panel. Your post is stored on-chain as part of the `ActedFun` event and appears in the activity feed immediately after your transaction confirms. Make it count  everyone can read it.
+  </Step>
+  <Step title="Click Mine">
+    Click the **Mine** button. MetaMask opens a transaction confirmation showing the ARC fee as the transaction value plus gas costs.
+  </Step>
+  <Step title="Confirm in MetaMask">
+    Review the fee and gas estimate, then click **Confirm**. The contract checks your cooldown, daily cap, and remaining mineable supply before minting.
+  </Step>
+  <Step title="Receive your tokens">
+    Once the transaction confirms, the tokens appear in your wallet immediately. Your post shows up in the activity feed on the token's detail page. The mining progress bar updates to reflect the newly mined supply.
+  </Step>
+</Steps>
+
+<Tip>
+  Your post is permanent and public on-chain. It shows in the activity feed alongside your wallet address and the token amount you received. A memorable post also helps you climb the leaderboard  the **Leaderboard** tab ranks miners by total tokens earned.
+</Tip>
+
+## Understand cooldowns
+
+The cooldown is a per-wallet timer set by the token creator. After each mine, your wallet must wait the full cooldown period before mining again. The mining panel shows the remaining wait time.
+
+Cooldown periods range from 30 seconds to 1 hour depending on how the token was configured. You can check the cooldown for any token on its detail page under the stats grid.
+
+## Understand the daily cap
+
+Each wallet can mine a maximum number of tokens in any rolling 24-hour window. This cap is automatically set to `tokens per mine × 10` when the token is created. The **Remaining today** field in the mining panel shows how many tokens you can still earn before hitting the cap.
+
+The daily window is a rolling 24-hour period starting from your first mine in that cycle  not a fixed midnight reset. Once the window expires, your cap resets and you can mine again.
+
+## What happens on the final mine
+
+When `totalMined` reaches the mineable supply (95% of max supply), the contract automatically graduates the token in the same transaction as the final mine. At that moment:
+
+1. The contract mints the 5% LP reserve to itself.
+2. The built-in AMM pool opens, seeded with the LP reserve tokens and all accumulated ARC fees.
+3. The mining panel on the token's detail page is replaced by the swap panel.
+4. The token card shows a **Graduated** badge.
+
+From that point, buying and selling happen through the AMM. See [Buy and sell graduated tokens](/guides/trading) for details.
+
+<Note>
+  If you have paid ARC fees on a token that has not yet graduated, you can claim those fees back at any time before graduation. See [Claim your ARC mining fee refund](/guides/claim-refund).
+</Note>

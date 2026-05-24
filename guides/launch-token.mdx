@@ -1,0 +1,136 @@
+---
+title: "Deploy and configure your own  token launch"
+sidebarTitle: "Launch a Token"
+description: "Deploy a community-mined token on Arc Testnet by setting its name, supply, mining rules, and fee  all on-chain, no backend needed."
+---
+
+Launching a token on MINEPAD deploys two smart contracts: an ERC-20 token and a `TokenLauncher` that controls the mining phase and, after graduation, runs as a built-in AMM. Once you submit the transaction, every parameter is locked permanently on-chain  your community can immediately start mining.
+
+<Warning>
+  Token parameters are immutable once deployed. Double-check your supply, mining amounts, cooldown, and fee before submitting — there is no way to edit them afterward.
+</Warning>
+
+## Navigate to the creation form
+
+Go to [actfun.xyz/create](https://actfun.fun/create). You need a connected MetaMask wallet on Arc Testnet and enough ARC to cover the creation fee plus gas. If you haven't done that yet, see [Connect your wallet](/guides/connect-wallet).
+
+## Fill in the token form
+
+### Token identity
+
+<Steps>
+  <Step title="Enter a token name">
+    Type a name in the **Token Name** field. Maximum 32 characters. This becomes the ERC-20 `name` stored on-chain (e.g. `DogeFun`).
+  </Step>
+  <Step title="Enter a ticker symbol">
+    Type a symbol in the **Symbol** field. Maximum 10 characters, alphanumeric only — the form automatically converts to uppercase and strips other characters (e.g. `DOGE`). This becomes the ERC-20 `symbol`.
+  </Step>
+  <Step title="Choose a token image">
+    Select one of three image modes using the tabs above the image picker:
+
+    - **Emoji** — pick from the emoji grid. The selected emoji is stored on-chain as the token's `imageUri`.
+    - **URL** — paste a link to an image hosted elsewhere (e.g. `https://example.com/logo.png`).
+    - **Upload** — drag or click to select a file (PNG, JPG, GIF, or WebP, max 10 MB). The app compresses your image to 200×200 px JPEG at 72% quality and stores it on-chain as a base64 data URL.
+
+    <Note>
+      Uploaded images are stored directly in the smart contract. Keep the image recognisable at small sizes — it will appear at 56×56 px throughout the app.
+    </Note>
+  </Step>
+</Steps>
+
+### Supply and mining parameters
+
+These parameters define the entire lifecycle of your token — how fast it mines out, how much effort each mine requires, and how large the liquidity pool will be at graduation.
+
+<Steps>
+  <Step title="Set the max supply">
+    Choose a preset or enter a custom value:
+
+    | Preset | Value |
+    | --- | --- |
+    | 1M | 1,000,000 |
+    | 10M | 10,000,000 |
+    | 21M | 21,000,000 |
+    | 100M | 100,000,000 |
+
+    **95%** of the max supply becomes the mineable supply  the amount the community can mine out. The remaining **5%** is reserved as LP tokens, minted to the launcher contract at graduation to seed the AMM pool.
+  </Step>
+  <Step title="Set tokens per mine">
+    Choose how many tokens each successful mine call awards:
+
+    | Preset | Value |
+    | --- | --- |
+    | 100 | 100 tokens |
+    | 1,000 | 1,000 tokens |
+    | 10,000 | 10,000 tokens |
+
+    A larger mine amount means fewer total mines needed before graduation. A smaller amount extends the mining phase and gives more people a chance to participate. The live preview shows the resulting **Total mines** count.
+  </Step>
+  <Step title="Set the cooldown">
+    Choose how long each wallet must wait between mine calls:
+
+    | Preset | Duration |
+    | --- | --- |
+    | 30 sec | 30 seconds |
+    | 1 min | 1 minute |
+    | 3 min | 3 minutes |
+    | 10 min | 10 minutes |
+    | 1 hr | 1 hour |
+
+    Longer cooldowns reduce mining speed and spread participation across more wallets. Shorter cooldowns let individual miners accumulate faster.
+  </Step>
+  <Step title="Set the ARC fee per mine">
+    Choose the ARC fee a miner must pay each time they mine:
+
+    | Preset | Fee |
+    | --- | --- |
+    | 1 ARC | 1 ARC |
+    | 2 ARC | 2 ARC |
+    | 3 ARC | 3 ARC |
+    | 4 ARC | 4 ARC |
+    | 5 ARC | 5 ARC |
+
+    Every fee payment accumulates in the launcher contract. At graduation, the entire collected ARC balance  along with the 5% LP reserve tokens  seeds the AMM liquidity pool. A higher fee creates a larger pool and better initial liquidity. The preview shows an **LP seed estimate** based on your fee and total mine count.
+  </Step>
+</Steps>
+
+### Daily max (automatic)
+
+The per-wallet daily maximum is set automatically to `tokens per mine × 10`. For example, if each mine awards 1,000 tokens, a wallet can mine at most 10,000 tokens in any rolling 24-hour window. This limit resets as a rolling window, not on a fixed midnight schedule.
+
+## Read the live preview
+
+The preview panel on the right updates as you type. Before deploying, confirm these values look correct:
+
+| Field | What it means |
+| --- | --- |
+| Max supply | Total token supply cap |
+| Mineable (95%) | Tokens the community can mine |
+| LP reserve (5%) | Tokens held back to seed the AMM |
+| Per mine | Tokens awarded per mine call |
+| Total mines | How many mines until graduation |
+| Cooldown | Wait time between mines per wallet |
+| Daily max | Max tokens per wallet per 24 hours |
+| Fee/mine | ARC required per mine |
+| LP seed (est) | Estimated ARC in the pool at launch |
+
+## Deploy the token
+
+<Steps>
+  <Step title="Click Deploy Token">
+    Scroll to the bottom of the form and click **Deploy Token**. MetaMask will open a transaction confirmation dialog.
+  </Step>
+  <Step title="Review the transaction">
+    MetaMask shows the creation fee (an anti-spam charge sent to the protocol) plus the gas estimate. Confirm the amounts and click **Confirm**.
+  </Step>
+  <Step title="Wait for confirmation">
+    The button changes to **Deploying on Arc...** while the transaction is pending. This usually completes within a few seconds on Arc Testnet.
+  </Step>
+  <Step title="Token launched">
+    When the transaction confirms, the app shows a **Token launched!** success message and redirects you to the token grid after 2 seconds. Your token is now live and ready to mine.
+  </Step>
+</Steps>
+
+<Note>
+  The creation fee is a small ARC amount charged by the protocol to prevent spam deployments. It is sent directly to the protocol fee recipient and is separate from the per-mine fees miners will pay later.
+</Note>

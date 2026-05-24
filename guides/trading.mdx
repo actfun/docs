@@ -1,0 +1,70 @@
+---
+title: "Trade graduated tokens on the  ACTFUN built-in AMM"
+description: "Trade graduated ACTFUN tokens using the built-in constant-product AMM  send ARC to buy, or approve and sell tokens back for ARC."
+---
+
+Once a token's mining phase is complete, it graduates automatically and a built-in constant-product AMM (automated market maker) goes live inside the same contract. No external DEX, no bridging  you trade directly through the token's launcher contract on Arc Testnet.
+
+## Before you start
+
+Trading is only available after graduation. A token graduates when 95% of its supply has been mined. Look for the green **Graduated** badge on the token card or detail page. If the badge is not present, the token is still in the mining phase and the swap panel is not yet available.
+
+## How the AMM works
+
+MINEPAD uses a constant-product formula: `x * y = k`, where `x` is the ARC reserve, `y` is the token reserve, and `k` remains constant after each trade.
+
+- **Buying** sends ARC in and receives tokens out: `tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)`
+- **Selling** sends tokens in and receives ARC out: `arcOut = tokensIn × arcReserve / (tokenReserve + tokensIn)`
+
+The pool is seeded at graduation with the 5% LP reserve tokens and all ARC fees collected during mining. There are no additional fees on top of gas.
+
+<Note>
+  Large trades move the price significantly because the pool starts relatively small. Check the estimated output before confirming — a trade that is a large fraction of the pool's reserves will experience high price impact.
+</Note>
+
+## Read the price chart
+
+On any graduated token's detail page, a price chart appears above the stats grid. The chart shows historical trade prices derived from on-chain swap events. Use it to see how the token price has moved since graduation.
+
+## Buy tokens
+
+<Steps>
+  <Step title="Open the token's detail page">
+    Navigate to [actfun.](https://actfun.fun)xyz , find the graduated token you want, and click its card to open the detail page.
+  </Step>
+  <Step title="Select Buy in the swap panel">
+    The swap panel on the right side of the page defaults to the **Buy** tab. Enter the amount of ARC you want to spend.
+  </Step>
+  <Step title="Review the estimated output">
+    The panel shows the estimated number of tokens you'll receive, calculated using the AMM formula against the current pool reserves. This estimate is what you'd get at the current price with zero slippage.
+  </Step>
+  <Step title="Set your slippage tolerance">
+    The swap sends a `minTokensOut` parameter to the contract. If the price moves between when you submit and when the transaction confirms, and you receive fewer tokens than `minTokensOut`, the transaction reverts. The swap panel calculates this automatically from your slippage setting.
+  </Step>
+  <Step title="Confirm in MetaMask">
+    Click **Buy**. MetaMask opens with the ARC amount as the transaction value. Click **Confirm** to submit. Tokens arrive in your wallet once the transaction confirms.
+  </Step>
+</Steps>
+
+## Sell tokens
+
+Selling requires two transactions: first approving the launcher contract to spend your tokens (an ERC-20 `approve` call), then executing the sell. The swap panel handles both steps automatically.
+
+<Steps>
+  <Step title="Select Sell in the swap panel">
+    Click the **Sell** tab in the swap panel. Enter the number of tokens you want to sell.
+  </Step>
+  <Step title="Review the estimated ARC output">
+    The panel shows the estimated ARC you'll receive based on the current pool state.
+  </Step>
+  <Step title="Click Approve">
+    If you haven't approved the launcher contract for this token yet, the panel shows an **Approve** button first. Click it and confirm the approval transaction in MetaMask. This authorises the contract to transfer your tokens when you sell.
+  </Step>
+  <Step title="Click Sell">
+    Once the approval confirms, click **Sell** and confirm the second transaction in MetaMask. The contract transfers your tokens into the pool and sends ARC to your wallet.
+  </Step>
+</Steps>
+
+<Warning>
+  Slippage and price impact can cause you to receive significantly less than the displayed estimate, especially on large trades or in low-liquidity pools. For large sells, consider splitting into multiple smaller transactions to reduce price impact.
+</Warning>

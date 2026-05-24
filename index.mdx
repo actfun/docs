@@ -1,0 +1,52 @@
+Welcome to ACTFUN The Pump.fun-style token launchpad on Arc Testnet where tokens are earned, not bought. Anyone can deploy a token, the community mines 95% of the supply by writing funny posts, and once fully mined the token automatically opens for live trading on its own built-in DEX. No backend, no admin keys, no external exchange needed.
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Connect your wallet, get testnet ARC, and mine your first token in minutes.
+  </Card>
+
+  <Card title="Launch a Token" icon="coins" href="/guides/launch-token">
+    Deploy your own community-mined token with custom supply, fees, and mining rules.
+  </Card>
+
+  <Card title="Mine Tokens" icon="pickaxe" href="/guides/mining">
+    Earn tokens by writing funny posts. Pay a small ARC fee, get tokens instantly.
+  </Card>
+
+  <Card title="Trade Tokens" icon="arrow-right-arrow-left" href="/guides/trading">
+    Buy and sell graduated tokens on the built-in constant-product AMM.
+  </Card>
+</CardGroup>
+
+## How MINEPAD works
+
+<Steps>
+  <Step title="Create a token">
+    Any wallet can deploy a new token via the LaunchpadFactory. Set the name, symbol, total supply, mine amount per call, cooldown period, and ARC fee per mine.
+  </Step>
+  <Step title="Community mines it">
+    Other users mine the token by writing a funny post and paying a small ARC fee. Each mine mints tokens directly to the miner's wallet. Per-wallet cooldowns and daily caps prevent spam.
+  </Step>
+  <Step title="Token graduates">
+    When 95% of the supply has been mined, the contract automatically graduates — minting 5% as LP reserve tokens and opening a constant-product AMM seeded with those tokens plus all accumulated ARC fees.
+  </Step>
+  <Step title="Trade on the built-in DEX">
+    Buy and sell the token using the AMM built into the same contract. No external DEX, no bridging, no extra setup.
+  </Step>
+</Steps>
+
+## Explore the docs
+
+<CardGroup cols={3}>
+  <Card title="Core Concepts" icon="book" href="/concepts/mine-to-launch">
+    Understand the Mine-to-Launch model, tokenomics, and how graduation works.
+  </Card>
+
+  <Card title="Arc Testnet Setup" icon="network-wired" href="/reference/arc-testnet">
+    Add Arc Testnet to MetaMask and get free ARC from the faucet.
+  </Card>
+
+  <Card title="Smart Contracts" icon="file-contract" href="/contracts/overview">
+    Full reference for LaunchpadFactory and TokenLauncher contract functions.
+  </Card>
+</CardGroup>

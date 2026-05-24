@@ -1,0 +1,72 @@
+---
+title: "Arc Testnet: RPC config and ARC faucet for "
+description: "Add Arc Testnet to MetaMask, get free ARC from the faucet, and confirm your setup before using ACTFUN  . ARC has no real monetary value."
+---
+
+ACTFUN runs exclusively on Arc Testnet, an EVM-compatible test network where the native currency is ARC. Because this is a testnet, ARC carries no real monetary value  you can claim as much as you need for free from the official faucet. Before you can connect your wallet to ACTFUN , you need to add the Arc Testnet network to MetaMask.
+
+<Warning>
+  Arc Testnet is not a mainnet. ARC tokens have no real monetary value and cannot be exchanged for real money. Never send mainnet funds to an Arc Testnet address.
+</Warning>
+
+## Network details
+
+Use these exact values when adding the network to any EVM-compatible wallet.
+
+| Field | Value |
+| --- | --- |
+| Network Name | Arc Testnet |
+| RPC URL | `https://rpc.testnet.arc.network` |
+| Chain ID | `5042002` |
+| Currency Symbol | `ARC` |
+| Currency Decimals | `18` |
+| Block Explorer | `https://testnet.arcscan.app` |
+
+## Add Arc Testnet to MetaMask
+
+1. Open MetaMask and click the network selector at the top of the extension (it shows your current network name).
+2. Click **Add a custom network** at the bottom of the network list.
+3. Fill in the fields using the values from the table above:
+   - **Network name** → `Arc Testnet`
+   - **New RPC URL** → `https://rpc.testnet.arc.network`
+   - **Chain ID** → `5042002`
+   - **Currency symbol** → `ARC`
+   - **Block explorer URL** → `https://testnet.arcscan.app`
+4. Click **Save**.
+5. MetaMask switches to Arc Testnet automatically. The network selector now shows **Arc Testnet** and your balance displays in ARC.
+
+<Tip>
+  If MetaMask rejects the Chain ID, make sure you are entering `5042002` as a plain number with no leading zeros or extra characters.
+</Tip>
+
+## Get ARC from the faucet
+
+You need ARC in your wallet to pay mining fees, buy tokens, and create new tokens. The faucet gives you free testnet ARC instantly.
+
+1. Go to [faucet.testnet.arc.network](https://faucet.testnet.arc.network).
+2. Paste your wallet address into the input field.
+3. Complete any verification step the faucet requires, then click the claim button.
+4. Wait a few seconds for the transaction to confirm. Your MetaMask balance updates automatically.
+
+<Note>
+  If the faucet has a cooldown, you can request again after the waiting period ends. You only need a small amount of ARC to start — each mine call costs a fraction of an ARC.
+</Note>
+
+## Verify your connection
+
+Once you have added the network and received ARC:
+
+1. Open [actfun.](https://actfun.fun)xyz  in your browser.
+2. Click **Connect Wallet**. MetaMask prompts you to approve the connection.
+3. After connecting, confirm the network shown in the top-right corner of the app matches **Arc Testnet**.
+4. Your ARC balance appears next to your wallet address.
+
+If the app warns you about a wrong network, switch to Arc Testnet in MetaMask and refresh the page.
+
+## Browse transactions on Arcscan
+
+Every mine, buy, sell, refund, and graduation event is recorded on-chain and visible in the block explorer. Go to [testnet.arcscan.app](https://testnet.arcscan.app) to:
+
+- Search for a wallet address and see all its  ACTFUN activity.
+- Look up a token contract to inspect its transaction history.
+- Verify that a contract is the authentic, audited code by checking the **Contract** tab.

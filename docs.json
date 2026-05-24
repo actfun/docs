@@ -1,0 +1,83 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "MINEPAD",
+  "theme": "luma",
+  "colors": {
+    "primary": "#3b8ef3"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/actfun/minepad"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/mine-to-launch",
+              "concepts/tokenomics",
+              "concepts/graduation-amm"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/connect-wallet",
+              "guides/launch-token",
+              "guides/mining",
+              "guides/trading",
+              "guides/claim-refund"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/arc-testnet",
+              "reference/contract-addresses",
+              "reference/faq"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Smart Contracts",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "contracts/overview"
+            ]
+          },
+          {
+            "group": "LaunchpadFactory",
+            "pages": [
+              "contracts/launchpad-factory/create-token",
+              "contracts/launchpad-factory/read-tokens"
+            ]
+          },
+          {
+            "group": "TokenLauncher",
+            "pages": [
+              "contracts/token-launcher/mining",
+              "contracts/token-launcher/trading",
+              "contracts/token-launcher/refunds",
+              "contracts/token-launcher/views"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

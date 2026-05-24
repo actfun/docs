@@ -1,0 +1,149 @@
+---
+title: "mine()  Mint tokens via the TokenLauncher contract"
+description: "Call mine() on a TokenLauncher to mint tokens during Phase 1. Pay the ARC fee, write a post, and receive mineAmount tokens instantly."
+---
+
+During Phase 1, the only way to receive tokens is to call `mine` on the token's `TokenLauncher` contract. Each call requires a short string  the "funny post" and an ARC payment equal to the token's `feePerMine`. If all conditions are met, the contract mints `mineAmount` tokens directly to your wallet. The accumulated ARC fees stay locked in the contract until graduation, when they seed the AMM liquidity pool.
+
+## Function signature
+
+```solidity
+function mine(string calldata funnyPost) external payable
+```
+
+## Requirements
+
+All of the following must be true for a `mine` call to succeed:
+
+| Check | Revert message |
+| --- | --- |
+| Token has not graduated | `"Token has graduated - swap instead!"` |
+| `msg.value >= feePerMine` | `"TokenLauncher: ARC fee required"` |
+| `totalMined + mineAmount <= mineableSupply` | `"TokenLauncher: mining complete"` |
+| Cooldown elapsed since your last mine | `"TokenLauncher: cooldown not over"` |
+| Your 24h mined amount \+ `mineAmount <= dailyMax` | `"TokenLauncher: daily limit reached"` |
+
+<ParamField path="funnyPost" type="string" required>
+  A string written to the chain as part of the `ActedFun` event. No length limit is enforced by the contract, but keep it short to minimise gas costs. Must be provided; there is no default.
+</ParamField>
+
+## Mineable supply
+
+The launcher reserves 95% of `maxSupply` for mining (rounded down to the nearest whole multiple of `mineAmount`). The remaining 5% is reserved as `lpReserve` for AMM seeding on graduation. You can read these values directly:
+
+```solidity
+uint256 public immutable mineableSupply; // 95% of maxSupply
+uint256 public immutable lpReserve;      // 5% of maxSupply
+```
+
+## Cooldown and daily cap
+
+Each wallet has two independent rate limits:
+
+- **Cooldown**  you must wait at least `cooldownSeconds` after your previous `mine` call before mining again.
+- **Daily cap**  you may mine at most `dailyMax` tokens within any rolling 24-hour window. The window resets when the current timestamp exceeds `dailyWindowStart[user] + 24 hours`.
+
+Use the view functions `getTimeUntilNextMine(address)` and `getRemainingDailyAllowance(address)` to check both limits before submitting a transaction.
+
+## Auto-graduation
+
+After the `mine` call updates `totalMined`, the contract checks whether `totalMined >= mineableSupply`. If so, it immediately calls `_graduate()` in the same transaction:
+
+1. Mints `lpReserve` tokens to the launcher contract itself.
+2. Sets `tokenReserve = lpReserve`.
+3. Sets `arcReserve = address(this).balance` (all accumulated mine fees minus any previously claimed refunds).
+4. Sets `graduated = true`.
+5. Emits `TokenGraduated`.
+
+From that point forward, `mine` reverts and the AMM functions become active.
+
+<Warning>
+  Once the token graduates, you can no longer claim a refund for ARC fees you paid during mining. If you want your ARC back, call `claimRefund()` before the final mine call completes graduation.
+</Warning>
+
+## ActedFun event
+
+```solidity
+event ActedFun(
+    address indexed user,
+    string funnyPost,
+    uint256 amount,
+    uint256 timestamp
+);
+```
+
+Emitted on every successful mine call. `amount` is always equal to the token's `mineAmount`. You can use this event to build an activity feed without storing any off-chain state.
+
+## TokenGraduated event
+
+```solidity
+event TokenGraduated(
+    address indexed token,
+    uint256 tokenReserve,
+    uint256 arcReserve,
+    uint256 timestamp
+);
+```
+
+Emitted in the same transaction as the final mine call. `tokenReserve` and `arcReserve` are the initial AMM reserves.
+
+## Code example
+
+```typescript
+import { createPublicClient, createWalletClient, http, parseEther } from "viem";
+import { arcTestnet } from "./chains";
+import { LAUNCHER_ABI } from "./contracts";
+
+const publicClient = createPublicClient({ chain: arcTestnet, transport: http() });
+const walletClient = createWalletClient({ chain: arcTestnet, transport: http(), account: myAccount });
+
+// Read mining limits before submitting
+const [timeUntilNext, remainingDaily, [mined, total]] = await Promise.all([
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "getTimeUntilNextMine",
+    args: [myAccount.address],
+  }),
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "getRemainingDailyAllowance",
+    args: [myAccount.address],
+  }),
+  publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "getMiningProgress",
+  }),
+]);
+
+if (timeUntilNext > 0n) {
+  console.log(`Cooldown: ${timeUntilNext}s remaining`);
+} else if (remainingDaily === 0n) {
+  console.log("Daily cap reached");
+} else if (mined >= total) {
+  console.log("Mining complete — token has graduated");
+} else {
+  const feePerMine = await publicClient.readContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "feePerMine",
+  });
+
+  const hash = await walletClient.writeContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "mine",
+    args: ["gm to all the miners out here 🤝"],
+    value: feePerMine,
+  });
+
+  const receipt = await publicClient.waitForTransactionReceipt({ hash });
+  console.log("Mined in block", receipt.blockNumber);
+}
+```
+
+<Tip>
+  Watch for the `TokenGraduated` event on the launcher contract to detect graduation in real time and switch your UI from the mining view to the swap view.
+</Tip>

@@ -1,0 +1,101 @@
+---
+title: "claimRefund — Recover ARC mining fees before graduation"
+sidebarTitle: "claimRefund"
+description: "Miners can reclaim all ARC fees paid during Phase 1 by calling claimRefund. Check your claimable balance with claimableRefund before submitting the transaction."
+---
+
+Every ARC fee you pay when calling `mine()` is tracked in the `feePaid` mapping under your address. Before the token graduates, you can recover the full accumulated amount at any time by calling `claimRefund`. This is useful if you change your mind about a token or want to redeploy your ARC to other mining opportunities. Once the token graduates, those fees become the initial liquidity for the AMM and cannot be returned.
+
+## claimRefund
+
+```solidity
+function claimRefund() external
+```
+
+Sends the full `feePaid[msg.sender]` balance back to your wallet in ARC. The function sets `feePaid[msg.sender]` to zero before transferring, following the checks-effects-interactions pattern, so re-entrancy is not possible.
+
+The call reverts if:
+
+| Condition | Revert message |
+|---|---|
+| Token has graduated | `"TokenLauncher: token has graduated, no refunds"` |
+| Your `feePaid` balance is zero | `"TokenLauncher: nothing to refund"` |
+
+<Warning>
+  After graduation you cannot claim a refund under any circumstances. The accumulated ARC becomes `arcReserve` in the AMM and is permanently locked as protocol liquidity. If you want your ARC back, call `claimRefund()` before the token's mineable supply is exhausted.
+</Warning>
+
+## claimableRefund
+
+```solidity
+function claimableRefund(address user) external view returns (uint256)
+```
+
+Returns the ARC (in wei) that `user` can currently reclaim. Returns `0` if the token has graduated, even if `feePaid[user]` is non-zero. Use this before submitting a `claimRefund` transaction to confirm the amount and avoid a wasted gas spend.
+
+<ParamField path="user" type="address" required>
+  The wallet address to check. Typically your own address.
+</ParamField>
+
+## feePaid mapping
+
+```solidity
+mapping(address => uint256) public feePaid;
+```
+
+Accumulates the total ARC (in wei) paid by each miner across all their `mine()` calls. You can read it directly as a public mapping.
+
+<Note>
+  `feePaid[user]` does not reset after a `claimRefund` call on its own — the contract explicitly sets it to zero as part of `claimRefund`. If you mine again after claiming, new fees start accumulating from zero.
+</Note>
+
+## ArcRefundClaimed event
+
+```solidity
+event ArcRefundClaimed(
+    address indexed user,
+    uint256 amount,
+    uint256 timestamp
+);
+```
+
+Emitted when a successful refund is sent. `amount` is the total ARC returned to `user` in wei.
+
+## Code example
+
+```typescript
+import { createPublicClient, createWalletClient, http, formatEther } from "viem";
+import { arcTestnet } from "./chains";
+import { LAUNCHER_ABI } from "./contracts";
+
+const publicClient = createPublicClient({ chain: arcTestnet, transport: http() });
+const walletClient = createWalletClient({ chain: arcTestnet, transport: http(), account: myAccount });
+
+// 1. Check claimable amount
+const claimable = await publicClient.readContract({
+  address: launcherAddress,
+  abi: LAUNCHER_ABI,
+  functionName: "claimableRefund",
+  args: [myAccount.address],
+});
+
+if (claimable === 0n) {
+  console.log("Nothing to refund (either no fees paid, or token has graduated)");
+} else {
+  console.log(`Claimable: ${formatEther(claimable)} ARC`);
+
+  // 2. Claim the refund
+  const hash = await walletClient.writeContract({
+    address: launcherAddress,
+    abi: LAUNCHER_ABI,
+    functionName: "claimRefund",
+  });
+
+  const receipt = await publicClient.waitForTransactionReceipt({ hash });
+  console.log("Refund claimed in block", receipt.blockNumber);
+}
+```
+
+<Tip>
+  Monitor the `TokenGraduated` event on the launcher contract so your frontend can disable the refund UI as soon as graduation occurs. This prevents users from submitting `claimRefund` transactions that will revert.
+</Tip>

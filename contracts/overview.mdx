@@ -1,0 +1,97 @@
+---
+title: " ACTFUN contract architecture: factory and launcher"
+description: "LaunchpadFactory deploys token pairs on demand. Each pair is a LaunchToken ERC-20 and a TokenLauncher that runs mining in Phase 1 and the AMM in Phase 2."
+---
+
+ ACTFUN uses a two-contract system deployed on Arc Testnet (Chain ID 5042002). A single shared **LaunchpadFactory** acts as a registry and deploys new token pairs on demand. Each token pair consists of a **LaunchToken** (an ERC-20) and a **TokenLauncher** (a combined miner and AMM). All supply distribution, trading, and graduation logic lives entirely on-chain  there is no backend, no admin key, and no external DEX dependency.
+
+## Contract addresses
+
+| Contract | Address |
+| --- | --- |
+| **LaunchpadFactory** | [`0x6Ac3CaF79A5d68D259795380F012f922476A1721`](https://testnet.arcscan.app/address/0x6Ac3CaF79A5d68D259795380F012f922476A1721#code) |
+| **TokenLauncher** | Deployed per token by the factory |
+| **LaunchToken** | Deployed per token by the factory |
+
+All contracts are verified on [Arcscan](https://testnet.arcscan.app). Future token pairs automatically match the verified bytecode.
+
+<Note>
+  Arc Testnet RPC: `https://rpc.testnet.arc.network` · Chain ID: `5042002` · Currency: `ARC`
+</Note>
+
+## The two-phase lifecycle
+
+Every token launched through MINEPAD follows the same two-phase lifecycle.
+
+**Phase 1 Mining**
+
+The community earns tokens by calling `mine(funnyPost)` on the token's `TokenLauncher` contract. Each mine call requires a small ARC fee (set by the token creator) and mints a fixed `mineAmount` of tokens directly to the caller. A per-wallet cooldown and a 24-hour cap prevent any single address from dominating the supply. Mining continues until 95% of the max supply has been minted.
+
+**Phase 2  Trading**
+
+When the last mine call fills the 95% mineable supply, the `TokenLauncher` automatically calls `_graduate()`. This mints the remaining 5% as LP reserve tokens to the contract itself and seeds a constant-product AMM (`x * y = k`) using those tokens plus all accumulated ARC mine fees as initial liquidity. From that point on, anyone can buy and sell via `buyTokens` and `sellTokens` no external DEX needed.
+
+## Contract roles
+
+```text
+LaunchpadFactory (0x6Ac3CaF79A5...)
+│
+│  createToken(...) → deploys:
+│
+├── LaunchToken (ERC-20)
+│     • Standard ERC-20 (OpenZeppelin)
+│     • Ownership transferred to TokenLauncher on deploy
+│     • Only TokenLauncher can call mint()
+│     • Stores: maxSupply, imageUri
+│
+└── TokenLauncher (miner + AMM)
+      Phase 1 (mining):
+        • mine(funnyPost) — mint tokens, collect ARC fees
+        • claimRefund()  — return ARC fees before graduation
+      Phase 2 (trading, post-graduation):
+        • buyTokens(minTokensOut) — send ARC, receive tokens
+        • sellTokens(tokenAmount, minArcOut) — send tokens, receive ARC
+      Views (always available):
+        • getMiningProgress(), getTokenPrice()
+        • estimateBuy(), estimateSell()
+        • getTimeUntilNextMine(), getRemainingDailyAllowance()
+```
+
+## Tokenomics summary
+
+| Parameter | Value |
+| --- | --- |
+| Mineable supply | 95% of `maxSupply` (rounded down to a whole multiple of `mineAmount`) |
+| LP reserve | 5% of `maxSupply`, minted to the launcher on graduation |
+| AMM seeding | LP reserve tokens \+ all ARC mine fees accumulated in Phase 1 |
+| AMM formula | `tokensOut = arcIn * tokenReserve / (arcReserve + arcIn)` |
+
+## Network configuration
+
+Add Arc Testnet to your wallet or viem config:
+
+```typescript
+import { defineChain } from "viem";
+
+export const arcTestnet = defineChain({
+  id: 5042002,
+  name: "Arc Testnet",
+  nativeCurrency: { name: "ARC", symbol: "ARC", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://rpc.testnet.arc.network"] },
+  },
+  blockExplorers: {
+    default: { name: "Arcscan", url: "https://testnet.arcscan.app" },
+  },
+  testnet: true,
+});
+```
+
+## Further reading
+
+- [createToken — Deploy a new minable token](/contracts/launchpad-factory/create-token)
+- [Read token listings from LaunchpadFactory](/contracts/launchpad-factory/read-tokens)
+- [mine() — Earn tokens by writing a post](/contracts/token-launcher/mining)
+- [buyTokens and sellTokens — Trade on the AMM](/contracts/token-launcher/trading)
+- [claimRefund — Recover ARC fees before graduation](/contracts/token-launcher/refunds)
+- [TokenLauncher view functions reference](/contracts/token-launcher/views)

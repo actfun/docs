@@ -1,0 +1,174 @@
+---
+title: "Query the MINEPAD on-chain LaunchpadFactory registry"
+sidebarTitle: "Read Tokens"
+description: "Use getTokenCount, getTokens, and getToken to read the LaunchpadFactory registry of all MINEPAD tokens, with full TokenRecord struct field reference."
+---
+
+The `LaunchpadFactory` maintains an append-only array of every token pair it has deployed. Three view functions let you read this registry: `getTokenCount` returns the total, `getTokens` returns a paginated slice sorted newest-first, and `getToken` returns a single record by its array index. All three are free to call and require no authentication.
+
+**Contract:** `LaunchpadFactory` at `0x6Ac3CaF79A5d68D259795380F012f922476A1721` on Arc Testnet (Chain ID 5042002)
+
+## getTokenCount
+
+```solidity
+function getTokenCount() external view returns (uint256)
+```
+
+Returns the total number of tokens ever deployed through this factory. Use this to determine how many pages exist before calling `getTokens`.
+
+## getTokens
+
+```solidity
+function getTokens(uint256 from, uint256 count)
+    external
+    view
+    returns (TokenRecord[] memory result)
+```
+
+Returns up to `count` token records starting at pagination offset `from`, sorted **newest first**. If `from` is greater than or equal to the total token count, the function returns an empty array rather than reverting.
+
+<ParamField path="from" type="uint256" required>
+  Zero-based pagination offset. Pass `0` to start from the most recently deployed token.
+</ParamField>
+
+<ParamField path="count" type="uint256" required>
+  Maximum number of records to return. If `from + count` exceeds the total, the function returns only the available records.
+</ParamField>
+
+## getToken
+
+```solidity
+function getToken(uint256 index) external view returns (TokenRecord memory)
+```
+
+Returns a single `TokenRecord` by its raw array index (oldest-first order, opposite of `getTokens`). Reverts with `"LaunchpadFactory: out of bounds"` if `index >= getTokenCount()`.
+
+<ParamField path="index" type="uint256" required>
+  Zero-based index into the internal `tokens` array. Index `0` is the first token ever deployed; index `getTokenCount() - 1` is the most recent.
+</ParamField>
+
+## TokenRecord struct
+
+Each query returns one or more `TokenRecord` structs with the following fields:
+
+<ResponseField name="tokenAddress" type="address">
+  Address of the `LaunchToken` ERC-20 contract.
+</ResponseField>
+
+<ResponseField name="launcherAddress" type="address">
+  Address of the `TokenLauncher` contract that controls mining and trading for this token.
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Token name as provided to `createToken`.
+</ResponseField>
+
+<ResponseField name="symbol" type="string">
+  Token symbol as provided to `createToken`.
+</ResponseField>
+
+<ResponseField name="imageUri" type="string">
+  Image URL or emoji set by the token creator.
+</ResponseField>
+
+<ResponseField name="creator" type="address">
+  Wallet address that called `createToken`.
+</ResponseField>
+
+<ResponseField name="createdAt" type="uint256">
+  Unix timestamp (seconds) of the block in which the token was created.
+</ResponseField>
+
+<ResponseField name="maxSupply" type="uint256">
+  Total token supply cap in units with 18 decimals.
+</ResponseField>
+
+<ResponseField name="mineAmount" type="uint256">
+  Tokens minted per `mine()` call, in units with 18 decimals.
+</ResponseField>
+
+<ResponseField name="cooldownSeconds" type="uint256">
+  Per-wallet cooldown between consecutive `mine()` calls, in seconds.
+</ResponseField>
+
+<ResponseField name="dailyMax" type="uint256">
+  Per-wallet 24-hour mining cap in units with 18 decimals.
+</ResponseField>
+
+<ResponseField name="feePerMine" type="uint256">
+  ARC (in wei) required per `mine()` call.
+</ResponseField>
+
+## Code examples
+
+### Read the total token count
+
+```typescript
+import { createPublicClient, http } from "viem";
+import { arcTestnet } from "./chains";
+import { FACTORY_ABI, FACTORY_ADDRESS } from "./contracts";
+
+const publicClient = createPublicClient({
+  chain: arcTestnet,
+  transport: http(),
+});
+
+const total = await publicClient.readContract({
+  address: FACTORY_ADDRESS,
+  abi: FACTORY_ABI,
+  functionName: "getTokenCount",
+});
+
+console.log(`${total} tokens deployed`);
+```
+
+### Paginate through all tokens
+
+```typescript
+const PAGE_SIZE = 20n;
+
+async function fetchAllTokens() {
+  const total = await publicClient.readContract({
+    address: FACTORY_ADDRESS,
+    abi: FACTORY_ABI,
+    functionName: "getTokenCount",
+  });
+
+  const tokens = [];
+  for (let from = 0n; from < total; from += PAGE_SIZE) {
+    const page = await publicClient.readContract({
+      address: FACTORY_ADDRESS,
+      abi: FACTORY_ABI,
+      functionName: "getTokens",
+      args: [from, PAGE_SIZE],
+    });
+    tokens.push(...page);
+  }
+
+  return tokens; // sorted newest-first across all pages
+}
+```
+
+### Fetch a single token by index
+
+```typescript
+// Fetch the most recently deployed token
+const total = await publicClient.readContract({
+  address: FACTORY_ADDRESS,
+  abi: FACTORY_ABI,
+  functionName: "getTokenCount",
+});
+
+const latest = await publicClient.readContract({
+  address: FACTORY_ADDRESS,
+  abi: FACTORY_ABI,
+  functionName: "getToken",
+  args: [total - 1n],
+});
+
+console.log(latest.name, latest.tokenAddress, latest.launcherAddress);
+```
+
+<Note>
+  `getTokens(from, count)` returns records newest-first, but `getToken(index)` uses the raw oldest-first array index. Index `0` in `getToken` is the oldest token; index `0` in `getTokens` is the newest. Keep this in mind when correlating results from the two functions.
+</Note>
