@@ -1,5 +1,5 @@
 ---
-title: "createToken Deploy a new token via LaunchpadFactory"
+title: "createToken — Deploy a new token via LaunchpadFactory"
 sidebarTitle: "createToken"
 description: "Call createToken on LaunchpadFactory to deploy a LaunchToken ERC-20 and TokenLauncher. Pass supply, mine amount, cooldown, daily cap, and fee per mine."
 ---
@@ -31,7 +31,7 @@ You must send at least `creationFee()` ARC with the call. Read the current fee b
 uint256 fee = LaunchpadFactory(factory).creationFee();
 ```
 
-The entire `msg.value` is forwarded to the protocol `feeRecipient`. If you send more than the minimum the excess is also forwarded  there is no refund mechanism in the factory.
+The entire `msg.value` is forwarded to the protocol `feeRecipient`. If you send more than the minimum the excess is also forwarded — there is no refund mechanism in the factory.
 
 <Warning>
   Call `creationFee()` immediately before building your transaction. The owner can update the fee at any time and your transaction will revert with `"LaunchpadFactory: creation fee required"` if `msg.value` falls short.
@@ -48,7 +48,7 @@ The entire `msg.value` is forwarded to the protocol `feeRecipient`. If you send 
 </ParamField>
 
 <ParamField path="imageUri" type="string" required>
-  URL or emoji used as the token's avatar in the UI, e.g. `"https://example.com/doge.png"` or `"🐶"`. Can be an empty string  the contract does not validate it.
+  URL or emoji used as the token's avatar in the UI, e.g. `"https://example.com/doge.png"` or `"🐶"`. Can be an empty string — the contract does not validate it.
 </ParamField>
 
 <ParamField path="maxSupply" type="uint256" required>

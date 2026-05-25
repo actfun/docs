@@ -1,6 +1,6 @@
 ---
-title: " ACTFUN tokenomics: supply split, fees, and AMM seeding"
-description: "Every MINEPAD token splits 95% to community mining and 5% to LP seeding. All mine fees flow into the trading pool at graduation never to the creator."
+title: "ACTFUN tokenomics: supply split, fees, and AMM seeding"
+description: "Every MINEPAD token splits 95% to community mining and 5% to LP seeding. All mine fees flow into the trading pool at graduation, never to the creator."
 ---
 
 Every token deployed through MINEPAD follows a fixed economic structure enforced entirely by the smart contract. There are no hidden allocations, no vesting schedules you can't inspect, and no parameters the creator can change after deployment. This page explains exactly how the numbers work.
@@ -9,8 +9,8 @@ Every token deployed through MINEPAD follows a fixed economic structure enforced
 
 When a creator sets a `maxSupply`, the contract immediately divides it into two buckets:
 
-- **Mineable supply (95%)**  Available for the community to mine during Phase 1. Calculated as `floor(maxSupply × 95% / mineAmount) × mineAmount`, rounded down to the nearest whole `mineAmount` so every mine is exactly the same size.
-- **LP reserve (5%)**  Held back and never minted until graduation. When `_graduate()` fires, the contract mints this 5% to itself and uses it as one side of the initial AMM liquidity pair.
+- **Mineable supply (95%)** — Available for the community to mine during Phase 1. Calculated as `floor(maxSupply × 95% / mineAmount) × mineAmount`, rounded down to the nearest whole `mineAmount` so every mine is exactly the same size.
+- **LP reserve (5%)** — Held back and never minted until graduation. When `_graduate()` fires, the contract mints this 5% to itself and uses it as one side of the initial AMM liquidity pair.
 
 <Info>
   The 5% LP reserve is the only tokens the contract ever mints to itself. It does not go to the creator — it seeds the trading pool so that the token has immediate liquidity the moment it graduates.
@@ -30,7 +30,7 @@ This means the more activity a token sees during mining, the deeper its initial 
 
 ## The Creation Fee
 
-Deploying a new token costs a creation fee set by MINEPAD (stored as `creationFee` on the `LaunchpadFactory`). This fee goes to the  ACTFUN fee recipient, not into the token's LP pool. Its purpose is purely anti-spam: it makes it expensive to flood the platform with junk tokens.
+Deploying a new token costs a creation fee set by MINEPAD (stored as `creationFee` on the `LaunchpadFactory`). This fee goes to the ACTFUN fee recipient, not into the token's LP pool. Its purpose is purely anti-spam: it makes it expensive to flood the platform with junk tokens.
 
 <Tip>
   On Arc Testnet, the creation fee is set low to encourage experimentation. Check the current value by reading `creationFee` on the `LaunchpadFactory` contract at `0x6Ac3CaF79A5d68D259795380F012f922476A1721`.
@@ -38,7 +38,7 @@ Deploying a new token costs a creation fee set by MINEPAD (stored as `creationFe
 
 ## Tokenomics Parameters
 
-When a creator deploys a token, they set the following parameters. All of them are **immutable** after deployment  they are written into the `TokenLauncher` contract and cannot be changed by anyone.
+When a creator deploys a token, they set the following parameters. All of them are **immutable** after deployment — they are written into the `TokenLauncher` contract and cannot be changed by anyone.
 
 | Parameter | What It Controls | Set By | Mutable After Deploy? |
 | --- | --- | --- | --- |
@@ -56,7 +56,7 @@ When a creator deploys a token, they set the following parameters. All of them a
 
 ## The Daily Cap Default
 
-The MINEPAD UI defaults `dailyMax` to `mineAmount × 10`, meaning a single wallet can mine up to 10 times within a 24-hour rolling window (subject to the cooldown between each mine). Creators can set a different `dailyMax` as long as it is at least `mineAmount`  the contract enforces `dailyMax >= mineAmount` at deployment time.
+The MINEPAD UI defaults `dailyMax` to `mineAmount × 10`, meaning a single wallet can mine up to 10 times within a 24-hour rolling window (subject to the cooldown between each mine). Creators can set a different `dailyMax` as long as it is at least `mineAmount` — the contract enforces `dailyMax >= mineAmount` at deployment time.
 
 ## What the Creator Controls vs. What Is Immutable
 
