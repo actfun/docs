@@ -1,7 +1,7 @@
 ---
 title: "How tokens auto-graduate into a built-in DEX"
 sidebarTitle: "Graduation & DEX"
-description: "When 95% of supply is mined, a ACTFUN  token graduates automatically into a constant-product AMM seeded with LP reserve tokens and all accumulated ARC fees."
+description: "When 95% of supply is mined, an ACTFUN token graduates automatically into a constant-product AMM seeded with LP reserve tokens and all accumulated ARC fees."
 ---
 
 Graduation is the moment ACTFUN token transitions from the mining phase into a fully functional trading market. It happens automatically, in the same on-chain transaction as the final mine, the instant `totalMined` reaches `mineableSupply`. No one has to push a button, call a contract, or wait for an off-chain system to react.
@@ -30,7 +30,7 @@ From that point on, `buyTokens()` and `sellTokens()` are unlocked, and the token
 
 ## The Constant-Product AMM Formula
 
-MINEPAD's built-in DEX uses the classic constant-product formula  the same model as Uniswap v1. At any point in time, the pool maintains the invariant `x * y = k`, where `x` is `arcReserve` and `y` is `tokenReserve`.
+MINEPAD's built-in DEX uses the classic constant-product formula — the same model as Uniswap v1. At any point in time, the pool maintains the invariant `x * y = k`, where `x` is `arcReserve` and `y` is `tokenReserve`.
 
 ### Buying tokens with ARC
 
@@ -40,7 +40,7 @@ When you send ARC into the pool, the contract calculates how many tokens you rec
 tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)
 ```
 
-As `arcIn` increases, `tokensOut` grows  but at a diminishing rate. Larger buys move the price more than smaller ones.
+As `arcIn` increases, `tokensOut` grows — but at a diminishing rate. Larger buys move the price more than smaller ones.
 
 ### Selling tokens for ARC
 
@@ -86,7 +86,7 @@ Because the AMM uses a fixed formula with no external oracle, the price of a tok
 price (ARC per token) = arcReserve × 1e18 / tokenReserve
 ```
 
-Slippage  the difference between the expected price and the executed price — increases with trade size relative to pool depth. Both `buyTokens()` and `sellTokens()` accept a minimum output parameter (`minTokensOut` and `minArcOut` respectively). Your transaction reverts if the actual output falls below your minimum, protecting you from front-running and unexpected price moves.
+Slippage — the difference between the expected price and the executed price — increases with trade size relative to pool depth. Both `buyTokens()` and `sellTokens()` accept a minimum output parameter (`minTokensOut` and `minArcOut` respectively). Your transaction reverts if the actual output falls below your minimum, protecting you from front-running and unexpected price moves.
 
 <Tip>
   The UI shows a live slippage estimate before you confirm. For large trades, consider splitting into smaller transactions to reduce price impact.
@@ -94,7 +94,7 @@ Slippage  the difference between the expected price and the executed price — i
 
 ## Why There Is No External DEX
 
-Because the AMM lives inside the same `TokenLauncher` contract that handled mining, the token needs no external listing, no liquidity migration, and no bridge to another protocol. The pool is always at the same contract address. There is no LP token  the pool's liquidity is permanently locked inside the contract and cannot be withdrawn by anyone, including the creator.
+Because the AMM lives inside the same `TokenLauncher` contract that handled mining, the token needs no external listing, no liquidity migration, and no bridge to another protocol. The pool is always at the same contract address. There is no LP token — the pool's liquidity is permanently locked inside the contract and cannot be withdrawn by anyone, including the creator.
 
 <Warning>
   There is no mechanism to remove liquidity from the AMM. The ARC and tokens in the pool are permanently locked. This is a deliberate design choice to guarantee that the market remains liquid after graduation.
@@ -104,10 +104,10 @@ Because the AMM lives inside the same `TokenLauncher` contract that handled mini
 
 Selling tokens is a two-transaction process:
 
-1. **Approve**  Call `approve(launcherAddress, tokenAmount)` on the ERC-20 token contract, granting the `TokenLauncher` permission to pull your tokens.
-2. **Sell**  Call `sellTokens(tokenAmount, minArcOut)` on the launcher.
+1. **Approve** — Call `approve(launcherAddress, tokenAmount)` on the ERC-20 token contract, granting the `TokenLauncher` permission to pull your tokens.
+2. **Sell** — Call `sellTokens(tokenAmount, minArcOut)` on the launcher.
 
-The  ACTFUN UI handles this two-step flow automatically. If you are interacting with the contract directly, you must complete the `approve` transaction first or `sellTokens` will revert with an ERC-20 allowance error.
+The ACTFUN UI handles this two-step flow automatically. If you are interacting with the contract directly, you must complete the `approve` transaction first or `sellTokens` will revert with an ERC-20 allowance error.
 
 <Info>
   You only need to approve once per sell amount. If you approved more than you sold, the remaining allowance carries over and you may not need to approve again for your next sell — depending on the amount.

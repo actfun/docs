@@ -1,33 +1,33 @@
 ---
-title: " ACTFUN FAQ: mining, trading, refunds, and wallets"
-description: "Common  ACTFUN questions answered: testnet setup, mining limits, graduation triggers, refund eligibility, the two-step sell flow, and immutable parameters."
+title: "ACTFUN FAQ: mining, trading, refunds, and wallets"
+description: "Common ACTFUN questions answered: testnet setup, mining limits, graduation triggers, refund eligibility, the two-step sell flow, and immutable parameters."
 ---
 
-Find answers to the most common questions about  ACTFUN below. If your question is not covered here, visit the  ACTFUNcommunity on [X (Twitter)](https://x.com/Actfunpad) or explore the source code at [github.com/actfun/minepad](https://github.com/actfun/minepad).
+Find answers to the most common questions about ACTFUN below. If your question is not covered here, visit the ACTFUN community on [X (Twitter)](https://x.com/Actfunpad) or explore the source code at [github.com/actfun/minepad](https://github.com/actfun/minepad).
 
 <AccordionGroup>
   <Accordion title="Is ACTFUN on mainnet?">
-    No.  ACTFUN currently runs on **Arc Testnet only** (Chain ID `5042002`). There is no mainnet deployment at this time. All activity  token creation, mining, trading, and refunds  takes place on the testnet.
+    No. ACTFUN currently runs on **Arc Testnet only** (Chain ID `5042002`). There is no mainnet deployment at this time. All activity — token creation, mining, trading, and refunds — takes place on the testnet.
   </Accordion>
 
-  <Accordion title="Do I need real money to use ACTFUN ?">
-    No.  ACTFUN uses **ARC**, the native currency of Arc Testnet. ARC has no real monetary value and cannot be exchanged for real money. You can claim free ARC from the official faucet at [faucet.testnet.arc.network](https://faucet.testnet.arc.network). A small amount is enough to cover mining fees and token creation.
+  <Accordion title="Do I need real money to use ACTFUN?">
+    No. ACTFUN uses **ARC**, the native currency of Arc Testnet. ARC has no real monetary value and cannot be exchanged for real money. You can claim free ARC from the official faucet at [faucet.testnet.arc.network](https://faucet.testnet.arc.network). A small amount is enough to cover mining fees and token creation.
   </Accordion>
 
   <Accordion title="What wallet should I use?">
-    Use **MetaMask**. The ACTFUN app is built around MetaMask's injected provider. You need to add Arc Testnet to MetaMask manually before connecting see the [Arc Testnet setup guide](/reference/arc-testnet) for the exact network values and step-by-step instructions.
+    Use **MetaMask**. The ACTFUN app is built around MetaMask's injected provider. You need to add Arc Testnet to MetaMask manually before connecting — see the [Arc Testnet setup guide](/reference/arc-testnet) for the exact network values and step-by-step instructions.
   </Accordion>
 
   <Accordion title="Can I get a refund if a token never graduates?">
-    Yes. If a token has not yet reached 95% of its mineable supply  and therefore has not graduated  you can call **Claim Refund** in the app to recover all the ARC fees you paid as a miner. Once the token graduates, refunds are permanently closed and the ARC you paid becomes part of the liquidity pool. Claim your refund before graduation if you want it back.
+    Yes. If a token has not yet reached 95% of its mineable supply — and therefore has not graduated — you can call **Claim Refund** in the app to recover all the ARC fees you paid as a miner. Once the token graduates, refunds are permanently closed and the ARC you paid becomes part of the liquidity pool. Claim your refund before graduation if you want it back.
   </Accordion>
 
   <Accordion title="What happens to ARC fees when a token graduates?">
-    When 95% of the mineable supply is mined, the contract automatically calls graduation. At that point, the contract mints the remaining 5% of the token supply as LP reserve tokens and seeds a constant-product AMM (x\*y=k) using those tokens together with **all accumulated ARC fees** as the initial liquidity. The ARC fees are locked permanently into the pool  they cannot be withdrawn by the creator or anyone else.
+    When 95% of the mineable supply is mined, the contract automatically calls graduation. At that point, the contract mints the remaining 5% of the token supply as LP reserve tokens and seeds a constant-product AMM (x\*y=k) using those tokens together with **all accumulated ARC fees** as the initial liquidity. The ARC fees are locked permanently into the pool — they cannot be withdrawn by the creator or anyone else.
   </Accordion>
 
   <Accordion title="Can I create a token for free?">
-    On Arc Testnet the creation fee is minimal and payable in ARC, which you get for free from the faucet. When you deploy a token through the LaunchpadFactory you set the per-mine fee that your community will pay  your own ARC cost to create is separate and small. There is no platform fee taken by  ACTFUN beyond what the contract requires for gas.
+    On Arc Testnet the creation fee is minimal and payable in ARC, which you get for free from the faucet. When you deploy a token through the LaunchpadFactory you set the per-mine fee that your community will pay — your own ARC cost to create is separate and small. There is no platform fee taken by ACTFUN beyond what the contract requires for gas.
   </Accordion>
 
   <Accordion title="What is the daily mining cap?">
@@ -35,19 +35,19 @@ Find answers to the most common questions about  ACTFUN below. If your question 
   </Accordion>
 
   <Accordion title="Can the token creator take the mining fees?">
-    No. Once a mine fee is paid, the ARC goes into the `TokenLauncher` contract and is controlled entirely by the contract's logic not by the creator. The creator has no admin key, no withdrawal function, and no privileged access. The ARC either stays available for miner refunds (before graduation) or gets locked into the AMM liquidity pool (at graduation).
+    No. Once a mine fee is paid, the ARC goes into the `TokenLauncher` contract and is controlled entirely by the contract's logic, not by the creator. The creator has no admin key, no withdrawal function, and no privileged access. The ARC either stays available for miner refunds (before graduation) or gets locked into the AMM liquidity pool (at graduation).
   </Accordion>
 
   <Accordion title="Why do I need to approve before selling?">
-    Selling follows the ERC-20 standard. Before the `TokenLauncher` contract can transfer tokens out of your wallet on your behalf, it needs explicit permission via an `approve` transaction. The ACTFUN app handles this automatically as a two-step flow: it submits the approval first, then the sell transaction once the approval is confirmed. You will see two MetaMask prompts when you sell for the first time.
+    Selling follows the ERC-20 standard. Before the `TokenLauncher` contract can transfer tokens out of your wallet on your behalf, it needs explicit permission via an `approve` transaction. The ACTFUN app handles this automatically as a two-step flow: it submits the approval first, then the sell transaction once the approval is confirmed. You will see two MetaMask prompts when you sell for the first time.
   </Accordion>
 
   <Accordion title="Where can I see my token's transactions?">
-    All on-chain activity is visible on Arcscan. Go to [testnet.arcscan.app](https://testnet.arcscan.app) and search for your wallet address or the token's contract address to see every mine, buy, sell, refund, and graduation event. You can also find a direct link to each token's contracts from its detail page on [actfun.](https://actfun.fun)xyz
+    All on-chain activity is visible on Arcscan. Go to [testnet.arcscan.app](https://testnet.arcscan.app) and search for your wallet address or the token's contract address to see every mine, buy, sell, refund, and graduation event. You can also find a direct link to each token's contracts from its detail page on [actfun.xyz](https://actfun.fun).
   </Accordion>
 
   <Accordion title="Can I change a token's parameters after deploying?">
-    No. All token parameters  name, symbol, max supply, mine amount, cooldown, daily cap, and fee per mine are **immutable**. They are set once at deployment and stored as `immutable` variables in the `TokenLauncher` contract. No one, including the creator, can modify them after the transaction confirms.
+    No. All token parameters — name, symbol, max supply, mine amount, cooldown, daily cap, and fee per mine — are **immutable**. They are set once at deployment and stored as `immutable` variables in the `TokenLauncher` contract. No one, including the creator, can modify them after the transaction confirms.
   </Accordion>
 
   <Accordion title="What is graduation?">
@@ -57,6 +57,6 @@ Find answers to the most common questions about  ACTFUN below. If your question 
     2. Locks all accumulated ARC fees alongside those tokens as initial liquidity.
     3. Opens the constant-product AMM (x\*y=k), allowing anyone to buy and sell the token immediately.
 
-    Graduation is triggered by the contract itself no manual action is needed, and it cannot be reversed.
+    Graduation is triggered by the contract itself — no manual action is needed, and it cannot be reversed.
   </Accordion>
 </AccordionGroup>

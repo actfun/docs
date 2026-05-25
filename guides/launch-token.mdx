@@ -1,10 +1,10 @@
 ---
-title: "Deploy and configure your own  token launch"
+title: "Deploy and configure your own token launch"
 sidebarTitle: "Launch a Token"
-description: "Deploy a community-mined token on Arc Testnet by setting its name, supply, mining rules, and fee  all on-chain, no backend needed."
+description: "Deploy a community-mined token on Arc Testnet by setting its name, supply, mining rules, and fee — all on-chain, no backend needed."
 ---
 
-Launching a token on MINEPAD deploys two smart contracts: an ERC-20 token and a `TokenLauncher` that controls the mining phase and, after graduation, runs as a built-in AMM. Once you submit the transaction, every parameter is locked permanently on-chain  your community can immediately start mining.
+Launching a token on MINEPAD deploys two smart contracts: an ERC-20 token and a `TokenLauncher` that controls the mining phase and, after graduation, runs as a built-in AMM. Once you submit the transaction, every parameter is locked permanently on-chain — your community can immediately start mining.
 
 <Warning>
   Token parameters are immutable once deployed. Double-check your supply, mining amounts, cooldown, and fee before submitting — there is no way to edit them afterward.
@@ -53,7 +53,7 @@ These parameters define the entire lifecycle of your token — how fast it mines
     | 21M | 21,000,000 |
     | 100M | 100,000,000 |
 
-    **95%** of the max supply becomes the mineable supply  the amount the community can mine out. The remaining **5%** is reserved as LP tokens, minted to the launcher contract at graduation to seed the AMM pool.
+    **95%** of the max supply becomes the mineable supply — the amount the community can mine out. The remaining **5%** is reserved as LP tokens, minted to the launcher contract at graduation to seed the AMM pool.
   </Step>
   <Step title="Set tokens per mine">
     Choose how many tokens each successful mine call awards:
@@ -90,7 +90,7 @@ These parameters define the entire lifecycle of your token — how fast it mines
     | 4 ARC | 4 ARC |
     | 5 ARC | 5 ARC |
 
-    Every fee payment accumulates in the launcher contract. At graduation, the entire collected ARC balance  along with the 5% LP reserve tokens  seeds the AMM liquidity pool. A higher fee creates a larger pool and better initial liquidity. The preview shows an **LP seed estimate** based on your fee and total mine count.
+    Every fee payment accumulates in the launcher contract. At graduation, the entire collected ARC balance — along with the 5% LP reserve tokens — seeds the AMM liquidity pool. A higher fee creates a larger pool and better initial liquidity. The preview shows an **LP seed estimate** based on your fee and total mine count.
   </Step>
 </Steps>
 

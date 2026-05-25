@@ -1,9 +1,9 @@
 ---
-title: " ACTFUN contract architecture: factory and launcher"
+title: "ACTFUN contract architecture: factory and launcher"
 description: "LaunchpadFactory deploys token pairs on demand. Each pair is a LaunchToken ERC-20 and a TokenLauncher that runs mining in Phase 1 and the AMM in Phase 2."
 ---
 
- ACTFUN uses a two-contract system deployed on Arc Testnet (Chain ID 5042002). A single shared **LaunchpadFactory** acts as a registry and deploys new token pairs on demand. Each token pair consists of a **LaunchToken** (an ERC-20) and a **TokenLauncher** (a combined miner and AMM). All supply distribution, trading, and graduation logic lives entirely on-chain  there is no backend, no admin key, and no external DEX dependency.
+ACTFUN uses a two-contract system deployed on Arc Testnet (Chain ID 5042002). A single shared **LaunchpadFactory** acts as a registry and deploys new token pairs on demand. Each token pair consists of a **LaunchToken** (an ERC-20) and a **TokenLauncher** (a combined miner and AMM). All supply distribution, trading, and graduation logic lives entirely on-chain — there is no backend, no admin key, and no external DEX dependency.
 
 ## Contract addresses
 
@@ -23,13 +23,13 @@ All contracts are verified on [Arcscan](https://testnet.arcscan.app). Future tok
 
 Every token launched through MINEPAD follows the same two-phase lifecycle.
 
-**Phase 1 Mining**
+**Phase 1 — Mining**
 
 The community earns tokens by calling `mine(funnyPost)` on the token's `TokenLauncher` contract. Each mine call requires a small ARC fee (set by the token creator) and mints a fixed `mineAmount` of tokens directly to the caller. A per-wallet cooldown and a 24-hour cap prevent any single address from dominating the supply. Mining continues until 95% of the max supply has been minted.
 
-**Phase 2  Trading**
+**Phase 2 — Trading**
 
-When the last mine call fills the 95% mineable supply, the `TokenLauncher` automatically calls `_graduate()`. This mints the remaining 5% as LP reserve tokens to the contract itself and seeds a constant-product AMM (`x * y = k`) using those tokens plus all accumulated ARC mine fees as initial liquidity. From that point on, anyone can buy and sell via `buyTokens` and `sellTokens` no external DEX needed.
+When the last mine call fills the 95% mineable supply, the `TokenLauncher` automatically calls `_graduate()`. This mints the remaining 5% as LP reserve tokens to the contract itself and seeds a constant-product AMM (`x * y = k`) using those tokens plus all accumulated ARC mine fees as initial liquidity. From that point on, anyone can buy and sell via `buyTokens` and `sellTokens` — no external DEX needed.
 
 ## Contract roles
 
