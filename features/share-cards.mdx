@@ -1,0 +1,60 @@
+---
+title: "Shareable Token Cards & X (Twitter) Integration"
+sidebarTitle: "Share Cards & X Integration"
+description: "Every MINEPAD token has a shareable card URL that generates a rich 1200×630 OG image preview when posted on X (Twitter). One-click tweet from the token page."
+---
+
+Every token launched on MINEPAD automatically gets a shareable card page and an X (Twitter)-optimised image preview. Share your token to X with a single click — X's crawler fetches a rich 1200×630 image card showing the token's live status, mining progress, and community posts.
+
+## Share URL
+
+Each token's shareable URL follows the format:
+
+```
+https://actfun.fun/card/:launcherAddress
+```
+
+When you post this URL on X:
+- X's bot fetches the `twitter:card: summary_large_image` meta tags from the page.
+- A **1200×630 PNG image** is generated on-demand server-side and embedded as the card preview.
+- The image renders instantly for anyone who sees the tweet — no wallet or app required.
+
+## What the OG image shows
+
+The generated card image includes:
+
+| Element | Details |
+| --- | --- |
+| Token image / emoji | The token's image as set by the creator |
+| Status badge | 🎓 **WON** (green) if graduated, 💀 **LOST** (red) if expired, ⛏️ **MINING** (blue) if active |
+| Mining progress | Progress bar showing % mined and total miner count |
+| Community posts | Top 3 funny mining posts rendered as a chat thread |
+| MINEPAD branding | ACTFUN logo and platform name |
+
+## One-click tweet from the token page
+
+Every token page includes a **Share on X** button. Clicking it opens a pre-filled tweet containing:
+
+- The token name and symbol.
+- A short message about its current status.
+- The card URL so X renders the rich preview.
+- Relevant hashtags (`#ACTFUN`).
+
+You can edit the tweet text before posting.
+
+## Token card page
+
+When a real user (not X's crawler) clicks the share URL, they are directed to `/card/:address` — a full visual card page with:
+
+- The same rich card image displayed full-size.
+- A **Share on X** button to reshare.
+- A **Copy link** button to copy the URL to clipboard.
+- A **Trade this token** CTA that links directly to the token's detail page.
+
+<Tip>
+  The card page works without a wallet connection. Anyone can view a token's card and click through to the detail page — even if they haven't used MINEPAD before.
+</Tip>
+
+## Dynamic status
+
+The OG image reflects the token's current on-chain state at the time it is generated. The image is not cached — every fetch generates a fresh image with the latest progress, badge, and community posts. This means your tweet always shows up-to-date information even if the token's status changes after you post.
