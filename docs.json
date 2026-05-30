@@ -42,6 +42,16 @@
             ]
           },
           {
+            "group": "Platform Features",
+            "pages": [
+              "features/live-streaming",
+              "features/leaderboard",
+              "features/global-feed",
+              "features/share-cards",
+              "features/graduation-alerts"
+            ]
+          },
+          {
             "group": "Reference",
             "pages": [
               "reference/arc-testnet",
