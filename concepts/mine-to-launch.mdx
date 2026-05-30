@@ -1,13 +1,13 @@
 ---
 title: "Mine-to-Launch: token distribution model"
-description: "ACTFUN replaces pre-sales and team allocations with community mining — earn tokens by writing funny posts and paying a small ARC fee, all enforced on-chain."
+description: "ACTFUN replaces pre-sales and team allocations with community mining — earn tokens by writing funny posts and paying a small USDC fee, all enforced on-chain."
 ---
 
 Mine-to-Launch is ACTFUN core mechanic: instead of buying into a pre-sale or receiving a team allocation, you earn tokens by participating. Every token launched on ACTFUN starts with zero circulating supply. The community mines 95% of that supply into existence, one funny post at a time, before any trading begins. Only after the community has mined the full mineable supply does the token unlock for open trading.
 
 ## How Mining Works
 
-When you mine a token, you submit a short funny post alongside your transaction and pay a small ARC fee (`feePerMine`). The contract mints a fixed batch of tokens (`mineAmount`) directly to your wallet. That's it — no whitelists, no KYC, no lottery. If your wallet is eligible, the tokens are yours.
+When you mine a token, you submit a short funny post alongside your transaction and pay a small USDC fee (`feePerMine`). The contract mints a fixed batch of tokens (`mineAmount`) directly to your wallet. That's it — no whitelists, no KYC, no lottery. If your wallet is eligible, the tokens are yours.
 
 <Note>
   Your funny post is stored on-chain in the `ActedFun` event. Every mine is permanently part of the token's history.
@@ -19,7 +19,7 @@ Every ACTFUN token moves through exactly two phases, in order:
 
 <AccordionGroup>
   <Accordion title="Phase 1 — Mining">
-    The token is live but not yet tradeable. Community members mine tokens by paying the ARC fee and writing a funny post. Each successful mine mints `mineAmount` tokens directly to the miner's wallet.
+    The token is live but not yet tradeable. Community members mine tokens by paying the USDC fee and writing a funny post. Each successful mine mints `mineAmount` tokens directly to the miner's wallet.
 
     Mining continues until `totalMined` reaches `mineableSupply` (95% of max supply). The moment that threshold is crossed, the contract automatically calls `_graduate()` and the token moves to Phase 2. There is no manual trigger — graduation happens inside the same transaction as the final mine.
   </Accordion>
@@ -53,15 +53,15 @@ Mining is gated by three independent on-chain controls, all enforced by the smar
 
 **Per-wallet daily cap (**`dailyMax`**)** — Within any rolling 24-hour window, you cannot mine more than `dailyMax` tokens from a single wallet. The daily window resets automatically based on the timestamp of your first mine in the window.
 
-**ARC fee (**`feePerMine`**)** — Every mine costs real ARC. This makes bot farming expensive: running hundreds of wallets means paying hundreds of fees. All collected fees flow into the LP pool at graduation, not to the creator.
+**USDC fee (**`feePerMine`**)** — Every mine costs real ARC. This makes bot farming expensive: running hundreds of wallets means paying hundreds of fees. All collected fees flow into the LP pool at graduation, not to the creator.
 
 <Warning>
-  All three limits are checked on-chain in the same transaction. If any check fails, your transaction reverts and you pay no fee. The contract never takes your ARC without minting tokens.
+  All three limits are checked on-chain in the same transaction. If any check fails, your transaction reverts and you pay no fee. The contract never takes your USDC without minting tokens.
 </Warning>
 
 ## Refunds Before Graduation
 
-If a token is still in the mining phase, you can claim back all the ARC fees you have paid by calling `claimRefund()`. Once the token graduates, refunds are permanently closed — your fees become part of the AMM's initial liquidity pool.
+If a token is still in the mining phase, you can claim back all the USDC fees you have paid by calling `claimRefund()`. Once the token graduates, refunds are permanently closed — your fees become part of the AMM's initial liquidity pool.
 
 <Tip>
   Check `claimableRefund(yourAddress)` on the contract to see your current refundable balance before graduation.
