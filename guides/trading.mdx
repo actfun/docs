@@ -1,6 +1,6 @@
 ---
 title: "Trade graduated tokens on the ACTFUN built-in AMM"
-description: "Trade graduated ACTFUN tokens using the built-in constant-product AMM — send ARC to buy, or approve and sell tokens back for ARC."
+description: "Trade graduated ACTFUN tokens using the built-in constant-product AMM — send USDC to buy, or approve and sell tokens back for ARC."
 ---
 
 Once a token's mining phase is complete, it graduates automatically and a built-in constant-product AMM (automated market maker) goes live inside the same contract. No external DEX, no bridging — you trade directly through the token's launcher contract on Arc Testnet.
@@ -11,12 +11,12 @@ Trading is only available after graduation. A token graduates when 95% of its su
 
 ## How the AMM works
 
-MINEPAD uses a constant-product formula: `x * y = k`, where `x` is the ARC reserve, `y` is the token reserve, and `k` remains constant after each trade.
+MINEPAD uses a constant-product formula: `x * y = k`, where `x` is the USDC reserve, `y` is the token reserve, and `k` remains constant after each trade.
 
-- **Buying** sends ARC in and receives tokens out: `tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)`
+- **Buying** sends USDC in and receives tokens out: `tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)`
 - **Selling** sends tokens in and receives ARC out: `arcOut = tokensIn × arcReserve / (tokenReserve + tokensIn)`
 
-The pool is seeded at graduation with the 5% LP reserve tokens and all ARC fees collected during mining. There are no additional fees on top of gas.
+The pool is seeded at graduation with the 5% LP reserve tokens and all USDC fees collected during mining. There are no additional fees on top of gas.
 
 <Note>
   Large trades move the price significantly because the pool starts relatively small. Check the estimated output before confirming — a trade that is a large fraction of the pool's reserves will experience high price impact.
@@ -42,7 +42,7 @@ On any graduated token's detail page, a price chart appears above the stats grid
     The swap sends a `minTokensOut` parameter to the contract. If the price moves between when you submit and when the transaction confirms, and you receive fewer tokens than `minTokensOut`, the transaction reverts. The swap panel calculates this automatically from your slippage setting.
   </Step>
   <Step title="Confirm in MetaMask">
-    Click **Buy**. MetaMask opens with the ARC amount as the transaction value. Click **Confirm** to submit. Tokens arrive in your wallet once the transaction confirms.
+    Click **Buy**. MetaMask opens with the USDC amount as the transaction value. Click **Confirm** to submit. Tokens arrive in your wallet once the transaction confirms.
   </Step>
 </Steps>
 
@@ -61,7 +61,7 @@ Selling requires two transactions: first approving the launcher contract to spen
     If you haven't approved the launcher contract for this token yet, the panel shows an **Approve** button first. Click it and confirm the approval transaction in MetaMask. This authorises the contract to transfer your tokens when you sell.
   </Step>
   <Step title="Click Sell">
-    Once the approval confirms, click **Sell** and confirm the second transaction in MetaMask. The contract transfers your tokens into the pool and sends ARC to your wallet.
+    Once the approval confirms, click **Sell** and confirm the second transaction in MetaMask. The contract transfers your tokens into the pool and sends USDC to your wallet.
   </Step>
 </Steps>
 
