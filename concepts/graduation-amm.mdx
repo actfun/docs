@@ -1,7 +1,7 @@
 ---
 title: "How tokens auto-graduate into a built-in DEX"
 sidebarTitle: "Graduation & DEX"
-description: "When 95% of supply is mined, an ACTFUN token graduates automatically into a constant-product AMM seeded with LP reserve tokens and all accumulated ARC fees."
+description: "When 95% of supply is mined, an ACTFUN token graduates automatically into a constant-product AMM seeded with LP reserve tokens and all accumulated USDC fees."
 ---
 
 Graduation is the moment ACTFUN token transitions from the mining phase into a fully functional trading market. It happens automatically, in the same on-chain transaction as the final mine, the instant `totalMined` reaches `mineableSupply`. No one has to push a button, call a contract, or wait for an off-chain system to react.
@@ -25,7 +25,7 @@ When graduation fires, the contract executes three things in sequence:
 From that point on, `buyTokens()` and `sellTokens()` are unlocked, and the token trades against its own built-in liquidity pool.
 
 <Note>
-  The ARC side of the initial liquidity is the sum of all `feePerMine` payments collected during Phase 1, minus any refunds that miners claimed before graduation. Miners who claimed refunds before graduation reduced the pool's initial depth.
+  The USDC side of the initial liquidity is the sum of all `feePerMine` payments collected during Phase 1, minus any refunds that miners claimed before graduation. Miners who claimed refunds before graduation reduced the pool's initial depth.
 </Note>
 
 ## The Constant-Product AMM Formula
@@ -34,7 +34,7 @@ MINEPAD's built-in DEX uses the classic constant-product formula — the same mo
 
 ### Buying tokens with ARC
 
-When you send ARC into the pool, the contract calculates how many tokens you receive:
+When you send USDC into the pool, the contract calculates how many tokens you receive:
 
 ```text
 tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)
@@ -54,7 +54,7 @@ The same diminishing-returns dynamic applies in reverse. Selling a large fractio
 
 <AccordionGroup>
   <Accordion title="Worked example: buying tokens">
-    Suppose the pool has `arcReserve = 100 ARC` and `tokenReserve = 50,000 tokens`. You send `10 ARC`.
+    Suppose the pool has `arcReserve = 100 USDC` and `tokenReserve = 50,000 tokens`. You send `10 USDC`.
 
     ```text
     tokensOut = 10 × 50,000 / (100 + 10)
@@ -62,19 +62,19 @@ The same diminishing-returns dynamic applies in reverse. Selling a large fractio
              ≈ 4,545 tokens
     ```
 
-    After the trade: `arcReserve = 110 ARC`, `tokenReserve ≈ 45,455 tokens`. The product `110 × 45,455 ≈ 5,000,050` is approximately equal to the original `100 × 50,000 = 5,000,000` — constant-product maintained (small rounding due to integer math).
+    After the trade: `arcReserve = 110 USDC`, `tokenReserve ≈ 45,455 tokens`. The product `110 × 45,455 ≈ 5,000,050` is approximately equal to the original `100 × 50,000 = 5,000,000` — constant-product maintained (small rounding due to integer math).
   </Accordion>
 
   <Accordion title="Worked example: selling tokens">
-    Using the same pool (`arcReserve = 100 ARC`, `tokenReserve = 50,000 tokens`), you sell `5,000 tokens`.
+    Using the same pool (`arcReserve = 100 USDC`, `tokenReserve = 50,000 tokens`), you sell `5,000 tokens`.
 
     ```text
     arcOut = 5,000 × 100 / (50,000 + 5,000)
            = 500,000 / 55,000
-           ≈ 9.09 ARC
+           ≈ 9.09 USDC
     ```
 
-    After the trade: `arcReserve ≈ 90.91 ARC`, `tokenReserve = 55,000 tokens`.
+    After the trade: `arcReserve ≈ 90.91 USDC`, `tokenReserve = 55,000 tokens`.
   </Accordion>
 </AccordionGroup>
 
@@ -97,7 +97,7 @@ Slippage — the difference between the expected price and the executed price �
 Because the AMM lives inside the same `TokenLauncher` contract that handled mining, the token needs no external listing, no liquidity migration, and no bridge to another protocol. The pool is always at the same contract address. There is no LP token — the pool's liquidity is permanently locked inside the contract and cannot be withdrawn by anyone, including the creator.
 
 <Warning>
-  There is no mechanism to remove liquidity from the AMM. The ARC and tokens in the pool are permanently locked. This is a deliberate design choice to guarantee that the market remains liquid after graduation.
+  There is no mechanism to remove liquidity from the AMM. The USDC and tokens in the pool are permanently locked. This is a deliberate design choice to guarantee that the market remains liquid after graduation.
 </Warning>
 
 ## Selling Requires an Approval Step
