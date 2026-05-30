@@ -1,18 +1,18 @@
 ---
-title: "Actfun: community mined token launchpad on Arc Testnet"
+title: "MINEPAD: community mined token launchpad on Arc Testnet"
 sidebarTitle: "Introduction"
-description: "ACTFUN is a Pump.fun-style token launchpad on Arc Testnet. Mine tokens by writing funny posts, then trade them once 95% of supply is mined out."
+description: "MINEPAD is a Pump.fun-style token launchpad on Arc Testnet. Mine tokens by writing funny posts, then trade them once 95% of supply is mined out."
 ---
 
-ACTFUN is a Pump.fun-style token launchpad on Arc Testnet. Instead of buying into a presale or hoping for an airdrop, you earn tokens by doing something simple: writing a funny post and paying a small USDC fee. The community mines 95% of the supply directly to their own wallets. When mining completes, the token automatically opens for live trading on its own built-in DEX — no external exchange, no admin action required.
+MINEPAD is a Pump.fun-style token launchpad on Arc Testnet. Instead of buying into a presale or hoping for an airdrop, you earn tokens by doing something simple: writing a funny post and paying a small USDC fee. The community mines 95% of the supply directly to their own wallets. When mining completes, the token automatically opens for live trading on its own built-in DEX — no external exchange, no admin action required.
 
 ## The Mine-to-Launch concept
 
-Every token on ACTFUN follows the same four-stage lifecycle:
+Every token on MINEPAD follows the same four-stage lifecycle:
 
 <Steps>
   <Step title="Create">
-    Anyone can deploy a new token via the LaunchpadFactory. The creator sets the name, symbol, total supply, how many tokens each mine yields, a per-wallet cooldown, a daily cap, and an USDC fee per mine.
+    Anyone can deploy a new token via the LaunchpadFactory. The creator sets the name, symbol, total supply, how many tokens each mine yields, a per-wallet cooldown, a daily cap, and a USDC fee per mine.
   </Step>
   <Step title="Mine">
     Community members mine the token by writing a funny post and paying the USDC fee. Each successful mine mints tokens directly to the miner's wallet. Cooldowns and daily caps — enforced entirely in the smart contract — keep things fair.
@@ -25,23 +25,39 @@ Every token on ACTFUN follows the same four-stage lifecycle:
   </Step>
 </Steps>
 
-## Key benefits
+## Platform features
 
 <CardGroup cols={2}>
   <Card title="100% community mined" icon="pickaxe">
-    Every token — aside from the 5% LP reserve minted at graduation — goes directly to the people who mine it. There is no team allocation, no insider distribution, and no presale.
+    Every token — aside from the 5% LP reserve minted at graduation — goes directly to the people who mine it. No team allocation, no insider distribution, no presale.
   </Card>
 
-  <Card title="Zero team allocation" icon="shield-check">
-    The creator deploys the contract and sets the parameters, but receives no special token grant. The same mining rules apply to everyone.
+  <Card title="Creator Livestream" icon="video" href="/features/live-streaming">
+    Token creators can go live directly from the token page. Viewers watch in real time via WebRTC peer-to-peer video with a live chat panel alongside the stream.
+  </Card>
+
+  <Card title="Global Leaderboard" icon="trophy" href="/features/leaderboard">
+    A live leaderboard ranks all miners across every token by total amount mined. Top performers earn a spot in the Hall of Fame.
+  </Card>
+
+  <Card title="Hall of Fame" icon="star" href="/features/leaderboard">
+    Every token that successfully graduates gets immortalised in the Hall of Fame — a permanent record of graduated tokens and their top miners.
+  </Card>
+
+  <Card title="Global Live Feed" icon="rss" href="/features/global-feed">
+    A real-time activity stream shows every mine, buy, sell, and graduation across all tokens on MINEPAD, powered by Goldsky Turbo.
+  </Card>
+
+  <Card title="Shareable Token Cards" icon="share" href="/features/share-cards">
+    Every token gets a shareable card URL and an X-optimized OG image. One-click tweet integration lets you share your token straight to X.
+  </Card>
+
+  <Card title="Graduation Alerts" icon="bell" href="/features/graduation-alerts">
+    Browser notifications ping you at 75% mined and again when your token graduates — no account needed, tracked in your browser.
   </Card>
 
   <Card title="Fully onchain" icon="link">
     All supply caps, cooldowns, daily limits, graduation triggers, and AMM logic live in the smart contracts on Arc Testnet. Nothing is controlled by an off-chain server or admin key.
-  </Card>
-
-  <Card title="No backend API" icon="server">
-    The app communicates directly with Arc Testnet via RPC. There is no database, no centralized server, and no single point of failure.
   </Card>
 </CardGroup>
 
@@ -57,7 +73,7 @@ Every token on ACTFUN follows the same four-stage lifecycle:
   </Card>
 
   <Card title="Mine tokens" icon="pickaxe" href="/guides/mining">
-    Learn how mining works, what limits apply, and how to maximize your output.
+    Learn how mining works, what limits apply, and how to maximise your output.
   </Card>
 
   <Card title="Trade tokens" icon="arrow-right-arrow-left" href="/guides/trading">
