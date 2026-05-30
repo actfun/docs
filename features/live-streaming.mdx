@@ -1,0 +1,70 @@
+---
+title: "Creator Livestream: go live directly from your token page"
+sidebarTitle: "Creator Livestream"
+description: "Token creators can broadcast live video directly from the MINEPAD token page. Viewers watch via WebRTC peer-to-peer with a live chat panel and real-time viewer count."
+---
+
+Every token page on MINEPAD includes a built-in livestream studio for the token's creator. No streaming platform account, no OBS setup, no external tools — just click **Go Live** and your camera goes live to everyone watching the token page.
+
+<Info>
+  Only the wallet that created the token sees the **Go Live** button. Viewers see the stream automatically when it is active.
+</Info>
+
+## How it works
+
+MINEPAD uses **WebRTC peer-to-peer** video to stream directly from the creator's browser to each viewer's browser. There is no central media server — the video travels directly between peers, which means near-zero latency and no streaming account required.
+
+When a creator goes live:
+
+1. The creator's browser captures their camera and microphone.
+2. WebRTC connections are established with every viewer currently on the token page.
+3. Viewers see a pulsing 🔴 **LIVE** badge appear on the token card and detail page.
+4. A **live chat** panel opens alongside the stream for both creator and viewers.
+5. A **live viewer count** updates in real time as people join and leave.
+
+## Live chat
+
+The chat panel is available to everyone on the page — creator and viewers alike — while a stream is active. Messages appear instantly. The chat is session-scoped: it does not persist after the stream ends.
+
+## Viewer experience
+
+Viewers who land on a token page while a stream is active see:
+
+- The video stream embedded at the top of the token detail page.
+- A pulsing 🔴 **LIVE** badge on the token card in the grid and on the detail page header.
+- The live chat panel next to the stream.
+- A live viewer count showing how many people are currently watching.
+
+If the creator ends the stream, the video panel disappears and the LIVE badge is removed automatically.
+
+## Starting a stream
+
+<Steps>
+  <Step title="Open your token's detail page">
+    Navigate to your token on [actfun.fun](https://actfun.fun). The **Go Live** button appears in the top-right corner of the token detail page only for the wallet that created the token.
+  </Step>
+  <Step title="Click Go Live">
+    Click **Go Live**. Your browser will ask for permission to access your camera and microphone. Grant the permissions to continue.
+  </Step>
+  <Step title="You're live">
+    The stream starts immediately. The 🔴 LIVE badge appears for all viewers. Use the chat panel to interact with your audience.
+  </Step>
+  <Step title="End the stream">
+    Click **End Stream** to stop broadcasting. The stream terminates for all viewers instantly.
+  </Step>
+</Steps>
+
+<Warning>
+  WebRTC performance depends on your network connection. A stable broadband or 4G+ connection is recommended for smooth video. The stream quality may degrade on poor connections.
+</Warning>
+
+## Technical details
+
+| Detail | Value |
+| --- | --- |
+| Protocol | WebRTC (peer-to-peer) |
+| Signalling | MINEPAD API server (WebSocket) |
+| Video codec | Browser default (VP8/VP9/H.264) |
+| Latency | Near real-time (< 1 second typical) |
+| Auth | Creator wallet address verified client-side |
+| Persistence | Session-only (no recording or replay) |
