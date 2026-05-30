@@ -20,7 +20,7 @@ The rounding in the mineable supply formula means the LP reserve is always sligh
 
 ## Where Mine Fees Go
 
-Every time you mine, you pay `feePerMine` in ARC. That ARC is held in the contract's balance. It does **not** go to the creator. When the token graduates, the entire accumulated ARC balance becomes the ARC side of the AMM's initial liquidity — paired with the 5% LP reserve tokens.
+Every time you mine, you pay `feePerMine` in USDC. That ARC is held in the contract's balance. It does **not** go to the creator. When the token graduates, the entire accumulated USDC balance becomes the USDC side of the AMM's initial liquidity — paired with the 5% LP reserve tokens.
 
 This means the more activity a token sees during mining, the deeper its initial trading liquidity on graduation. Miners are collectively funding the market they will eventually trade in.
 
@@ -65,7 +65,7 @@ The creator's only power is at the moment of deployment: they choose the eight p
 - Mint tokens to themselves
 - Change fees or cooldowns
 - Pause or stop mining
-- Access the accumulated ARC fees
+- Access the accumulated USDC fees
 - Modify the AMM after graduation
 
 The contract enforces these constraints by design. Minting rights belong exclusively to the `TokenLauncher` contract, and the `LaunchToken`'s ownership is transferred to the launcher at deploy time.
