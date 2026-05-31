@@ -47,7 +47,7 @@ event TokensBought(
 function sellTokens(uint256 tokenAmount, uint256 minArcOut) external
 ```
 
-Transfer tokens from your wallet to the launcher and receive ARC. You must approve the launcher contract to spend your tokens before calling this function.
+Transfer tokens from your wallet to the launcher and receive USDC. You must approve the launcher contract to spend your tokens before calling this function.
 
 **Formula:**
 
@@ -144,7 +144,7 @@ await publicClient.waitForTransactionReceipt({ hash: buyHash });
 
 const tokenAmount = parseUnits("500", 18); // sell 500 tokens
 
-// Estimate ARC output
+// Estimate USDC output
 const arcOut = await publicClient.readContract({
   address: launcherAddress,
   abi: LAUNCHER_ABI,
