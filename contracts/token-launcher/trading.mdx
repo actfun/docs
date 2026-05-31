@@ -4,7 +4,7 @@ sidebarTitle: "Buy / Sell"
 description: "Use buyTokens and sellTokens on a graduated TokenLauncher to trade against the built-in constant-product AMM with slippage protection."
 ---
 
-After a token graduates from Phase 1, its `TokenLauncher` contract operates as a constant-product AMM (`x * y = k`). You can buy tokens by sending ARC via `buyTokens`, or sell tokens back for ARC via `sellTokens`. Both functions revert if you are not graduated yet, and both accept a slippage protection parameter so your transaction does not execute at a worse price than you expect.
+After a token graduates from Phase 1, its `TokenLauncher` contract operates as a constant-product AMM (`x * y = k`). You can buy tokens by sending ARC via `buyTokens`, or sell tokens back for USDC via `sellTokens`. Both functions revert if you are not graduated yet, and both accept a slippage protection parameter so your transaction does not execute at a worse price than you expect.
 
 <Warning>
   Both functions are only available after graduation (`graduated == true`). Calling either before graduation reverts with `"TokenLauncher: not graduated yet"`.
@@ -16,7 +16,7 @@ After a token graduates from Phase 1, its `TokenLauncher` contract operates as a
 function buyTokens(uint256 minTokensOut) external payable
 ```
 
-Send ARC as `msg.value`. The contract calculates how many tokens to send you using the constant-product formula and transfers them to your wallet. The call reverts if the output would be zero, fall below `minTokensOut`, or exceed the available token reserve.
+Send USDC as `msg.value`. The contract calculates how many tokens to send you using the constant-product formula and transfers them to your wallet. The call reverts if the output would be zero, fall below `minTokensOut`, or exceed the available token reserve.
 
 **Formula:**
 
@@ -60,7 +60,7 @@ arcOut = tokenAmount * arcReserve / (tokenReserve + tokenAmount)
 </ParamField>
 
 <ParamField path="minArcOut" type="uint256" required>
-  Minimum ARC (in wei) you are willing to receive. The transaction reverts with `"TokenLauncher: slippage exceeded"` if `arcOut < minArcOut`. Pass `0` to skip slippage protection.
+  Minimum USDC (in wei) you are willing to receive. The transaction reverts with `"TokenLauncher: slippage exceeded"` if `arcOut < minArcOut`. Pass `0` to skip slippage protection.
 </ParamField>
 
 ### Approve before selling
