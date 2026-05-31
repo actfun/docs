@@ -87,6 +87,14 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "AMM",
+        "products": [
+          {
+            "product": "Untitled Product"
+          }
+        ]
       }
     ]
   }
