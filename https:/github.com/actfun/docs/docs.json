@@ -1,0 +1,93 @@
+{
+  "theme": "luma",
+  "name": "ACTFUN",
+  "colors": {
+    "primary": "#3b8ef3"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/actfun/actfun"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/mine-to-launch",
+              "concepts/tokenomics",
+              "concepts/graduation-amm"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/connect-wallet",
+              "guides/launch-token",
+              "guides/mining",
+              "guides/trading",
+              "guides/claim-refund"
+            ]
+          },
+          {
+            "group": "Platform Features",
+            "pages": [
+              "features/live-streaming",
+              "features/leaderboard",
+              "features/global-feed",
+              "features/share-cards",
+              "features/graduation-alerts"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "reference/arc-testnet",
+              "reference/contract-addresses",
+              "reference/amm-liquidity.mdx",
+              "reference/fqa"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Smart Contracts",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "contracts/overview"
+            ]
+          },
+          {
+            "group": "LaunchpadFactory",
+            "pages": [
+              "contracts/launchpad-factory/create-token",
+              "contracts/launchpad-factory/read-tokens"
+            ]
+          },
+          {
+            "group": "TokenLauncher",
+            "pages": [
+              "contracts/token-launcher/mining",
+              "contracts/token-launcher/trading",
+              "contracts/token-launcher/refunds",
+              "contracts/token-launcher/views"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
