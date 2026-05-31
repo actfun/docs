@@ -49,8 +49,8 @@ LaunchpadFactory (0x6Ac3CaF79A5...)
         • mine(funnyPost) — mint tokens, collect USDC fees
         • claimRefund()  — return USDC fees before graduation
       Phase 2 (trading, post-graduation):
-        • buyTokens(minTokensOut) — send ARC, receive tokens
-        • sellTokens(tokenAmount, minArcOut) — send tokens, receive ARC
+        • buyTokens(minTokensOut) — send USDC, receive tokens
+        • sellTokens(tokenAmount, minArcOut) — send tokens, receive USDC
       Views (always available):
         • getMiningProgress(), getTokenPrice()
         • estimateBuy(), estimateSell()
@@ -76,7 +76,7 @@ import { defineChain } from "viem";
 export const arcTestnet = defineChain({
   id: 5042002,
   name: "Arc Testnet",
-  nativeCurrency: { name: "ARC", symbol: "ARC", decimals: 18 },
+  nativeCurrency: { name: "USDC", symbol: "USDC", decimals: 18 },
   rpcUrls: {
     default: { http: ["https://rpc.testnet.arc.network"] },
   },
