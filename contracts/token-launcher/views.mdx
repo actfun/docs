@@ -32,7 +32,7 @@ console.log(`${pct}% mined (${mined} / ${total})`);
 function getTokenPrice() external view returns (uint256)
 ```
 
-Returns the current price of one full token (1e18 units) denominated in ARC wei, calculated from the live AMM reserves:
+Returns the current price of one full token (1e18 units) denominated in USDC wei, calculated from the live AMM reserves:
 
 ```
 price = arcReserve * 1e18 / tokenReserve
@@ -49,7 +49,7 @@ const price = await publicClient.readContract({
   functionName: "getTokenPrice",
 });
 
-console.log(`Price: ${formatEther(price)} ARC per token`);
+console.log(`Price: ${formatEther(price)} USDC per token`);
 ```
 
 ## Trade estimation
@@ -60,7 +60,7 @@ console.log(`Price: ${formatEther(price)} ARC per token`);
 function estimateBuy(uint256 tokensOut) external view returns (uint256 arcIn)
 ```
 
-Returns the ARC (in wei) you need to send to receive exactly `tokensOut` tokens. Reverts with `"Insufficient liquidity"` if `tokensOut >= tokenReserve`.
+Returns the USDC (in wei) you need to send to receive exactly `tokensOut` tokens. Reverts with `"Insufficient liquidity"` if `tokensOut >= tokenReserve`.
 
 <ParamField path="tokensOut" type="uint256" required>
   Desired token output in units with 18 decimals.
@@ -72,7 +72,7 @@ Returns the ARC (in wei) you need to send to receive exactly `tokensOut` tokens.
 function estimateSell(uint256 tokensIn) external view returns (uint256 arcOut)
 ```
 
-Returns the ARC (in wei) you will receive for selling `tokensIn` tokens. Does not revert for any input value.
+Returns the USDC (in wei) you will receive for selling `tokensIn` tokens. Does not revert for any input value.
 
 <ParamField path="tokensIn" type="uint256" required>
   Tokens to sell in units with 18 decimals.
@@ -168,11 +168,11 @@ The following variables are `public` and readable via their auto-generated gette
 | `mineableSupply` | `uint256` | 95% of `maxSupply`, rounded to a whole multiple of `mineAmount` (18 decimals). |
 | `lpReserve` | `uint256` | 5% of `maxSupply` reserved for AMM seeding on graduation (18 decimals). |
 | `tokenReserve` | `uint256` | Current token balance of the AMM pool (18 decimals). `0` before graduation. |
-| `arcReserve` | `uint256` | Current ARC balance of the AMM pool (wei). `0` before graduation. |
+| `arcReserve` | `uint256` | Current USDC balance of the AMM pool (wei). `0` before graduation. |
 | `mineAmount` | `uint256` | Tokens minted per `mine()` call (18 decimals). Immutable. |
 | `cooldownSeconds` | `uint256` | Per-wallet cooldown between mine calls in seconds. Immutable. |
 | `dailyMax` | `uint256` | Per-wallet 24h mining cap in tokens (18 decimals). Immutable. |
-| `feePerMine` | `uint256` | ARC (wei) required per `mine()` call. Immutable. |
+| `feePerMine` | `uint256` | USDC (wei) required per `mine()` call. Immutable. |
 | `creator` | `address` | Wallet that deployed this token via `createToken`. Immutable. |
 | `createdAt` | `uint256` | Unix timestamp of the block in which this launcher was deployed. Immutable. |
 
