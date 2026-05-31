@@ -1,7 +1,7 @@
 ---
 title: "ACTFUN contract addresses on Arc Testnet (Chain 5042002)"
 sidebarTitle: "Contract Addresses"
-description: "Verified contract addresses for MINEPAD on Arc Testnet (Chain ID 5042002), including LaunchpadFactory and how to find each token's contracts."
+description: "Verified contract addresses for ACTFUN on Arc Testnet (Chain ID 5042002), including LaunchpadFactory and how to find each token's contracts."
 ---
 
 All ACTFUN contracts are deployed on Arc Testnet (Chain ID `5042002`) and verified on Arcscan. Verification means you can read the source code and interact directly with any contract through the explorer's **Contract** tab — no intermediary required. There is no mainnet deployment at this time.
@@ -14,7 +14,7 @@ All ACTFUN contracts are deployed on Arc Testnet (Chain ID `5042002`) and verifi
 
 | Contract | Address |
 | --- | --- |
-| LaunchpadFactory | [`0x6Ac3CaF79A5d68D259795380F012f922476A1721`](https://testnet.arcscan.app/address/0x6Ac3CaF79A5d68D259795380F012f922476A1721#code) |
+| LaunchpadFactory | [`0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4`](https://testnet.arcscan.app/address/0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4#code) |
 
 The **LaunchpadFactory** is the single entry point for creating new tokens. It records every deployed token pair and exposes the full list on-chain for the ACTFUN app to read.
 
@@ -35,14 +35,14 @@ These addresses are unique to each token — there is one `LaunchToken` \+ one `
 
 ## Find a specific token's contracts
 
-**From the MINEPAD app:**
+**From the ACTFUN app:**
 
 1. Open the token's detail page on [actfun.xyz](https://actfun.fun).
 2. The page displays the `LaunchToken` and `TokenLauncher` addresses. Click either address to open it directly in Arcscan.
 
 **From Arcscan directly:**
 
-1. Go to the [LaunchpadFactory contract](https://testnet.arcscan.app/address/0x6Ac3CaF79A5d68D259795380F012f922476A1721#code) on Arcscan.
+1. Go to the [LaunchpadFactory contract](https://testnet.arcscan.app/address/0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4#code) on Arcscan.
 2. Open the **Read Contract** tab.
 3. Call `getTokenCount` to see how many tokens have been deployed, then call `getToken(index)` to retrieve the addresses for a specific token by its position in the list.
 
