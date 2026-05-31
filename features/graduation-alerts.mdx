@@ -1,10 +1,10 @@
 ---
 title: "Graduation Alerts: browser notifications for tokens you've mined"
 sidebarTitle: "Graduation Alerts"
-description: "MINEPAD sends browser toast notifications when a token you mined hits 75% and when it graduates — no account needed, tracked entirely in your browser."
+description: "ACTFUN sends browser toast notifications when a token you mined hits 75% and when it graduates — no account needed, tracked entirely in your browser."
 ---
 
-MINEPAD automatically tracks every token you mine and sends browser toast notifications at key milestones — no account, no email address, and no push notification permission required. Everything is stored locally in your browser using `localStorage`.
+ACTFUN automatically tracks every token you mine and sends browser toast notifications at key milestones — no account, no email address, and no push notification permission required. Everything is stored locally in your browser using `localStorage`.
 
 ## What triggers a notification
 
@@ -15,7 +15,7 @@ MINEPAD automatically tracks every token you mine and sends browser toast notifi
 
 ## How it works
 
-1. Every time you successfully mine a token, MINEPAD records that token's launcher address in your browser's `localStorage`.
+1. Every time you successfully mine a token, ACTFUN records that token's launcher address in your browser's `localStorage`.
 2. A background poller checks the mining progress of every tracked token every **45 seconds**.
 3. When a token crosses 75% or graduates, a toast notification appears at the bottom of the screen.
 4. Each notification fires **exactly once per milestone** — you won't see the same alert twice.
@@ -31,9 +31,9 @@ MINEPAD automatically tracks every token you mine and sends browser toast notifi
 - **Graduation alert** → The token has a live AMM. Click the toast to jump straight to the swap panel and buy in.
 
 <Tip>
-  If you mine a token and immediately close the tab, your alerts are still set. The next time you open MINEPAD in the same browser, the poller resumes and catches up on any milestones you missed.
+  If you mine a token and immediately close the tab, your alerts are still set. The next time you open ACTFUN in the same browser, the poller resumes and catches up on any milestones you missed.
 </Tip>
 
 ## Privacy
 
-No data is sent to any server to power alerts. Your mined token list lives entirely in your browser's `localStorage` and is never transmitted to MINEPAD's backend. The poller reads on-chain state directly from Arc Testnet via RPC.
+No data is sent to any server to power alerts. Your mined token list lives entirely in your browser's `localStorage` and is never transmitted to ACTFUN's backend. The poller reads on-chain state directly from Arc Testnet via RPC.
