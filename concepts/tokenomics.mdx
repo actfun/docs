@@ -20,7 +20,7 @@ The rounding in the mineable supply formula means the LP reserve is always sligh
 
 ## Where Mine Fees Go
 
-Every time you mine, you pay `feePerMine` in USDC. That ARC is held in the contract's balance. It does **not** go to the creator. When the token graduates, the entire accumulated USDC balance becomes the USDC side of the AMM's initial liquidity — paired with the 5% LP reserve tokens.
+Every time you mine, you pay `feePerMine` in USDC. That USDC is held in the contract's balance. It does **not** go to the creator. When the token graduates, the entire accumulated USDC balance becomes the USDC side of the AMM's initial liquidity — paired with the 5% LP reserve tokens.
 
 This means the more activity a token sees during mining, the deeper its initial trading liquidity on graduation. Miners are collectively funding the market they will eventually trade in.
 
@@ -46,7 +46,7 @@ When a creator deploys a token, they set the following parameters. All of them a
 | `mineAmount` | Tokens minted per mine call | Creator | No |
 | `cooldownSeconds` | Per-wallet wait time between mines | Creator | No |
 | `dailyMax` | Per-wallet 24h mining cap (in tokens) | Creator | No |
-| `feePerMine` | ARC cost per mine call | Creator | No |
+| `feePerMine` | USDC cost per mine call | Creator | No |
 | `mineableSupply` | Derived: 95% of maxSupply, rounded | Contract | No (computed) |
 | `lpReserve` | Derived: maxSupply − mineableSupply | Contract | No (computed) |
 
