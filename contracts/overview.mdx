@@ -9,27 +9,27 @@ ACTFUN uses a two-contract system deployed on Arc Testnet (Chain ID 5042002). A 
 
 | Contract | Address |
 | --- | --- |
-| **LaunchpadFactory** | [`0x6Ac3CaF79A5d68D259795380F012f922476A1721`](https://testnet.arcscan.app/address/0x6Ac3CaF79A5d68D259795380F012f922476A1721#code) |
+| **LaunchpadFactory** | [`0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4`](https://testnet.arcscan.app/address/0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4#code) |
 | **TokenLauncher** | Deployed per token by the factory |
 | **LaunchToken** | Deployed per token by the factory |
 
 All contracts are verified on [Arcscan](https://testnet.arcscan.app). Future token pairs automatically match the verified bytecode.
 
 <Note>
-  Arc Testnet RPC: `https://rpc.testnet.arc.network` · Chain ID: `5042002` · Currency: `ARC`
+  Arc Testnet RPC: `https://rpc.testnet.arc.network` · Chain ID: `5042002` · Currency: `USDC`
 </Note>
 
 ## The two-phase lifecycle
 
-Every token launched through MINEPAD follows the same two-phase lifecycle.
+Every token launched through ACTFUN follows the same two-phase lifecycle.
 
 **Phase 1 — Mining**
 
-The community earns tokens by calling `mine(funnyPost)` on the token's `TokenLauncher` contract. Each mine call requires a small ARC fee (set by the token creator) and mints a fixed `mineAmount` of tokens directly to the caller. A per-wallet cooldown and a 24-hour cap prevent any single address from dominating the supply. Mining continues until 95% of the max supply has been minted.
+The community earns tokens by calling `mine(funnyPost)` on the token's `TokenLauncher` contract. Each mine call requires a small USDC fee (set by the token creator) and mints a fixed `mineAmount` of tokens directly to the caller. A per-wallet cooldown and a 24-hour cap prevent any single address from dominating the supply. Mining continues until 95% of the max supply has been minted.
 
 **Phase 2 — Trading**
 
-When the last mine call fills the 95% mineable supply, the `TokenLauncher` automatically calls `_graduate()`. This mints the remaining 5% as LP reserve tokens to the contract itself and seeds a constant-product AMM (`x * y = k`) using those tokens plus all accumulated ARC mine fees as initial liquidity. From that point on, anyone can buy and sell via `buyTokens` and `sellTokens` — no external DEX needed.
+When the last mine call fills the 95% mineable supply, the `TokenLauncher` automatically calls `_graduate()`. This mints the remaining 5% as LP reserve tokens to the contract itself and seeds a constant-product AMM (`x * y = k`) using those tokens plus all accumulated USDC mine fees as initial liquidity. From that point on, anyone can buy and sell via `buyTokens` and `sellTokens` — no external DEX needed.
 
 ## Contract roles
 
@@ -46,8 +46,8 @@ LaunchpadFactory (0x6Ac3CaF79A5...)
 │
 └── TokenLauncher (miner + AMM)
       Phase 1 (mining):
-        • mine(funnyPost) — mint tokens, collect ARC fees
-        • claimRefund()  — return ARC fees before graduation
+        • mine(funnyPost) — mint tokens, collect USDC fees
+        • claimRefund()  — return USDC fees before graduation
       Phase 2 (trading, post-graduation):
         • buyTokens(minTokensOut) — send ARC, receive tokens
         • sellTokens(tokenAmount, minArcOut) — send tokens, receive ARC
@@ -63,7 +63,7 @@ LaunchpadFactory (0x6Ac3CaF79A5...)
 | --- | --- |
 | Mineable supply | 95% of `maxSupply` (rounded down to a whole multiple of `mineAmount`) |
 | LP reserve | 5% of `maxSupply`, minted to the launcher on graduation |
-| AMM seeding | LP reserve tokens \+ all ARC mine fees accumulated in Phase 1 |
+| AMM seeding | LP reserve tokens \+ all USDC mine fees accumulated in Phase 1 |
 | AMM formula | `tokensOut = arcIn * tokenReserve / (arcReserve + arcIn)` |
 
 ## Network configuration
@@ -93,5 +93,5 @@ export const arcTestnet = defineChain({
 - [Read token listings from LaunchpadFactory](/contracts/launchpad-factory/read-tokens)
 - [mine() — Earn tokens by writing a post](/contracts/token-launcher/mining)
 - [buyTokens and sellTokens — Trade on the AMM](/contracts/token-launcher/trading)
-- [claimRefund — Recover ARC fees before graduation](/contracts/token-launcher/refunds)
+- [claimRefund — Recover USDC fees before graduation](/contracts/token-launcher/refunds)
 - [TokenLauncher view functions reference](/contracts/token-launcher/views)
