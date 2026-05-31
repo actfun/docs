@@ -20,7 +20,7 @@ When graduation fires, the contract executes three things in sequence:
 
 1. Sets `graduated = true`, permanently locking out the mining functions.
 2. Mints the 5% LP reserve tokens (`lpReserve`) to itself.
-3. Records the AMM's initial reserves: `tokenReserve = lpReserve` and `arcReserve = address(this).balance` (all ARC accumulated from mining fees).
+3. Records the AMM's initial reserves: `tokenReserve = lpReserve` and `arcReserve = address(this).balance` (all USDC accumulated from mining fees).
 
 From that point on, `buyTokens()` and `sellTokens()` are unlocked, and the token trades against its own built-in liquidity pool.
 
@@ -30,9 +30,9 @@ From that point on, `buyTokens()` and `sellTokens()` are unlocked, and the token
 
 ## The Constant-Product AMM Formula
 
-MINEPAD's built-in DEX uses the classic constant-product formula — the same model as Uniswap v1. At any point in time, the pool maintains the invariant `x * y = k`, where `x` is `arcReserve` and `y` is `tokenReserve`.
+ACTFUN's built-in DEX uses the classic constant-product formula — the same model as Uniswap v1. At any point in time, the pool maintains the invariant `x * y = k`, where `x` is `arcReserve` and `y` is `tokenReserve`.
 
-### Buying tokens with ARC
+### Buying tokens with USDC
 
 When you send USDC into the pool, the contract calculates how many tokens you receive:
 
@@ -42,7 +42,7 @@ tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)
 
 As `arcIn` increases, `tokensOut` grows — but at a diminishing rate. Larger buys move the price more than smaller ones.
 
-### Selling tokens for ARC
+### Selling tokens for USDC
 
 When you sell tokens back to the pool, the contract calculates how much ARC you receive:
 
@@ -83,7 +83,7 @@ The same diminishing-returns dynamic applies in reverse. Selling a large fractio
 Because the AMM uses a fixed formula with no external oracle, the price of a token is determined entirely by the ratio of `arcReserve` to `tokenReserve` at any moment:
 
 ```text
-price (ARC per token) = arcReserve × 1e18 / tokenReserve
+price (USDC per token) = arcReserve × 1e18 / tokenReserve
 ```
 
 Slippage — the difference between the expected price and the executed price — increases with trade size relative to pool depth. Both `buyTokens()` and `sellTokens()` accept a minimum output parameter (`minTokensOut` and `minArcOut` respectively). Your transaction reverts if the actual output falls below your minimum, protecting you from front-running and unexpected price moves.
