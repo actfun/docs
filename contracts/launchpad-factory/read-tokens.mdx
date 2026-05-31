@@ -1,12 +1,12 @@
 ---
-title: "Query the MINEPAD on-chain LaunchpadFactory registry"
+title: "Query the ACTFUN on-chain LaunchpadFactory registry"
 sidebarTitle: "Read Tokens"
-description: "Use getTokenCount, getTokens, and getToken to read the LaunchpadFactory registry of all MINEPAD tokens, with full TokenRecord struct field reference."
+description: "Use getTokenCount, getTokens, and getToken to read the LaunchpadFactory registry of all ACTFUN tokens, with full TokenRecord struct field reference."
 ---
 
 The `LaunchpadFactory` maintains an append-only array of every token pair it has deployed. Three view functions let you read this registry: `getTokenCount` returns the total, `getTokens` returns a paginated slice sorted newest-first, and `getToken` returns a single record by its array index. All three are free to call and require no authentication.
 
-**Contract:** `LaunchpadFactory` at `0x6Ac3CaF79A5d68D259795380F012f922476A1721` on Arc Testnet (Chain ID 5042002)
+**Contract:** `LaunchpadFactory` at `0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4` on Arc Testnet (Chain ID 5042002)
 
 ## getTokenCount
 
@@ -96,7 +96,7 @@ Each query returns one or more `TokenRecord` structs with the following fields:
 </ResponseField>
 
 <ResponseField name="feePerMine" type="uint256">
-  ARC (in wei) required per `mine()` call.
+  USDC (in wei) required per `mine()` call.
 </ResponseField>
 
 ## Code examples
