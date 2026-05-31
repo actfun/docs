@@ -92,7 +92,10 @@
         "tab": "AMM",
         "products": [
           {
-            "product": "Untitled Product"
+            "product": "Untitled Product",
+            "pages": [
+              "https:/github.com/actfun/docs/https:/github.com/actfun/docs/https:/github.com/actfun/docs/reference/amm-liquidity"
+            ]
           }
         ]
       }
