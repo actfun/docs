@@ -18,6 +18,28 @@ All ACTFUN contracts are deployed on Arc Testnet (Chain ID `5042002`) and verifi
 
 The **LaunchpadFactory** is the single entry point for creating new tokens. It records every deployed token pair and exposes the full list on-chain for the ACTFUN app to read.
 
+## UNITFLOW V3 Contracts (Arc Testnet)
+
+ACTFUN uses UNITFLOW V3 for the AMM liquidity pool on graduation. These contracts are the standard Uniswap V3-compatible infrastructure on Arc Testnet.
+
+| Contract | Address | Purpose |
+| --- | --- | --- |
+| **UnitFlowV3 Router** | [`0x509cF58CdA08C7aee83a2BdBb4A1Eac907343D01`](https://testnet.arcscan.app/address/0x509cF58CdA08C7aee83a2BdBb4A1Eac907343D01#code) | Swap router for token trades |
+| **UnitFlowV3 PositionManager** | [`0x77c39eB310BE31e60068CE29855F83359bf85fc4`](https://testnet.arcscan.app/address/0x77c39eB310BE31e60068CE29855F83359bf85fc4#code) | Manages liquidity positions (NFTs) |
+| **UnitFlowV3 Factory** | [`0xAb6A8AAb7d490007634ef59d424b5d89688a1971`](https://testnet.arcscan.app/address/0xAb6A8AAb7d490007634ef59d424b5d89688a1971#code) | Creates and manages V3 pools |
+| **WUSDC** | [`0x911b4000D3422F482F4062a913885f7b035382Df`](https://testnet.arcscan.app/address/0x911b4000D3422F482F4062a913885f7b035382Df#code) | Wrapped USDC (native gas token) |
+| **Quoter** | [`0x121aeB6DEf00F6F67665008CaC1C19805886ed1a`](https://testnet.arcscan.app/address/0x121aeB6DEf00F6F67665008CaC1C19805886ed1a#code) | Price quoting for swaps |
+
+## Fee tier
+
+All ACTFUN liquidity pools use **3000 (0.30%)** fee tier with full-range ticks: **-887220 / 887220**.
+
+## Previous factory version
+
+| Contract | Address | Status |
+| --- | --- | --- |
+| LaunchpadFactory v8 | [`0x6Ac3CaF79A5d68D259795380F012f922476A1721`](https://testnet.arcscan.app/address/0x6Ac3CaF79A5d68D259795380F012f922476A1721#code) | Verified (deprecated) |
+
 ## Per-token contracts
 
 Every token launched through ACTFUN gets its own pair of contracts deployed by the factory:
