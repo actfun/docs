@@ -4,7 +4,7 @@ sidebarTitle: "createToken"
 description: "Call createToken on LaunchpadFactory to deploy a LaunchToken ERC-20 and TokenLauncher. Pass supply, mine amount, cooldown, daily cap, and fee per mine."
 ---
 
-Calling `createToken` on the `LaunchpadFactory` deploys two contracts at once: a `LaunchToken` ERC-20 and a `TokenLauncher` that handles Phase 1 mining and Phase 2 trading. The factory registers both addresses in its on-chain token list and transfers mint authority to the launcher. You pay a creation fee (denominated in ARC) as `msg.value` to prevent spam deployments.
+Calling `createToken` on the `LaunchpadFactory` deploys two contracts at once: a `LaunchToken` ERC-20 and a `TokenLauncher` that handles Phase 1 mining and Phase 2 trading. The factory registers both addresses in its on-chain token list and transfers mint authority to the launcher. You pay a creation fee (denominated in USDC) as `msg.value` to prevent spam deployments.
 
 ## Function signature
 
@@ -21,7 +21,7 @@ function createToken(
 ) external payable returns (address tokenAddr, address launcherAddr)
 ```
 
-**Contract:** `LaunchpadFactory` at `0x6Ac3CaF79A5d68D259795380F012f922476A1721` on Arc Testnet (Chain ID 5042002)
+**Contract:** `LaunchpadFactory` at `0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4` on Arc Testnet (Chain ID 5042002)
 
 ## Required value
 
@@ -68,7 +68,7 @@ The entire `msg.value` is forwarded to the protocol `feeRecipient`. If you send 
 </ParamField>
 
 <ParamField path="feePerMine" type="uint256" required>
-  ARC (in wei) the caller must send with each `mine()` call. These fees accumulate in the `TokenLauncher` and seed the AMM liquidity pool on graduation. Set to `0` for free mining (though the factory's creation fee still applies).
+  USDC (in wei) the caller must send with each `mine()` call. These fees accumulate in the `TokenLauncher` and seed the AMM liquidity pool on graduation. Set to `0` for free mining (though the factory's creation fee still applies).
 </ParamField>
 
 ## Return values
@@ -153,7 +153,7 @@ const hash = await walletClient.writeContract({
     parseUnits("100", 18),       // mineAmount: 100 tokens per mine
     60n,                         // cooldown: 60 seconds
     parseUnits("500", 18),       // dailyMax: 500 tokens per 24h
-    parseEther("0.01"),          // feePerMine: 0.01 ARC
+    parseEther("0.01"),          // feePerMine: 0.01 USDC
   ],
   value: creationFee,
 });
