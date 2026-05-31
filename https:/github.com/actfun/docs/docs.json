@@ -55,8 +55,8 @@
             "pages": [
               "reference/arc-testnet",
               "reference/contract-addresses",
-              "reference/amm-liquidity.mdx",
-              "reference/amm-liquidity"
+              "reference/amm-liquidity",
+              "reference/faq"
             ]
           }
         ]

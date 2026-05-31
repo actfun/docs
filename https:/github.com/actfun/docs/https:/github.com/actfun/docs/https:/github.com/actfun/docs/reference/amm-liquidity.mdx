@@ -1,0 +1,42 @@
+---
+title: "On-Chain AMM Liquidity on Arc Testnet"
+sidebarTitle: "AMM Liquidity"
+description: "When an ACTFUN token graduates, liquidity is seeded simultaneously on three AMMs on Arc Testnet: UnitFlow V3, Uniswap V2, and Curve StableSwap."
+url: "reference/amm-liquidity"
+---
+
+When a token graduates, ACTFUN seeds liquidity on three AMMs simultaneously — every protocol is source-verified on Arc Explorer.
+
+## UnitFlow V3 • Concentrated Liquidity
+
+The primary AMM. A Uniswap V3 fork with full-range positions and sub-second finality on Arc. Every graduated token gets a dedicated V3 pool seeded at launch.
+
+| Contract | Address |
+| --- | --- |
+| Router | `0x509cF58CdA08C7aee83a2BdBb4A1Eac907343D01` |
+| Position Manager | `0x77c39eB310BE31e60068CE29855F83359bf85fc4` |
+| Factory | `0xAb6A8AAb7d490007634ef59d424b5d89688a1971` |
+| Quoter | `0x121aeB6DEf00F6F67665008CaC1C19805886ed1a` |
+
+**Fee tier:** 0.30% · **Ticks:** `-887220` / `887220` (full range)
+
+## Uniswap V2 • Classic Constant-Product
+
+The battle-tested `x * y = k` AMM. A second pool is created per token at graduation, giving traders a familiar swap interface and deep compatibility with V2-based tooling.
+
+| Contract | Address |
+| --- | --- |
+| Factory | `0x0036575FEB8c996B3306707eb74F6F824EB0Ac39` |
+| Router | `0x7F44fDFcC975bA07711a115a658B9d13D3E31274` |
+
+## Curve Finance (StableSwap) • Low-Slippage Pools
+
+A Curve-style StableSwap pool is deployed per token via the factory at graduation. Each token gets its own dedicated pool  designed for low-slippage swaps on correlated or newly bootstrapped pairs.
+
+| Contract | Address |
+| --- | --- |
+| StableSwap Factory | `0x8d4b65744eBdfB5d153980992B16f92826CA4Be1` |
+
+---
+
+That's it  three AMMs, one graduation event, all on Arc Testnet.
