@@ -1,10 +1,10 @@
 ---
-title: "claimRefund — Recover ARC mining fees before graduation"
+title: "claimRefund — Recover USDC mining fees before graduation"
 sidebarTitle: "claimRefund"
-description: "Miners can reclaim all ARC fees paid during Phase 1 by calling claimRefund. Check your claimable balance with claimableRefund before submitting the transaction."
+description: "Miners can reclaim all USDC fees paid during Phase 1 by calling claimRefund. Check your claimable balance with claimableRefund before submitting the transaction."
 ---
 
-Every ARC fee you pay when calling `mine()` is tracked in the `feePaid` mapping under your address. Before the token graduates, you can recover the full accumulated amount at any time by calling `claimRefund`. This is useful if you change your mind about a token or want to redeploy your ARC to other mining opportunities. Once the token graduates, those fees become the initial liquidity for the AMM and cannot be returned.
+Every USDC fee you pay when calling `mine()` is tracked in the `feePaid` mapping under your address. Before the token graduates, you can recover the full accumulated amount at any time by calling `claimRefund`. This is useful if you change your mind about a token or want to redeploy your USDC to other mining opportunities. Once the token graduates, those fees become the initial liquidity for the AMM and cannot be returned.
 
 ## claimRefund
 
@@ -12,7 +12,7 @@ Every ARC fee you pay when calling `mine()` is tracked in the `feePaid` mapping 
 function claimRefund() external
 ```
 
-Sends the full `feePaid[msg.sender]` balance back to your wallet in ARC. The function sets `feePaid[msg.sender]` to zero before transferring, following the checks-effects-interactions pattern, so re-entrancy is not possible.
+Sends the full `feePaid[msg.sender]` balance back to your wallet in USDC. The function sets `feePaid[msg.sender]` to zero before transferring, following the checks-effects-interactions pattern, so re-entrancy is not possible.
 
 The call reverts if:
 
@@ -22,7 +22,7 @@ The call reverts if:
 | Your `feePaid` balance is zero | `"TokenLauncher: nothing to refund"` |
 
 <Warning>
-  After graduation you cannot claim a refund under any circumstances. The accumulated ARC becomes `arcReserve` in the AMM and is permanently locked as protocol liquidity. If you want your ARC back, call `claimRefund()` before the token's mineable supply is exhausted.
+  After graduation you cannot claim a refund under any circumstances. The accumulated USDC becomes `arcReserve` in the AMM and is permanently locked as protocol liquidity. If you want your USDC back, call `claimRefund()` before the token's mineable supply is exhausted.
 </Warning>
 
 ## claimableRefund
@@ -31,7 +31,7 @@ The call reverts if:
 function claimableRefund(address user) external view returns (uint256)
 ```
 
-Returns the ARC (in wei) that `user` can currently reclaim. Returns `0` if the token has graduated, even if `feePaid[user]` is non-zero. Use this before submitting a `claimRefund` transaction to confirm the amount and avoid a wasted gas spend.
+Returns the USDC (in wei) that `user` can currently reclaim. Returns `0` if the token has graduated, even if `feePaid[user]` is non-zero. Use this before submitting a `claimRefund` transaction to confirm the amount and avoid a wasted gas spend.
 
 <ParamField path="user" type="address" required>
   The wallet address to check. Typically your own address.
@@ -43,7 +43,7 @@ Returns the ARC (in wei) that `user` can currently reclaim. Returns `0` if the t
 mapping(address => uint256) public feePaid;
 ```
 
-Accumulates the total ARC (in wei) paid by each miner across all their `mine()` calls. You can read it directly as a public mapping.
+Accumulates the total USDC (in wei) paid by each miner across all their `mine()` calls. You can read it directly as a public mapping.
 
 <Note>
   `feePaid[user]` does not reset after a `claimRefund` call on its own — the contract explicitly sets it to zero as part of `claimRefund`. If you mine again after claiming, new fees start accumulating from zero.
