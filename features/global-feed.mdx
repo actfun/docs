@@ -1,13 +1,13 @@
 ---
 title: "Global Live Feed: real-time on-chain activity across all tokens"
 sidebarTitle: "Global Live Feed"
-description: "The MINEPAD Global Live Feed streams every mine, buy, sell, and graduation event across all tokens in real time, powered by Goldsky Turbo and Neon Postgres."
+description: "The ACTFUN Global Live Feed streams every mine, buy, sell, and graduation event across all tokens in real time, powered by Goldsky Turbo and Neon Postgres."
 ---
 
-The **Global Live Feed** is a real-time activity stream on the MINEPAD homepage. It shows every on-chain event — mines, buys, sells, and graduations — across every token on the platform, as they happen.
+The **Global Live Feed** is a real-time activity stream on the ACTFUN homepage. It shows every on-chain event — mines, buys, sells, and graduations — across every token on the platform, as they happen.
 
 <Info>
-  The feed is powered by a **Goldsky Turbo** pipeline that streams Arc Testnet raw logs into a Neon Postgres database. The MINEPAD API server queries that database and serves events to the browser. A "Powered by Goldsky" badge appears in the feed footer.
+  The feed is powered by a **Goldsky Turbo** pipeline that streams Arc Testnet raw logs into a Neon Postgres database. The ACTFUN API server queries that database and serves events to the browser. A "Powered by Goldsky" badge appears in the feed footer.
 </Info>
 
 ## What the feed shows
@@ -52,7 +52,7 @@ The feed's data path:
 1. Arc Testnet produces a block containing an ACTFUN transaction.
 2. The Goldsky Turbo pipeline picks up the raw log within ~1 second.
 3. The log is decoded and written to the Neon Postgres `actfun_events` table.
-4. The MINEPAD API server (`GET /api/onchain-events`) queries the table and decodes events using `viem`.
+4. The ACTFUN API server (`GET /api/onchain-events`) queries the table and decodes events using `viem`.
 5. The browser polls for new events and renders them in the feed.
 
 The feed gracefully degrades to empty if the pipeline is paused or the database is temporarily unavailable.
