@@ -3,7 +3,7 @@ title: "mine() — Mint tokens via the TokenLauncher contract"
 description: "Call mine() on a TokenLauncher to mint tokens during Phase 1. Pay the USDC fee, write a post, and receive mineAmount tokens instantly."
 ---
 
-During Phase 1, the only way to receive tokens is to call `mine` on the token's `TokenLauncher` contract. Each call requires a short string — the "funny post" and an ARC payment equal to the token's `feePerMine`. If all conditions are met, the contract mints `mineAmount` tokens directly to your wallet. The accumulated USDC fees stay locked in the contract until graduation, when they seed the AMM liquidity pool.
+During Phase 1, the only way to receive tokens is to call `mine` on the token's `TokenLauncher` contract. Each call requires a short string — the "funny post" and a USDC payment equal to the token's `feePerMine`. If all conditions are met, the contract mints `mineAmount` tokens directly to your wallet. The accumulated USDC fees stay locked in the contract until graduation, when they seed the AMM liquidity pool.
 
 ## Function signature
 
