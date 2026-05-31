@@ -8,7 +8,7 @@
   "navbar": {
     "primary": {
       "type": "github",
-      "href": "https://github.com/actfun/minepad"
+      "href": "https://github.com/actfun/actfun"
     }
   },
   "navigation": {
@@ -56,7 +56,7 @@
             "pages": [
               "reference/arc-testnet",
               "reference/contract-addresses",
-              "reference/faq"
+              "reference/fqa"
             ]
           }
         ]
