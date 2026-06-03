@@ -550,7 +550,7 @@ This repo is fully open source under MIT. PRs welcome.
 ---
 
 <div align="center">
-  <strong>Built on Arc. Mined by community. Graduated by memes. 🤪</strong>
+  <strong>Built on Arc. Mined by community. Graduated by memes. </strong>
   <br /><br />
   <sub>ACTFUN is deployed on Arc testnet. Not financial advice. Mine responsibly.</sub>
 </div>
