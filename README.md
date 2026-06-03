@@ -1,7 +1,7 @@
 <div align="center">
   <img src="artifacts/actfun/public/minepad-logo.png" alt="ACTFUN" width="120" />
 
-  # ACTFUN / Mine to Launch on arc tesnet q
+  # ACTFUN / Mine to Launch on arc tesnet also mainnet day 1 upcoming 
 
   **The first community-mined token launchpad on Arc Network.**
   Mine tokens by writing something funny. 100% onchain. No VCs. No team allocation. Pure community.
