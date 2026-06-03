@@ -13,8 +13,8 @@ Trading is only available after graduation. A token graduates when 95% of its su
 
 ACTFUN uses a constant-product formula: `x * y = k`, where `x` is the USDC reserve, `y` is the token reserve, and `k` remains constant after each trade.
 
-- **Buying** sends USDC in and receives tokens out: `tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)`
-- **Selling** sends tokens in and receives USDC out: `arcOut = tokensIn × arcReserve / (tokenReserve + tokensIn)`
+- **Buying** sends USDC in and receives tokens out: `tokensOut = usdcIn × tokenReserve / (usdcReserve + usdcIn)`
+- **Selling** sends tokens in and receives USDC out: `usdcOut = tokensIn × usdcReserve / (tokenReserve + tokensIn)`
 
 The pool is seeded at graduation with the 5% LP reserve tokens and all USDC fees collected during mining. There are no additional fees on top of gas.
 

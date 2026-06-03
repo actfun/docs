@@ -20,7 +20,7 @@ When graduation fires, the contract executes three things in sequence:
 
 1. Sets `graduated = true`, permanently locking out the mining functions.
 2. Mints the 5% LP reserve tokens (`lpReserve`) to itself.
-3. Records the AMM's initial reserves: `tokenReserve = lpReserve` and `arcReserve = address(this).balance` (all USDC accumulated from mining fees).
+3. Records the AMM's initial reserves: `tokenReserve = lpReserve` and `usdcReserve = address(this).balance` (all USDC accumulated from mining fees).
 
 From that point on, `buyTokens()` and `sellTokens()` are unlocked, and the token trades against its own built-in liquidity pool.
 
@@ -30,31 +30,31 @@ From that point on, `buyTokens()` and `sellTokens()` are unlocked, and the token
 
 ## The Constant-Product AMM Formula
 
-ACTFUN's built-in DEX uses the classic constant-product formula — the same model as Uniswap v1. At any point in time, the pool maintains the invariant `x * y = k`, where `x` is `arcReserve` and `y` is `tokenReserve`.
+ACTFUN's built-in DEX uses the classic constant-product formula — the same model as Uniswap v1. At any point in time, the pool maintains the invariant `x * y = k`, where `x` is `usdcReserve` and `y` is `tokenReserve`.
 
 ### Buying tokens with USDC
 
 When you send USDC into the pool, the contract calculates how many tokens you receive:
 
 ```text
-tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)
+tokensOut = usdcIn × tokenReserve / (usdcReserve + usdcIn)
 ```
 
-As `arcIn` increases, `tokensOut` grows — but at a diminishing rate. Larger buys move the price more than smaller ones.
+As `usdcIn` increases, `tokensOut` grows — but at a diminishing rate. Larger buys move the price more than smaller ones.
 
 ### Selling tokens for USDC
 
 When you sell tokens back to the pool, the contract calculates how much USDC you receive:
 
 ```text
-arcOut = tokenAmount × arcReserve / (tokenReserve + tokenAmount)
+usdcOut = tokenAmount × usdcReserve / (tokenReserve + tokenAmount)
 ```
 
 The same diminishing-returns dynamic applies in reverse. Selling a large fraction of the pool in one transaction results in significant price impact.
 
 <AccordionGroup>
   <Accordion title="Worked example: buying tokens">
-    Suppose the pool has `arcReserve = 100 USDC` and `tokenReserve = 50,000 tokens`. You send `10 USDC`.
+    Suppose the pool has `usdcReserve = 100 USDC` and `tokenReserve = 50,000 tokens`. You send `10 USDC`.
 
     ```text
     tokensOut = 10 × 50,000 / (100 + 10)
@@ -62,31 +62,31 @@ The same diminishing-returns dynamic applies in reverse. Selling a large fractio
              ≈ 4,545 tokens
     ```
 
-    After the trade: `arcReserve = 110 USDC`, `tokenReserve ≈ 45,455 tokens`. The product `110 × 45,455 ≈ 5,000,050` is approximately equal to the original `100 × 50,000 = 5,000,000` — constant-product maintained (small rounding due to integer math).
+    After the trade: `usdcReserve = 110 USDC`, `tokenReserve ≈ 45,455 tokens`. The product `110 × 45,455 ≈ 5,000,050` is approximately equal to the original `100 × 50,000 = 5,000,000` — constant-product maintained (small rounding due to integer math).
   </Accordion>
 
   <Accordion title="Worked example: selling tokens">
-    Using the same pool (`arcReserve = 100 USDC`, `tokenReserve = 50,000 tokens`), you sell `5,000 tokens`.
+    Using the same pool (`usdcReserve = 100 USDC`, `tokenReserve = 50,000 tokens`), you sell `5,000 tokens`.
 
     ```text
-    arcOut = 5,000 × 100 / (50,000 + 5,000)
+    usdcOut = 5,000 × 100 / (50,000 + 5,000)
            = 500,000 / 55,000
            ≈ 9.09 USDC
     ```
 
-    After the trade: `arcReserve ≈ 90.91 USDC`, `tokenReserve = 55,000 tokens`.
+    After the trade: `usdcReserve ≈ 90.91 USDC`, `tokenReserve = 55,000 tokens`.
   </Accordion>
 </AccordionGroup>
 
 ## Price Discovery and Slippage
 
-Because the AMM uses a fixed formula with no external oracle, the price of a token is determined entirely by the ratio of `arcReserve` to `tokenReserve` at any moment:
+Because the AMM uses a fixed formula with no external oracle, the price of a token is determined entirely by the ratio of `usdcReserve` to `tokenReserve` at any moment:
 
 ```text
-price (USDC per token) = arcReserve × 1e18 / tokenReserve
+price (USDC per token) = usdcReserve × 1e18 / tokenReserve
 ```
 
-Slippage — the difference between the expected price and the executed price — increases with trade size relative to pool depth. Both `buyTokens()` and `sellTokens()` accept a minimum output parameter (`minTokensOut` and `minArcOut` respectively). Your transaction reverts if the actual output falls below your minimum, protecting you from front-running and unexpected price moves.
+Slippage — the difference between the expected price and the executed price — increases with trade size relative to pool depth. Both `buyTokens()` and `sellTokens()` accept a minimum output parameter (`minTokensOut` and `minUsdcOut` respectively). Your transaction reverts if the actual output falls below your minimum, protecting you from front-running and unexpected price moves.
 
 <Tip>
   The UI shows a live slippage estimate before you confirm. For large trades, consider splitting into smaller transactions to reduce price impact.
@@ -105,7 +105,7 @@ Because the AMM lives inside the same `TokenLauncher` contract that handled mini
 Selling tokens is a two-transaction process:
 
 1. **Approve** — Call `approve(launcherAddress, tokenAmount)` on the ERC-20 token contract, granting the `TokenLauncher` permission to pull your tokens.
-2. **Sell** — Call `sellTokens(tokenAmount, minArcOut)` on the launcher.
+2. **Sell** — Call `sellTokens(tokenAmount, minUsdcOut)` on the launcher.
 
 The ACTFUN UI handles this two-step flow automatically. If you are interacting with the contract directly, you must complete the `approve` transaction first or `sellTokens` will revert with an ERC-20 allowance error.
 

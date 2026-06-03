@@ -22,7 +22,7 @@ The call reverts if:
 | Your `feePaid` balance is zero | `"TokenLauncher: nothing to refund"` |
 
 <Warning>
-  After graduation you cannot claim a refund under any circumstances. The accumulated USDC becomes `arcReserve` in the AMM and is permanently locked as protocol liquidity. If you want your USDC back, call `claimRefund()` before the token's mineable supply is exhausted.
+  After graduation you cannot claim a refund under any circumstances. The accumulated USDC becomes `usdcReserve` in the AMM and is permanently locked as protocol liquidity. If you want your USDC back, call `claimRefund()` before the token's mineable supply is exhausted.
 </Warning>
 
 ## claimableRefund
@@ -82,7 +82,7 @@ const claimable = await publicClient.readContract({
 if (claimable === 0n) {
   console.log("Nothing to refund (either no fees paid, or token has graduated)");
 } else {
-  console.log(`Claimable: ${formatEther(claimable)} ARC`);
+  console.log(`Claimable: ${formatEther(claimable)} USDC`);
 
   // 2. Claim the refund
   const hash = await walletClient.writeContract({

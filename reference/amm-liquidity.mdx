@@ -1,0 +1,105 @@
+---
+title: "AMM Liquidity: creator-selectable AMM pools on graduation"
+sidebarTitle: "AMM Liquidity"
+description: "Token creators choose which AMMs receive liquidity on graduation. UNITFLOW V3, Uniswap V2, and Curve StableSwap are all available on Arc Testnet."
+---
+
+When a token graduates, its AMM liquidity is seeded into the creator-selected AMM pools. ACTFUN supports three distinct AMM protocols on Arc Testnet, and the creator picks any non-empty subset at launch time.
+
+## AMM selection at launch
+
+During token creation, the creator picks which AMMs to seed via the **AMM selection** panel on the creation form. This choice is stored as a bitmask in the `TokenLauncher` contract and cannot be changed after deployment.
+
+| Bitmask | AMM | Type | Liquidity model |
+| --- | --- | --- | --- |
+| `1` | **UNITFLOW V3** | Concentrated liquidity | Full-range LP positions (NFT) |
+| `2` | **Uniswap V2** | Constant-product | Classic `x*y=k` shared pool |
+| `4` | **Curve / StableSwap** | Low-slippage | StableSwap invariant for correlated assets |
+
+The creator must pick **at least one** AMM (bitmask `1` to `7`). The total liquidity pool is split evenly across all selected AMMs. The last-seeded AMM absorbs any rounding remainder.
+
+<Note>
+  `ammFlags` is an immutable `uint8` on the `TokenLauncher`. It is set at launch and never changes. You can read it via the `ammFlags()` public view function.
+</Note>
+
+## AMM 1: UNITFLOW V3
+
+UNITFLOW V3 is a Uniswap V3 fork on Arc Testnet. ACTFUN seeds a **full-range liquidity position** (ticks `-887220` to `887220`) with the token/WUSDC pair.
+
+- **Fee tier**: 3000 (0.30%)
+- **Pool creation**: `createAndInitializePoolIfNecessary` on the PositionManager
+- **LP token**: ERC-721 NFT held forever by the `TokenLauncher` contract
+- **No liquidity removal**: the NFT is permanently owned by the contract
+
+**Contract addresses**
+
+| Contract | Address |
+| --- | --- |
+| Factory | `0xAb6A8AAb7d490007634ef59d424b5d89688a1971` |
+| PositionManager | `0x77c39eB310BE31e60068CE29855F83359bf85fc4` |
+| Router | `0x509cF58CdA08C7aee83a2BdBb4A1Eac907343D01` |
+| Quoter | `0x121aeB6DEf00F6F67665008CaC1C19805886ed1a` |
+
+## AMM 2: Uniswap V2
+
+Uniswap V2 is a classic constant-product AMM on Arc Testnet. ACTFUN creates a pair and seeds it with both tokens.
+
+- **Pair creation**: `createPair` on the V2 Factory
+- **LP token**: standard Uniswap V2 pair token (ERC-20)
+- **No liquidity removal**: LP tokens are permanently held by the `TokenLauncher` contract
+
+**Contract addresses**
+
+| Contract | Address |
+| --- | --- |
+| Factory | `0xB56B00C38EF85633A789644415A16b4C8ea12EF8` |
+| Router | `0x54599C3e0bcb99ca37b286242b5eC5D331AB9D18` |
+
+## AMM 3: Curve / StableSwap
+
+StableSwap is a Curve-like stable-pair AMM on Arc Testnet. It uses the reference Curve StableSwap invariant (N_COINS=2, A_PRECISION=100) for low-slippage trading between correlated assets.
+
+- **Pool creation**: `createPool` on the StableSwap Factory
+- **Liquidity seeding**: `addLiquidity` with amounts in the pool's sorted token0/token1 order
+- **No liquidity removal**: pool tokens permanently held by the `TokenLauncher` contract
+
+<Warning>
+  The StableSwap pool sorts tokens by address. The `TokenLauncher` ensures the correct token0/token1 order when calling `addLiquidity`, so tokens with addresses higher than WUSDC graduate correctly.
+</Warning>
+
+**Contract addresses**
+
+| Contract | Address |
+| --- | --- |
+| Factory | `0x3714f242fe169AB5EB0D763Cf79AEAcA5F727E7b` |
+
+## Liquidity split on graduation
+
+When `_graduate()` fires, the contract:
+
+1. Mints `lpReserve` tokens (5% of max supply) to itself.
+2. Reads `ammFlags` to determine which AMMs are selected.
+3. Splits `lpReserve` and all accumulated USDC fees evenly across each selected AMM.
+4. Seeds each AMM with its share.
+
+If only one AMM is selected, the entire pool goes to that AMM. If all three are selected, each gets approximately one-third of the total liquidity.
+
+## Pool addresses
+
+After graduation, each token's pool addresses are readable on-chain:
+
+- `poolAddress` — UNITFLOW V3 pool (or `address(0)` if not selected)
+- `v2PairAddress` — Uniswap V2 pair (or `address(0)` if not selected)
+- `stablePoolAddress` — StableSwap pool (or `address(0)` if not selected)
+
+Use the `poolAddress()`, `v2PairAddress()`, and `stablePoolAddress()` view functions on the `TokenLauncher` to read them.
+
+## Why multi-AMM?
+
+Different AMMs serve different trading styles:
+
+- **UNITFLOW V3**: best for concentrated liquidity, high capital efficiency
+- **Uniswap V2**: simple, battle-tested, predictable pricing
+- **StableSwap**: lowest slippage for correlated-asset pairs (e.g. stablecoins)
+
+Creators can target their community's preferred trading style by selecting the right mix at launch.

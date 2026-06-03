@@ -4,7 +4,7 @@ sidebarTitle: "Buy / Sell"
 description: "Use buyTokens and sellTokens on a graduated TokenLauncher to trade against the built-in constant-product AMM with slippage protection."
 ---
 
-After a token graduates from Phase 1, its `TokenLauncher` contract operates as a constant-product AMM (`x * y = k`). You can buy tokens by sending ARC via `buyTokens`, or sell tokens back for USDC via `sellTokens`. Both functions revert if you are not graduated yet, and both accept a slippage protection parameter so your transaction does not execute at a worse price than you expect.
+After a token graduates from Phase 1, its `TokenLauncher` contract operates as a constant-product AMM (`x * y = k`). You can buy tokens by sending USDC via `buyTokens`, or sell tokens back for USDC via `sellTokens`. Both functions revert if you are not graduated yet, and both accept a slippage protection parameter so your transaction does not execute at a worse price than you expect.
 
 <Warning>
   Both functions are only available after graduation (`graduated == true`). Calling either before graduation reverts with `"TokenLauncher: not graduated yet"`.
@@ -21,10 +21,10 @@ Send USDC as `msg.value`. The contract calculates how many tokens to send you us
 **Formula:**
 
 ```text
-tokensOut = arcIn * tokenReserve / (arcReserve + arcIn)
+tokensOut = usdcIn * tokenReserve / (usdcReserve + usdcIn)
 ```
 
-where `arcIn = msg.value`.
+where `usdcIn = msg.value`.
 
 <ParamField path="minTokensOut" type="uint256" required>
   Minimum tokens you are willing to receive (18-decimal units). Acts as slippage protection. The transaction reverts with `"TokenLauncher: slippage exceeded"` if `tokensOut < minTokensOut`. Pass `0` to skip slippage protection, though this is not recommended on a live market.
@@ -35,7 +35,7 @@ where `arcIn = msg.value`.
 ```solidity
 event TokensBought(
     address indexed buyer,
-    uint256 arcIn,
+    uint256 usdcIn,
     uint256 tokensOut,
     uint256 timestamp
 );
@@ -44,7 +44,7 @@ event TokensBought(
 ## sellTokens
 
 ```solidity
-function sellTokens(uint256 tokenAmount, uint256 minArcOut) external
+function sellTokens(uint256 tokenAmount, uint256 minUsdcOut) external
 ```
 
 Transfer tokens from your wallet to the launcher and receive USDC. You must approve the launcher contract to spend your tokens before calling this function.
@@ -52,15 +52,15 @@ Transfer tokens from your wallet to the launcher and receive USDC. You must appr
 **Formula:**
 
 ```text
-arcOut = tokenAmount * arcReserve / (tokenReserve + tokenAmount)
+usdcOut = tokenAmount * usdcReserve / (tokenReserve + tokenAmount)
 ```
 
 <ParamField path="tokenAmount" type="uint256" required>
   Number of tokens to sell in units with 18 decimals. Must be greater than zero. The launcher calls `transferFrom` to pull exactly this amount from your wallet.
 </ParamField>
 
-<ParamField path="minArcOut" type="uint256" required>
-  Minimum USDC (in wei) you are willing to receive. The transaction reverts with `"TokenLauncher: slippage exceeded"` if `arcOut < minArcOut`. Pass `0` to skip slippage protection.
+<ParamField path="minUsdcOut" type="uint256" required>
+  Minimum USDC (in wei) you are willing to receive. The transaction reverts with `"TokenLauncher: slippage exceeded"` if `usdcOut < minUsdcOut`. Pass `0` to skip slippage protection.
 </ParamField>
 
 ### Approve before selling
@@ -81,7 +81,7 @@ await walletClient.writeContract({
   address: launcherAddress,
   abi: LAUNCHER_ABI,
   functionName: "sellTokens",
-  args: [tokenAmount, minArcOut],
+  args: [tokenAmount, minUsdcOut],
 });
 ```
 
@@ -91,7 +91,7 @@ await walletClient.writeContract({
 event TokensSold(
     address indexed seller,
     uint256 tokensIn,
-    uint256 arcOut,
+    uint256 usdcOut,
     uint256 timestamp
 );
 ```
@@ -119,16 +119,16 @@ const walletClient = createWalletClient({ chain: arcTestnet, transport: http(), 
 
 // ── Buy tokens ──────────────────────────────────────────────────────────────
 
-const arcIn = parseEther("1"); // 1 ARC
+const usdcIn = parseEther("1"); // 1 USDC
 
-// For "I'm sending arcIn, how many tokens do I get?" compute client-side
+// For "I'm sending usdcIn, how many tokens do I get?" compute client-side
 // using the AMM formula against the current pool reserves:
-const [tokenReserve, arcReserve] = await Promise.all([
+const [tokenReserve, usdcReserve] = await Promise.all([
   publicClient.readContract({ address: launcherAddress, abi: LAUNCHER_ABI, functionName: "tokenReserve" }),
-  publicClient.readContract({ address: launcherAddress, abi: LAUNCHER_ABI, functionName: "arcReserve" }),
+  publicClient.readContract({ address: launcherAddress, abi: LAUNCHER_ABI, functionName: "usdcReserve" }),
 ]);
 
-const tokensOut = (arcIn * tokenReserve) / (arcReserve + arcIn);
+const tokensOut = (usdcIn * tokenReserve) / (usdcReserve + usdcIn);
 const minTokensOut = (tokensOut * 99n) / 100n; // 1% slippage
 
 const buyHash = await walletClient.writeContract({
@@ -136,7 +136,7 @@ const buyHash = await walletClient.writeContract({
   abi: LAUNCHER_ABI,
   functionName: "buyTokens",
   args: [minTokensOut],
-  value: arcIn,
+  value: usdcIn,
 });
 await publicClient.waitForTransactionReceipt({ hash: buyHash });
 
@@ -145,13 +145,13 @@ await publicClient.waitForTransactionReceipt({ hash: buyHash });
 const tokenAmount = parseUnits("500", 18); // sell 500 tokens
 
 // Estimate USDC output
-const arcOut = await publicClient.readContract({
+const usdcOut = await publicClient.readContract({
   address: launcherAddress,
   abi: LAUNCHER_ABI,
   functionName: "estimateSell",
   args: [tokenAmount],
 });
-const minArcOut = (arcOut * 99n) / 100n; // 1% slippage
+const minUsdcOut = (usdcOut * 99n) / 100n; // 1% slippage
 
 // Approve the launcher
 const approveHash = await walletClient.writeContract({
@@ -167,7 +167,7 @@ const sellHash = await walletClient.writeContract({
   address: launcherAddress,
   abi: LAUNCHER_ABI,
   functionName: "sellTokens",
-  args: [tokenAmount, minArcOut],
+  args: [tokenAmount, minUsdcOut],
 });
 await publicClient.waitForTransactionReceipt({ hash: sellHash });
 ```

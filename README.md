@@ -55,13 +55,14 @@ Instead of buying into a bonding curve, **your community earns the token supply 
 │                                                         │
 │  2. MINE      Community mines 95% of supply by writing   │
 │               funny posts on-chain.                      │
-│               Each mine = small ARC fee → accumulates.   │
+│               Each mine = small USDC fee → accumulates.   │
 │               Rules enforced on-chain: cooldown,         │
 │               daily cap, supply cap.                     │
 │                                                         │
 │  3. GRADUATE  At 95% mined → contract auto-graduates:   │
 │               • Mints 5% LP reserve tokens to itself     │
-│               • Seeds UNITFLOW V3 full-range liquidity   │
+│               • Seeds creator-selected AMMs: UNITFLOW V3 │
+│                 + Uniswap V2 + Curve StableSwap (pick 1-3) │
 │               • LP NFT locked forever in the contract    │
 │                                                         │
 │  4. TRADE     Buy/sell via built-in AMM on the same page │
@@ -81,7 +82,7 @@ Instead of buying into a bonding curve, **your community earns the token supply 
 
 ![ACTFUN Architecture](https://raw.githubusercontent.com/amathxbt/actfun/main/public/assets/architecture-light.png)
 
-**LaunchpadFactory** (`0x6A3C...49D4`) deploys two contracts per token:
+**LaunchpadFactory** (`0xD3a6...7a4B`) deploys two contracts per token:
 1. **LaunchToken** — standard ERC-20 with `imageUri` stored on-chain
 2. **TokenLauncher** — per-token miner + AMM that owns the token and mints supply
 
@@ -96,18 +97,18 @@ Total Supply
 ├── 95%  Mineable by community (via funny posts)
 └──  5%  LP reserve (auto-minted to contract on graduation)
 
-Mining Fee  → set by creator (e.g. 1 ARC per mine)
+Mining Fee  → set by creator (e.g. 1 USDC per mine)
             → 100% flows into contract treasury
-            → Becomes initial ARC reserve in the AMM on graduation
+            → Becomes initial USDC reserve in the AMM on graduation
 
 On Graduation:
   • Initial token reserve = 5% of total supply
-  • Initial ARC reserve   = all accumulated mining fees
-  • UNITFLOW V3 pool seeded with full-range liquidity
+  • Initial USDC reserve  = all accumulated mining fees
+  • Creator-selected AMMs seeded (UNITFLOW V3, Uniswap V2, Curve StableSwap)
   • LP NFT held forever by the contract — no rug possible
 
 AMM Formula:
-  tokensOut = arcIn × tokenReserve / (arcReserve + arcIn)   (x·y=k)
+  tokensOut = usdcIn × tokenReserve / (usdcReserve + usdcIn)   (x·y=k)
 ```
 
 **No pre-mine. No team wallet. No VC allocation. The creator gets community glory and a Go Live button.**
@@ -145,7 +146,7 @@ AMM Formula:
 - **Graduation alerts** — browser toast notifications at 75% mined and on graduation
 
 ### 💱 Swap Page (post-graduation)
-- **Buy tokens** — direct ARC → token swap via UNITFLOW V3 AMM
+- **Buy tokens** — direct USDC → token swap via creator-selected AMMs (UNITFLOW V3, Uniswap V2, or Curve StableSwap)
 - **Sell tokens** — two-step approve + sell flow (ERC-20 approve handled automatically)
 - **Live price chart** — full trade history rendered as a price chart, built from on-chain Swap events
 - **Price stats** — current price, all-time high, all-time low, total trades
@@ -194,10 +195,10 @@ Powered by **Goldsky Turbo** pipeline streaming Arc testnet events into Neon Pos
 ### 💰 Refund Window
 If a token does not graduate before the refund deadline expires:
 - The token page shows an **"Expired"** badge
-- A **"Claim Your ARC Refund"** section appears at the bottom of the right panel
+- A **"Claim Your USDC Refund"** section appears at the bottom of the right panel
 - Live **countdown timer** shows how long until the refund window opens
-- Each miner sees their **claimable ARC amount** (all fees they paid)
-- One-click **Claim Refund** button — contract sends ARC back to the wallet
+- Each miner sees their **claimable USDC amount** (all fees they paid)
+- One-click **Claim Refund** button — contract sends USDC back to the wallet
 - If already claimed, shows "Refund claimed!" confirmation
 - Only wallets that actually mined the token can claim
 
@@ -279,7 +280,7 @@ event ArcRefundClaimed(
 
 | Contract | Address | Version |
 |---|---|---|
-| LaunchpadFactory | [`0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4`](https://testnet.arcscan.app/address/0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4) | v9 (2026-05-30) |
+| LaunchpadFactory | [`0xD3a684B4D9aA0E92E79ade7DcaB70A8b125A7a4B`](https://testnet.arcscan.app/address/0xD3a684B4D9aA0E92E79ade7DcaB70A8b125A7a4B) | v15 (current) |
 | UNITFLOW V3 Router | `0x509cF58CdA08C7aee83a2BdBb4A1Eac907343D01` | — |
 | UNITFLOW V3 PositionManager | `0x77c39eB310BE31e60068CE29855F83359bf85fc4` | — |
 | UNITFLOW V3 Factory | `0xAb6A8AAb7d490007634ef59d424b5d89688a1971` | — |
@@ -442,10 +443,10 @@ pnpm run typecheck
 | Network Name | Arc Testnet |
 | RPC URL | `https://rpc.testnet.arc.network` |
 | Chain ID | `5042002` |
-| Symbol | `ARC` |
+| Symbol | `USDC` |
 | Explorer | `https://testnet.arcscan.app` |
 
-Get testnet ARC from the [Arc faucet](https://faucet.testnet.arc.network).
+Get testnet USDC from the [Arc faucet](https://faucet.testnet.arc.network).
 
 ---
 
@@ -493,7 +494,7 @@ On-chain graduation is fully automatic and atomic. No migration transaction. No 
 Mining requires a string argument. Making it a funny post turns a mechanical fee payment into a social action. The activity feed becomes readable entertainment. The token with the best posts wins cultural mindshare.
 
 **Why the refund mechanism?**
-If a token doesn't gain enough community traction to graduate, miners shouldn't lose their ARC. The contract tracks `feePaid[user]` for every miner and allows a full refund after the window expires. This creates a safe, no-risk participation model.
+If a token doesn't gain enough community traction to graduate, miners shouldn't lose their USDC. The contract tracks `feePaid[user]` for every miner and allows a full refund after the window expires. This creates a safe, no-risk participation model.
 
 ---
 
@@ -545,7 +546,7 @@ This repo is fully open source under MIT. PRs welcome.
 | 📖 Docs | https://actfun-761788d6.mintlify.app/quickstart |
 | 🐦 X / Twitter | https://x.com/ACTFUNmine |
 | 🔍 Arc Explorer | https://testnet.arcscan.app |
-| 📜 Factory contract | [0x6A3Cf...dc49D4](https://testnet.arcscan.app/address/0x6A3Cf53F0df2A418b6731528aD3CFC1B71dc49D4) |
+| 📜 Factory contract | [0x6A3Cf...dc49D4](https://testnet.arcscan.app/address/0xD3a684B4D9aA0E92E79ade7DcaB70A8b125A7a4B) |
 
 ---
 

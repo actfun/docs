@@ -51,7 +51,7 @@ After the `mine` call updates `totalMined`, the contract checks whether `totalMi
 
 1. Mints `lpReserve` tokens to the launcher contract itself.
 2. Sets `tokenReserve = lpReserve`.
-3. Sets `arcReserve = address(this).balance` (all accumulated mine fees minus any previously claimed refunds).
+3. Sets `usdcReserve = address(this).balance` (all accumulated mine fees minus any previously claimed refunds).
 4. Sets `graduated = true`.
 5. Emits `TokenGraduated`.
 
@@ -80,12 +80,12 @@ Emitted on every successful mine call. `amount` is always equal to the token's `
 event TokenGraduated(
     address indexed token,
     uint256 tokenReserve,
-    uint256 arcReserve,
+    uint256 usdcReserve,
     uint256 timestamp
 );
 ```
 
-Emitted in the same transaction as the final mine call. `tokenReserve` and `arcReserve` are the initial AMM reserves.
+Emitted in the same transaction as the final mine call. `tokenReserve` and `usdcReserve` are the initial AMM reserves.
 
 ## Code example
 

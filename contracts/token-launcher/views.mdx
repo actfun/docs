@@ -35,7 +35,7 @@ function getTokenPrice() external view returns (uint256)
 Returns the current price of one full token (1e18 units) denominated in USDC wei, calculated from the live AMM reserves:
 
 ```
-price = arcReserve * 1e18 / tokenReserve
+price = usdcReserve * 1e18 / tokenReserve
 ```
 
 Returns `0` if the token has not graduated yet (`!graduated`) or if `tokenReserve == 0`.
@@ -57,7 +57,7 @@ console.log(`Price: ${formatEther(price)} USDC per token`);
 ### estimateBuy
 
 ```solidity
-function estimateBuy(uint256 tokensOut) external view returns (uint256 arcIn)
+function estimateBuy(uint256 tokensOut) external view returns (uint256 usdcIn)
 ```
 
 Returns the USDC (in wei) you need to send to receive exactly `tokensOut` tokens. Reverts with `"Insufficient liquidity"` if `tokensOut >= tokenReserve`.
@@ -69,7 +69,7 @@ Returns the USDC (in wei) you need to send to receive exactly `tokensOut` tokens
 ### estimateSell
 
 ```solidity
-function estimateSell(uint256 tokensIn) external view returns (uint256 arcOut)
+function estimateSell(uint256 tokensIn) external view returns (uint256 usdcOut)
 ```
 
 Returns the USDC (in wei) you will receive for selling `tokensIn` tokens. Does not revert for any input value.
@@ -85,7 +85,7 @@ import { parseUnits, formatEther } from "viem";
 
 const tokens = parseUnits("100", 18); // 100 tokens
 
-const [arcNeeded, arcReceived] = await Promise.all([
+const [usdcNeeded, usdcReceived] = await Promise.all([
   publicClient.readContract({
     address: launcherAddress,
     abi: LAUNCHER_ABI,
@@ -100,8 +100,8 @@ const [arcNeeded, arcReceived] = await Promise.all([
   }),
 ]);
 
-console.log(`Buy  100 tokens: ${formatEther(arcNeeded)} ARC`);
-console.log(`Sell 100 tokens: ${formatEther(arcReceived)} ARC`);
+console.log(`Buy  100 tokens: ${formatEther(usdcNeeded)} USDC`);
+console.log(`Sell 100 tokens: ${formatEther(usdcReceived)} USDC`);
 ```
 
 ## Per-wallet mining limits
@@ -168,7 +168,7 @@ The following variables are `public` and readable via their auto-generated gette
 | `mineableSupply` | `uint256` | 95% of `maxSupply`, rounded to a whole multiple of `mineAmount` (18 decimals). |
 | `lpReserve` | `uint256` | 5% of `maxSupply` reserved for AMM seeding on graduation (18 decimals). |
 | `tokenReserve` | `uint256` | Current token balance of the AMM pool (18 decimals). `0` before graduation. |
-| `arcReserve` | `uint256` | Current USDC balance of the AMM pool (wei). `0` before graduation. |
+| `usdcReserve` | `uint256` | Current USDC balance of the AMM pool (wei). `0` before graduation. |
 | `mineAmount` | `uint256` | Tokens minted per `mine()` call (18 decimals). Immutable. |
 | `cooldownSeconds` | `uint256` | Per-wallet cooldown between mine calls in seconds. Immutable. |
 | `dailyMax` | `uint256` | Per-wallet 24h mining cap in tokens (18 decimals). Immutable. |
@@ -179,7 +179,7 @@ The following variables are `public` and readable via their auto-generated gette
 **Example — read core AMM state:**
 
 ```typescript
-const [graduated, tokenReserve, arcReserve, mineableSupply] = await Promise.all([
+const [graduated, tokenReserve, usdcReserve, mineableSupply] = await Promise.all([
   publicClient.readContract({
     address: launcherAddress,
     abi: LAUNCHER_ABI,
@@ -193,7 +193,7 @@ const [graduated, tokenReserve, arcReserve, mineableSupply] = await Promise.all(
   publicClient.readContract({
     address: launcherAddress,
     abi: LAUNCHER_ABI,
-    functionName: "arcReserve",
+    functionName: "usdcReserve",
   }),
   publicClient.readContract({
     address: launcherAddress,
@@ -202,9 +202,9 @@ const [graduated, tokenReserve, arcReserve, mineableSupply] = await Promise.all(
   }),
 ]);
 
-console.log({ graduated, tokenReserve, arcReserve, mineableSupply });
+console.log({ graduated, tokenReserve, usdcReserve, mineableSupply });
 ```
 
 <Note>
-  `tokenReserve` and `arcReserve` are `0` before graduation. Do not use `getTokenPrice`, `estimateBuy`, or `estimateSell` before `graduated == true` — `getTokenPrice` returns `0`, while `estimateBuy` and `estimateSell` will return `0` or compute against zero reserves.
+  `tokenReserve` and `usdcReserve` are `0` before graduation. Do not use `getTokenPrice`, `estimateBuy`, or `estimateSell` before `graduated == true` — `getTokenPrice` returns `0`, while `estimateBuy` and `estimateSell` will return `0` or compute against zero reserves.
 </Note>
