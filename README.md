@@ -517,12 +517,15 @@ All economic invariants are enforced in Solidity — not in React:
 
 ## Roadmap
 
+- [ ]Upcoming future in the next few weeks 
+
+the future would be a new idea on how we can bring Solana trenches and degens to ACTFUN by using the CIRCLE USDC bridge, allowing Solana users to trade on ACTFUN on the Arc chain, but even though the $$ is on the Solana main chain.
 - [ ] Arc mainnet deployment
 - [ ] IPFS image pinning for token metadata
 - [ ] Creator revenue share (% of post-graduation AMM fees)
 - [ ] Governance: community votes on launchpad parameters
 - [ ] Mobile app (Expo / React Native)
-- [ ] Multi-chain graduation (graduate to Uniswap on other chains)
+- [ ] 
 
 ---
 
@@ -543,7 +546,7 @@ This repo is fully open source under MIT. PRs welcome.
 | | |
 |---|---|
 | 🌐 Live app | https://actfun.xyz |
-| 📖 Docs | https://actfun-761788d6.mintlify.app/quickstart |
+| 📖 Docs | https://actfubdoc.mintlify.app/quickstart |
 | 🐦 X / Twitter | https://x.com/ACTFUNmine |
 | 🔍 Arc Explorer | https://testnet.arcscan.app |
 | 📜 Factory contract | [0x6A3Cf...dc49D4](https://testnet.arcscan.app/address/0xD3a684B4D9aA0E92E79ade7DcaB70A8b125A7a4B) |
