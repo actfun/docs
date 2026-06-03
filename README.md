@@ -1,7 +1,7 @@
 <div align="center">
   <img src="artifacts/actfun/public/minepad-logo.png" alt="ACTFUN" width="120" />
 
-  # ACTFUN / MINEPAD — Mine to Launch
+  # ACTFUN / Mine to Launch on arc tesnet q
 
   **The first community-mined token launchpad on Arc Network.**
   Mine tokens by writing something funny. 100% onchain. No VCs. No team allocation. Pure community.
@@ -323,7 +323,7 @@ ACTFUN is built on the full Arc testnet ecosystem, day one:
 | Layer | Partner | Status |
 |---|---|---|
 | Wallet connection | @dynamic_xyz | ✅ Live on testnet |
-| AMM + Liquidity | @CurveFinance + UNIFLOW | ✅ Live on testnet |
+| AMM + Liquidity | @CurveFinance + UNIFLOW + uniswap| ✅ Live on testnet |
 | Data infrastructure | @goldskyio | ✅ Live on testnet |
 | Contract audit | @sherlockdefi | 🔒 Mainnet day one |
 | Chain | Arc Testnet → Mainnet | 🚀 Day one |
