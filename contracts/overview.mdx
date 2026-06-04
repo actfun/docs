@@ -29,12 +29,20 @@ The community earns tokens by calling `mine(funnyPost)` on the token's `TokenLau
 
 **Phase 2 — Trading**
 
-When the last mine call fills the 95% mineable supply, the `TokenLauncher` automatically calls `_graduate()`. This mints the remaining 5% as LP reserve tokens to the contract itself and seeds a constant-product AMM (`x * y = k`) using those tokens plus all accumulated USDC mine fees as initial liquidity. From that point on, anyone can buy and sell via `buyTokens` and `sellTokens` — no external DEX needed.
+When the last mine call fills the 95% mineable supply, the `TokenLauncher` automatically calls `_graduate()`. This mints the remaining 5% as LP reserve tokens to the contract itself, then seeds up to three AMMs simultaneously using those tokens plus all accumulated USDC mine fees as initial liquidity — based on the creator's `ammFlags` bitmask selected at launch:
+
+| Bit | AMM | Type |
+| --- | --- | --- |
+| `1` | **UNITFLOW V3** | Concentrated liquidity (full-range) |
+| `2` | **Uniswap V2** | Constant-product x\*y=k |
+| `4` | **Curve / StableSwap** | Low-slippage StableSwap pool |
+
+LP positions are permanently locked in the `TokenLauncher` — no liquidity removal is possible by anyone, including the creator.
 
 ## Contract roles
 
 ```text
-LaunchpadFactory (0x6Ac3CaF79A5...)
+LaunchpadFactory (0xD3a684B4D9aA...)
 │
 │  createToken(...) → deploys:
 │
@@ -64,7 +72,7 @@ LaunchpadFactory (0x6Ac3CaF79A5...)
 | Mineable supply | 95% of `maxSupply` (rounded down to a whole multiple of `mineAmount`) |
 | LP reserve | 5% of `maxSupply`, minted to the launcher on graduation |
 | AMM seeding | LP reserve tokens \+ all USDC mine fees accumulated in Phase 1 |
-| AMM formula | `tokensOut = usdcIn * tokenReserve / (usdcReserve + usdcIn)` |
+| AMM seeding | LP reserve tokens + all USDC mine fees split across selected AMMs (ammFlags) |
 
 ## Network configuration
 
