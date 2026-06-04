@@ -4,7 +4,13 @@ sidebarTitle: "Graduation & DEX"
 description: "When 95% of supply is mined, an ACTFUN token graduates automatically into a constant-product AMM seeded with LP reserve tokens and all accumulated USDC fees."
 ---
 
-Graduation is the moment ACTFUN token transitions from the mining phase into a fully functional trading market. It happens automatically, in the same on-chain transaction as the final mine, the instant `totalMined` reaches `mineableSupply`. No one has to push a button, call a contract, or wait for an off-chain system to react.
+Graduation is the moment an ACTFUN token transitions from the mining phase into a fully functional trading market.
+
+<Note>
+  The graduation mechanism described here reflects ACTFUN's current multi-AMM architecture. When `_graduate()` fires, the contract seeds up to **three external AMMs** — UNITFLOW V3, Uniswap V2, and/or Curve StableSwap — based on the creator's `ammFlags` choice at launch. See [AMM Liquidity](/reference/amm-liquidity) for the full breakdown of each AMM and its contract addresses.
+</Note>
+
+ It happens automatically, in the same on-chain transaction as the final mine, the instant `totalMined` reaches `mineableSupply`. No one has to push a button, call a contract, or wait for an off-chain system to react.
 
 ## What Triggers Graduation
 
@@ -16,11 +22,15 @@ Inside every `mine()` call, the contract checks whether `totalMined >= mineableS
 
 ## What `_graduate()` Does
 
-When graduation fires, the contract executes three things in sequence:
+When graduation fires, the contract executes the following in sequence:
 
 1. Sets `graduated = true`, permanently locking out the mining functions.
 2. Mints the 5% LP reserve tokens (`lpReserve`) to itself.
-3. Records the AMM's initial reserves: `tokenReserve = lpReserve` and `usdcReserve = address(this).balance` (all USDC accumulated from mining fees).
+3. Reads `ammFlags` to determine which AMMs were selected at launch.
+4. Splits `lpReserve` and all accumulated USDC fees evenly across each selected AMM.
+5. Seeds each AMM: UNITFLOW V3 full-range position, Uniswap V2 pair, and/or Curve StableSwap pool — whichever were chosen.
+
+LP positions are permanently locked in the `TokenLauncher` contract. No one can remove liquidity — not the creator, not the miner, not the factory owner.
 
 From that point on, `buyTokens()` and `sellTokens()` are unlocked, and the token trades against its own built-in liquidity pool.
 
