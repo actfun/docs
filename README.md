@@ -286,6 +286,9 @@ event ArcRefundClaimed(
 | UNITFLOW V3 Factory | `0xAb6A8AAb7d490007634ef59d424b5d89688a1971` | — |
 | WUSDC | `0x911b4000D3422F482F4062a913885f7b035382Df` | — |
 | UNITFLOW V3 Quoter | `0x121aeB6DEf00F6F67665008CaC1C19805886ed1a` | — |
+| Uniswap V2 Factory | [`0xB56B00C38EF85633A789644415A16b4C8ea12EF8`](https://testnet.arcscan.app/address/0xB56B00C38EF85633A789644415A16b4C8ea12EF8) | — |
+| Uniswap V2 Router | [`0x54599C3e0bcb99ca37b286242b5eC5D331AB9D18`](https://testnet.arcscan.app/address/0x54599C3e0bcb99ca37b286242b5eC5D331AB9D18) | — |
+| StableSwap (Curve) Factory | [`0x3714f242fe169AB5EB0D763Cf79AEAcA5F727E7b`](https://testnet.arcscan.app/address/0x3714f242fe169AB5EB0D763Cf79AEAcA5F727E7b) | — |
 
 Fee tier: 3000 (0.30%), full-range ticks: -887220 / 887220
 
@@ -340,8 +343,8 @@ ACTFUN is built on the full Arc testnet ecosystem, day one:
 | Routing | wouter |
 | Web3 | wagmi v2 · viem |
 | Wallet | Dynamic Labs SDK (injected connector) |
-| Real-time | WebSocket (ws) · WebRTC mesh for livestreams |
-| API | Express 5 (OG cards + WebSocket signaling) |
+| Real-time | LiveKit (WebRTC — camera/mic broadcast + audio-only viewers + data chat) |
+| API | Express 5 (OG cards + LiveKit token mint + stats) |
 | Data | Goldsky Turbo → Neon Postgres + Goldsky Subgraph |
 | Monorepo | pnpm workspaces · Node.js 24 |
 
@@ -395,11 +398,10 @@ actfun/
 │   └── src/
 │       ├── lib/
 │       │   ├── neon.ts             Neon DB read pool
-│       │   ├── liveRooms.ts        In-memory WebRTC room state
-│       │   └── wsServer.ts         WS upgrade handler
+│       │   └── livekit.ts          LiveKit server-SDK (token mint + room status)
 │       └── routes/
 │           ├── events.ts           /api/onchain-events (Neon queries)
-│           ├── live.ts             /api/live/:addr WebSocket
+│           ├── live.ts             /api/live/:addr — LiveKit token mint + status
 │           └── share.ts            /api/share/:addr OG + /api/og-image/:addr PNG
 │
 ├── artifacts/actfun-mobile/        React Native / Expo mobile app
