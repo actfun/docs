@@ -18,7 +18,7 @@ Every token on ACTFUN follows the same four-stage lifecycle:
     Community members mine the token by writing a funny post and paying the USDC fee. Each successful mine mints tokens directly to the miner's wallet. Cooldowns and daily caps — enforced entirely in the smart contract — keep things fair.
   </Step>
   <Step title="Graduate">
-    When 95% of the supply has been mined, the contract automatically graduates. It mints the remaining 5% as LP reserve tokens, then opens a constant-product AMM (x\*y=k) seeded with those tokens plus all accumulated USDC fees.
+    When 95% of the supply has been mined, the contract automatically graduates. It mints the remaining 5% as LP reserve tokens, then seeds up to three AMMs simultaneously — **UNITFLOW V3**, **Uniswap V2**, and/or **Curve StableSwap** — using those tokens plus all accumulated USDC fees. The creator picks which AMMs to use at launch via an `ammFlags` bitmask.
   </Step>
   <Step title="Trade">
     Once graduated, anyone can buy or sell the token using the AMM built into the same contract. No bridging, no external DEX, no extra setup needed.
@@ -33,7 +33,7 @@ Every token on ACTFUN follows the same four-stage lifecycle:
   </Card>
 
   <Card title="Creator Livestream" icon="video" href="/features/live-streaming">
-    Token creators can go live directly from the token page. Viewers watch in real time via WebRTC peer-to-peer video with a live chat panel alongside the stream.
+    Token creators can broadcast camera and microphone live from the token page via **LiveKit**. Viewers join audio-only; everyone shares a live chat panel powered by LiveKit data messages.
   </Card>
 
   <Card title="Global Leaderboard" icon="trophy" href="/features/leaderboard">
