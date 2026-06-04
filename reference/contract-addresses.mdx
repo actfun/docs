@@ -34,11 +34,48 @@ ACTFUN uses UNITFLOW V3 for the AMM liquidity pool on graduation. These contract
 
 All ACTFUN liquidity pools use **3000 (0.30%)** fee tier with full-range ticks: **-887220 / 887220**.
 
-## Previous factory version
+
+## Uniswap V2 contracts (Arc Testnet)
+
+ACTFUN seeds a classic constant-product Uniswap V2 pair on graduation when the creator selects **Uniswap V2** (ammFlags bit `2`).
+
+| Contract | Address | Purpose |
+| --- | --- | --- |
+| **Uniswap V2 Factory** | [`0xB56B00C38EF85633A789644415A16b4C8ea12EF8`](https://testnet.arcscan.app/address/0xB56B00C38EF85633A789644415A16b4C8ea12EF8#code) | Creates and manages V2 pairs |
+| **Uniswap V2 Router** | [`0x54599C3e0bcb99ca37b286242b5eC5D331AB9D18`](https://testnet.arcscan.app/address/0x54599C3e0bcb99ca37b286242b5eC5D331AB9D18#code) | Swap router for token trades |
+
+## Curve / StableSwap contracts (Arc Testnet)
+
+ACTFUN creates a dedicated StableSwap pool per token on graduation when the creator selects **StableSwap** (ammFlags bit `4`). The pool uses the Curve reference StableSwap invariant (N\_COINS=2, A\_PRECISION=100).
+
+| Contract | Address | Purpose |
+| --- | --- | --- |
+| **StableSwap Factory** | [`0x3714f242fe169AB5EB0D763Cf79AEAcA5F727E7b`](https://testnet.arcscan.app/address/0x3714f242fe169AB5EB0D763Cf79AEAcA5F727E7b#code) | Deploys a new StableSwap pool per token pair |
+
+Each token gets its own isolated StableSwap pool. Pool addresses are readable via `stablePoolAddress()` on the `TokenLauncher`.
+
+## AMM selection (ammFlags bitmask)
+
+Creators choose which AMMs receive liquidity at graduation using the `ammFlags` bitmask. At least one must be selected.
+
+| Bit | AMM | Description |
+| --- | --- | --- |
+| `1` | UNITFLOW V3 | Full-range concentrated liquidity |
+| `2` | Uniswap V2 | Classic constant-product pair |
+| `4` | Curve / StableSwap | Low-slippage StableSwap pool |
+
+Examples: `1` = V3 only · `3` = V3 + V2 · `7` = all three AMMs.
+
+## Previous factory versions
 
 | Contract | Address | Status |
 | --- | --- | --- |
-| LaunchpadFactory v8 | [`0x6Ac3CaF79A5d68D259795380F012f922476A1721`](https://testnet.arcscan.app/address/0x6Ac3CaF79A5d68D259795380F012f922476A1721#code) | Verified (deprecated) |
+| LaunchpadFactory v14 | [`0x87b0c4d1Db3EB636a6666f5F00Ba2cA321270361`](https://testnet.arcscan.app/address/0x87b0c4d1Db3EB636a6666f5F00Ba2cA321270361#code) | Deprecated |
+| LaunchpadFactory v13 | [`0x4F9eD84445b780998bAeF342b97A7525ea736AA3`](https://testnet.arcscan.app/address/0x4F9eD84445b780998bAeF342b97A7525ea736AA3#code) | Deprecated |
+| LaunchpadFactory v12 | [`0x697672B2eFAC2AB2636eaeD2caA79B50a317428f`](https://testnet.arcscan.app/address/0x697672B2eFAC2AB2636eaeD2caA79B50a317428f#code) | Deprecated |
+| LaunchpadFactory v11 | [`0x68aaEfa9A95AC4D648A33ed05cD9625EA4863B16`](https://testnet.arcscan.app/address/0x68aaEfa9A95AC4D648A33ed05cD9625EA4863B16#code) | Deprecated |
+| LaunchpadFactory v10 | [`0xdb791675BB2e2f1Ca9432aBd22af9EC95C4753c6`](https://testnet.arcscan.app/address/0xdb791675BB2e2f1Ca9432aBd22af9EC95C4753c6#code) | Deprecated |
+| LaunchpadFactory v8 | [`0x6Ac3CaF79A5d68D259795380F012f922476A1721`](https://testnet.arcscan.app/address/0x6Ac3CaF79A5d68D259795380F012f922476A1721#code) | Deprecated |
 
 ## Per-token contracts
 
