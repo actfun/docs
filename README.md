@@ -519,13 +519,11 @@ All economic invariants are enforced in Solidity — not in React:
 
 ## Roadmap
 
-- [ ]Upcoming future in the next few weeks 
-
-the future would be a new idea on how we can bring Solana trenches and degens to ACTFUN by using the CIRCLE USDC bridge, allowing Solana users to trade on ACTFUN on the Arc chain, but even though the $$ is on the Solana main chain.
-- [ ] Arc mainnet deployment
+- [ ]Creator revenue share (% of post-graduation AMM fees)
 - [ ] IPFS image pinning for token metadata
-- [ ] Creator revenue share (% of post-graduation AMM fees)
-- [ ] Governance: community votes on launchpad parameters
+- [ ]Governance: community votes on launchpad parameters
+- [ ] ACTFUN agent 
+- [ ] Arc mainnet deployment
 - [ ] Mobile app (Expo / React Native)
 - [ ] 
 
