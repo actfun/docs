@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "$ACTFUN — Mine by doing something funny"
+version = "1.0.0"
+id = "artifacts/actfun"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23790
+
+[services.development]
+run = "pnpm --filter @workspace/actfun run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/actfun", "run", "build" ]
+publicDir = "artifacts/actfun/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23790"
+BASE_PATH = "/"

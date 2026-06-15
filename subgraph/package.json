@@ -1,0 +1,15 @@
+{
+  "name": "actfun-subgraph",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Goldsky subgraph for the ACTFUN / MINEPAD mine-to-launch launchpad on Arc testnet",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "goldsky subgraph deploy actfun/1.0.1 --path ."
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.97.1",
+    "@graphprotocol/graph-ts": "^0.38.0"
+  }
+}

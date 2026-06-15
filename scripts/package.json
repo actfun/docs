@@ -1,0 +1,25 @@
+{
+  "name": "@workspace/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "hello": "tsx ./src/hello.ts",
+    "backfill:actfun": "tsx ./src/backfill-actfun-events.ts",
+    "backfill:perps-orders": "tsx ./src/backfill-perps-orders.ts",
+    "create:openclow": "tsx ./src/create-openclow.ts",
+    "decode-tx": "tsx ./src/decode-tx.ts",
+    "keeper:execute": "tsx ./src/keeper-execute-orders.ts",
+    "test:perps": "tsx ./src/test-perps-order.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/pg": "^8.18.0",
+    "tsx": "catalog:"
+  },
+  "dependencies": {
+    "pg": "^8.20.0",
+    "viem": "^2.48.11"
+  }
+}

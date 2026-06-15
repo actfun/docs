@@ -1,0 +1,12 @@
+- [Deployed factory ABI drift](deployed-contract-abi-drift.md) — token launches revert silently when frontend ABI selector drifts ahead of the immutable deployed factory; fix frontend ABI, do not redeploy.
+- [Dynamic↔wagmi v2 pin](dynamic-wagmi-pin.md) — actfun wallet writes silently fail if wagmi is v3; Dynamic connector needs wagmi v2.
+- [AMM addLiquidity token ordering](stableswap-token-ordering.md) — graduation seeding of sorted-token AMMs (StableSwap) must pass amounts in token0/token1 order, else tokens with address > WUSDC revert at ~98.6% mined.
+- [Mintlify docs deployment](mintlify-deploy.md) — actfun/docs GitHub commits do NOT auto-trigger Mintlify rebuild; manual redeploy from app.mintlify.com is required each time.
+- [Multi-AMM Swap indexing](multi-amm-swap-indexing.md) — index ALL three AMMs' Swap topic0s (V3/V2/StableSwap) or single-AMM tokens show 0 volume/0 trades; shapes differ.
+- [LiveKit live-token auth](livekit-live-auth.md) — /api/live token mint MUST verify a wallet signature + factory isLauncher; request-body identity alone is spoofable (broadcast-rights EoP).
+- [ACTFUN logo (code SVG)](actfun-logo.md) — logo is in-code SVG (ActfunLogo.tsx + public/actfun-logo.svg), not raster; keep both in sync on any mark change.
+- [ArcLend deployment](arclend-deployment.md) — Aave V2 lending pool deployed on Arc Testnet; native USDC collateral / ERC-20 USDC borrow, no oracle needed.
+- [Arc USDC precompile 6-dec ERC-20](arc-usdc-precompile.md) — 0x3600… precompile is 6-dec ERC-20 even though eth_getBalance shows 18-dec; perps amountIn must use USDC_DECIMALS=6.
+- [Stats endpoint stability](stats-endpoint-stability.md) — /api/stats must use background-refresh stale-while-revalidate + warm timer; never block the request on slow/flaky Arc RPC, never serve zeros once cached.
+- [Factory token-list cap](factory-token-list-cap.md) — getTokens(0,N) hardcoded caps silently drop tokens past N from the grid AND TVL/volume once the registry grows; fetch all (large count or paginate via getTokenCount).
+- [Synthra perps OrderBook address unknown](synthra-orderbook.md) — Synthra OrderBook contract has no bytecode on Arc RPC and eth_getLogs returns 0 events; OrderBook address is TBD; pipeline uses topic0-only filter (no address) so future events are captured regardless.

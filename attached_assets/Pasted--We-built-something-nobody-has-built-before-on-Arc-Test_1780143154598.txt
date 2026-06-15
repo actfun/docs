@@ -1,0 +1,129 @@
+‎🧵 We built something nobody has built before on Arc Testnet.
+‎
+‎It's called $ACTFUN — and it completely rewrites the rules of how a token launches, who earns it, and why it matters.
+‎
+‎Here's everything, from zero. 👇
+‎
+‎The problem with every launchpad right now:
+‎
+‎Pump.fun, Moonshot, every clone — same playbook.
+‎→ Dev deploys a token in 2 minutes
+‎→ Insiders buy before anyone else
+‎→ They dump on the community
+‎→ Community left holding bags
+‎→ Token dies in 48 hours
+‎
+‎Nobody in the community earned anything. They just gambled. And lost.
+‎
+‎
+‎ACTFUN flips this entirely.
+‎
+‎There's no presale. No insider allocation. No VC bags.
+‎
+‎The community mines 95% of every token's supply — by writing funny posts.
+‎
+‎That's the whole mechanism. Write something funny → pay a tiny ARC fee → receive tokens. That's mining.
+‎
+‎How it works, step by step:
+‎
+‎1. LAUNCH
+‎Anyone deploys a token through the LaunchpadFactory contract (free on Arc testnet). You set the name, symbol, image, supply, how many tokens per mine, the cooldown between mines, a daily cap per wallet, and the ARC fee per mine.
+‎
+‎The contract is live on Arc Testnet at:
+‎0x6Ac3CaF79A5d68D259795380F012f922476A1721
+‎
+‎
+‎2. MINE
+‎The community mines 95% of the supply by writing funny posts directly into the transaction. Every mine call costs a small ARC fee (e.g. 0.0001 ARC). That fee isn't going to the dev — it accumulates inside the contract itself.
+‎
+‎The contract enforces:
+‎
+‎Cooldown between mines per wallet
+‎Daily cap per wallet
+‎Max mineable supply (95% of total)
+‎No bots can drain it. No whales can hoard it all in one block.
+‎
+‎3. GRADUATE
+‎When 95% of the supply is mined, the contract automatically calls _graduate().
+‎
+‎
+‎No human triggers it. No multisig. No dev action needed. Pure smart contract logic.
+‎
+‎What happens at graduation:
+‎→ 5% of supply is minted as LP reserve tokens
+‎→ All accumulated ARC fees become the initial liquidity pool
+‎→ The contract opens as a constant-product AMM (x·y=k) built directly inside the TokenLauncher
+‎
+‎The token goes from "mining phase" to "trading live" in a single transaction. No external DEX. No Uniswap. No bridging. The DEX is the contract.
+‎
+‎
+‎4. TRADE
+‎After graduation, anyone can buy and sell through the built-in AMM. The formula is simple: tokensOut = arcIn × tokenReserve ÷ (arcReserve + arcIn). Standard x·y=k.
+‎
+‎
+‎The LP seed came from the community's own mining fees — not a dev wallet, not a VC fund. The community literally funded its own liquidity by mining.
+‎
+‎
+‎What makes this different from anything else:
+‎
+‎✅ Zero backend. Not a single API call. Everything is direct RPC to Arc Testnet via wagmi + viem. The chain is the backend.
+‎
+‎✅ Zero insider advantage. You cannot buy before the community mines. There's no presale price. The only way to get tokens in the mining phase is to write something funny.
+‎
+‎✅ Community-funded liquidity. The DEX pool is seeded by the fees miners paid — so the liquidity is proportional to how much the community engaged.
+‎
+‎✅ Built-in AMM. No dependency on any external DEX. The TokenLauncher contract IS the DEX after graduation. Less surface area for exploits, no reliance on third-party liquidity.
+‎
+‎✅ Fully onchain enforcement. Cooldowns, daily caps, graduation trigger, AMM math — all in Solidity. No off-chain oracle, no centralized rate limiter.
+‎
+‎✅ Transparent from day one. Every funny post is stored onchain in the ActedFun event. You can read the full history of who mined what and what they wrote — forever, on Arc explorer.
+‎
+‎The tokenomics (per launched token):
+‎
+‎95% → mined by community (via funny posts)
+‎5% → LP reserve, minted at graduation to seed the AMM
+‎Each mine costs feePerMine ARC (set by creator)
+‎All fees → initial DEX liquidity at graduation
+‎AMM price discovery starts the moment graduation hits
+‎The tech stack (fully open):
+‎
+‎•Solidity 0.8.24 + OpenZeppelin 5.x
+‎•Hardhat with viaIR: true
+‎•React 18 + Vite + Tailwind
+‎•wagmi v2 + viem
+‎•Arc Testnet · Chain ID 5042002
+‎•No RainbowKit — plain injected •MetaMask connector
+‎•No backend, no DB, no API
+‎
+‎
+‎Three contracts:
+‎
+‎•LaunchToken.sol — standard ERC-20
+‎•TokenLauncher.sol — miner + AMM in one contract
+‎•LaunchpadFactory.sol — registry + factory
+‎
+‎
+‎The leaderboard is onchain.
+‎
+‎Every mine emits an ActedFun event with the miner's address, their funny post text, the token amount, and a timestamp. The leaderboard on the dApp reads these events directly from the chain. No database. The funniest, most active miners are ranked by how many tokens they've earned — all verifiable on Arcscan.
+‎
+‎Why Arc Testnet?
+‎
+‎Arc is fast, cheap, and EVM-compatible. For a testnet launchpad where the whole point is friction-free mining, it's the right chain. The RPC is rpc.testnet.arc.network, explorer at testnet.arcscan.app. Everything is live and usable right now.
+‎
+‎
+‎
+
+TL;DR:
+
+Most launchpads let devs dump on you.
+
+ACTFUN makes you earn the tokens by being funny. The community mines 95% of supply. Mining fees seed the DEX liquidity. The contract graduates itself. No humans in the loop.
+
+Mine to earn. Write to win. Graduate together.
+
+🌐 actfun.xyz
+🐦 @Actfunpad
+⛏️ Arc Testnet · Chain 5042002
+
+Mine something funny.

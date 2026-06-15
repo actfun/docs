@@ -1,0 +1,151 @@
+uploads = []
+
+[[generated]]
+id = "MAMcgUc24ZzZHfVWb9_bL"
+uri = "file://artifacts/actfun/public/actfun-logo.png"
+type = "image"
+title = "actfun sketch logo"
+
+[[generated]]
+id = "_4eo-qtfPWtq9eSS30vU-"
+uri = "file://attached_assets/actfun-x-banner.png"
+type = "image"
+title = "actfun x twitter banner"
+
+[[generated]]
+id = "SpLryyKmyQy927jeUGxQQ"
+uri = "file://attached_assets/minepad-x-banner.png"
+type = "image"
+title = "minepad x twitter banner"
+
+[[generated]]
+id = "bTqvKRSqgrKgXC_4uwFW_"
+uri = "file://artifacts/actfun/public/minepad-logo.png"
+type = "image"
+title = "minepad circular sketch logo"
+
+[[generated]]
+id = "rVJOzgrKbYZjQQ8XXlWn_"
+uri = "file://attached_assets/minepad-x-banner-v2.png"
+type = "image"
+title = "minepad sketch dark banner"
+
+[[generated]]
+id = "V_xO6OXap6FpjzT9CEUn9"
+uri = "file://artifacts/actfun/public/images/bg-texture.png"
+type = "image"
+title = "blockchain atmospheric texture"
+
+[[generated]]
+id = "xEFEMCSb2oRW9sXa-TUm_"
+uri = "file://artifacts/actfun/public/images/floating-tokens.png"
+type = "image"
+title = "token particles floating"
+
+[[generated]]
+id = "3AzBkZwdiJ41Mtld5i7TI"
+uri = "file://artifacts/minepad-video/public/images/gold-explosion.png"
+type = "image"
+title = "gold explosion burst"
+
+[[generated]]
+id = "5iCAcUXwhQxj7wGogkb-P"
+uri = "file://artifacts/minepad-video/public/images/blockchain-texture.png"
+type = "image"
+title = "blockchain data stream"
+
+[[generated]]
+id = "3G_B_UzhMoiAuCT16XObi"
+uri = "file://artifacts/minepad-video/public/images/bg_particles.png"
+type = "image"
+title = "dark space particle background"
+
+[[generated]]
+id = "W3rNhqReR9SK9GuZd7_3t"
+uri = "file://artifacts/minepad-video/public/images/gold_burst.png"
+type = "image"
+title = "gold graduation explosion burst"
+
+[[generated]]
+id = "k2Lm4_gDWCSK10hsTUbOa"
+uri = "file://artifacts/minepad-video/public/images/arc_network.png"
+type = "image"
+title = "arc blockchain network visualization"
+
+[[generated]]
+id = "jmcM-81NwJynq_uYPsnJA"
+uri = "file://artifacts/minepad-video/public/images/community.png"
+type = "image"
+title = "community celebration crowd"
+
+[[generated]]
+id = "MK3x4WkayEH0AVR3LbLy2"
+uri = "file://artifacts/actfun-mobile/assets/images/icon.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "W5tLrUtmirp7GMiOhBdgc"
+uri = "file://attached_assets/generated_images/battle-mine-banner.png"
+type = "image"
+title = "generated_image"
+
+[[outputs]]
+id = "5p7VCmaZAn14VyVA0ETQc"
+uri = "file://attached_assets/actfun-x-banner.png"
+type = "image"
+title = "ACTFUN X (Twitter) Banner"
+
+[[outputs]]
+id = "xfep5zc9ggPZXaEz-Pppl"
+uri = "file://attached_assets/minepad-x-banner.png"
+type = "image"
+title = "MINEPAD — X (Twitter) Banner"
+
+[[outputs]]
+id = "cL9Gb_5EoJfbAenRP1F-m"
+uri = "file://attached_assets/minepad-x-banner-v2.png"
+type = "image"
+title = "MINEPAD — Sketch Dark X Banner"
+
+[[outputs]]
+id = "95Bj4iTxm9jwU6DSM9fTw"
+uri = "file://artifacts/actfun/public/minepad-logo.png"
+type = "image"
+title = "MINEPAD — New Logo"
+
+[[outputs]]
+id = "v-TmUswLrjAHPYQI1sEOV"
+uri = "file://artifacts/minepad-video/public/audio/bg_music.mp3"
+type = "audio"
+title = "minepad synthwave background music"
+
+[[outputs]]
+id = "RoDTbLa0Fx3FzaPL-g-_R"
+uri = "file://screenshots/actfun-flow-diagram.jpg"
+type = "image"
+title = "ACTFUN — Mine to Launch Flow Diagram"
+
+[[outputs]]
+id = "acXAR5UTVR1QRrceWrl9_"
+uri = "file://screenshots/goldsky-attribution.jpg"
+type = "image"
+title = "MINEPAD — Powered by Goldsky attribution (Live Feed + footer)"
+
+[[outputs]]
+id = "ru_OwhKaamAY0PHedA__R"
+uri = "file://.local/ama-tweet.txt"
+type = "text"
+title = "AMA Tweet Draft"
+
+[[outputs]]
+id = "ZOsPPKp0WEMoRqIAKsUlz"
+uri = "file://attached_assets/ACTFUN-Updated-Thread.md"
+type = "text"
+title = "ACTFUN Updated Twitter Thread"
+
+[[outputs]]
+id = "b5Xeqfzevak6NC8XtbKkN"
+uri = "file://attached_assets/generated_images/battle-mine-banner.png"
+type = "image"
+title = "⚔️ Battle Mine — Campaign Launch Banner"

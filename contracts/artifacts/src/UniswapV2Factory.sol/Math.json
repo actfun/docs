@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Math",
+  "sourceName": "src/UniswapV2Factory.sol",
+  "abi": [],
+  "bytecode": "0x60808060405234601757603a9081601d823930815050f35b600080fdfe600080fdfea26469706673582212201958f2ff1e1492fa162ac4e0064c4f6a0e2643b2a20283a8a2774bdbd2886cf564736f6c63430008180033",
+  "deployedBytecode": "0x600080fdfea26469706673582212201958f2ff1e1492fa162ac4e0064c4f6a0e2643b2a20283a8a2774bdbd2886cf564736f6c63430008180033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

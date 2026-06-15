@@ -1,0 +1,76 @@
+type Token @entity(immutable: false) {
+  "Launcher contract address (the anchor the app routes by)"
+  id: Bytes!
+  "ERC-20 token address"
+  tokenAddress: Bytes!
+  "Launcher contract address"
+  launcher: Bytes!
+  creator: Bytes!
+  name: String!
+  symbol: String!
+  imageUri: String!
+  maxSupply: BigInt!
+  feePerMine: BigInt!
+  createdAtBlock: BigInt!
+  createdAtTimestamp: BigInt!
+  createdTxHash: Bytes!
+  "Number of ActedFun (mine) events"
+  mineCount: BigInt!
+  "Sum of mined token amounts"
+  totalMined: BigInt!
+  graduated: Boolean!
+  graduatedTimestamp: BigInt
+  tokenSeeded: BigInt
+  arcSeeded: BigInt
+  "UnitFlow V3 pool address (set on graduation)"
+  poolAddress: Bytes
+  mines: [Mine!]! @derivedFrom(field: "token")
+  swaps: [Swap!]! @derivedFrom(field: "token")
+}
+
+type Mine @entity(immutable: true) {
+  id: Bytes!
+  token: Token!
+  user: Bytes!
+  funnyPost: String!
+  amount: BigInt!
+  timestamp: BigInt!
+  block: BigInt!
+  txHash: Bytes!
+}
+
+type Graduation @entity(immutable: true) {
+  id: Bytes!
+  token: Token!
+  tokenSeeded: BigInt!
+  arcSeeded: BigInt!
+  timestamp: BigInt!
+  block: BigInt!
+  txHash: Bytes!
+}
+
+type RefundClaim @entity(immutable: true) {
+  id: Bytes!
+  token: Token!
+  user: Bytes!
+  amount: BigInt!
+  timestamp: BigInt!
+  block: BigInt!
+  txHash: Bytes!
+}
+
+type Swap @entity(immutable: true) {
+  id: Bytes!
+  pool: Bytes!
+  token: Token
+  sender: Bytes!
+  recipient: Bytes!
+  amount0: BigInt!
+  amount1: BigInt!
+  sqrtPriceX96: BigInt!
+  liquidity: BigInt!
+  tick: Int!
+  timestamp: BigInt!
+  block: BigInt!
+  txHash: Bytes!
+}

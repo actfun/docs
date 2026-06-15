@@ -1,0 +1,589 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@600;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+/* Goldsky brand wordmark — Goldsky's infrastructure brand font (Inter) */
+.goldsky-wordmark {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background:         hsl(var(--background));
+  --color-foreground:         hsl(var(--foreground));
+  --color-border:             hsl(var(--border));
+  --color-input:              hsl(var(--input));
+  --color-ring:               hsl(var(--ring));
+
+  --color-card:               hsl(var(--card));
+  --color-card-foreground:    hsl(var(--card-foreground));
+  --color-card-border:        hsl(var(--card-border));
+
+  --color-popover:            hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border:     hsl(var(--popover-border));
+
+  --color-primary:            hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border:     var(--primary-border);
+
+  --color-secondary:          hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border:   var(--secondary-border);
+
+  --color-muted:              hsl(var(--muted));
+  --color-muted-foreground:   hsl(var(--muted-foreground));
+  --color-muted-border:       var(--muted-border);
+
+  --color-accent:             hsl(var(--accent));
+  --color-accent-foreground:  hsl(var(--accent-foreground));
+  --color-accent-border:      var(--accent-border);
+
+  --color-destructive:        hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-sidebar:              hsl(var(--sidebar));
+  --color-sidebar-foreground:   hsl(var(--sidebar-foreground));
+  --color-sidebar-border:       hsl(var(--sidebar-border));
+  --color-sidebar-primary:      hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-primary-border: var(--sidebar-primary-border);
+  --color-sidebar-accent:       hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-accent-border: var(--sidebar-accent-border);
+  --color-sidebar-ring:         hsl(var(--sidebar-ring));
+
+  --font-sans:  var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono:  var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACTFUN LAUNCHPAD — Sketch Dark Theme
+   Background: Pure Black    hsl(0 0% 2%)
+   Text:       Pure White    hsl(0 0% 100%)
+   Borders:    Sketch Gray   hsl(0 0% 22%)
+   Accent:     White         hsl(0 0% 100%)
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --button-outline:                   rgba(255,255,255,.15);
+  --badge-outline:                    rgba(255,255,255,.06);
+  --opaque-button-border-intensity:   7;
+  --elevate-1: rgba(255,255,255,.03);
+  --elevate-2: rgba(255,255,255,.06);
+
+  /* ─── Background ─── */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+
+  --border: 0 0% 16%;
+
+  /* ─── Cards ─── */
+  --card:            0 0% 4%;
+  --card-foreground: 0 0% 100%;
+  --card-border:     0 0% 16%;
+
+  /* ─── Sidebar ─── */
+  --sidebar:              0 0% 4%;
+  --sidebar-foreground:   0 0% 100%;
+  --sidebar-border:       0 0% 18%;
+  --sidebar-primary:      0 0% 100%;
+  --sidebar-primary-foreground: 0 0% 0%;
+  --sidebar-accent:       0 0% 10%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring:         0 0% 60%;
+
+  /* ─── Popover ─── */
+  --popover:            0 0% 5%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border:     0 0% 20%;
+
+  /* ─── Primary — Pure White ─── */
+  --primary:            0 0% 100%;
+  --primary-foreground: 0 0% 0%;
+
+  /* ─── Secondary ─── */
+  --secondary:            0 0% 10%;
+  --secondary-foreground: 0 0% 85%;
+
+  /* ─── Muted ─── */
+  --muted:            0 0% 6%;
+  --muted-foreground: 0 0% 55%;
+
+  /* ─── Accent ─── */
+  --accent:            0 0% 14%;
+  --accent-foreground: 0 0% 100%;
+
+  /* ─── Destructive ─── */
+  --destructive:            0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --input: 0 0% 15%;
+  --ring:  0 0% 60%;
+
+  /* ─── Charts ─── */
+  --chart-1: 0 0% 100%;
+  --chart-2: 0 0% 70%;
+  --chart-3: 0 0% 50%;
+  --chart-4: 45 95% 60%;
+  --chart-5: 145 60% 52%;
+
+  /* ─── Typography ─── */
+  --app-font-sans:  'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --app-font-serif: Georgia, serif;
+  --app-font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+  --radius: 0.5rem;
+
+  /* ─── Shadows ─── */
+  --shadow-2xs: 0 1px 3px 0 rgba(0,0,0,.8);
+  --shadow-xs:  0 1px 3px 0 rgba(0,0,0,.8);
+  --shadow-sm:  0 1px 5px 0 rgba(0,0,0,.9), 0 1px 2px -1px rgba(0,0,0,.7);
+  --shadow:     0 2px 10px 0 rgba(0,0,0,.9), 0 1px 2px -1px rgba(0,0,0,.7);
+  --shadow-md:  0 4px 14px 0 rgba(0,0,0,.9), 0 2px 4px -1px rgba(0,0,0,.7);
+  --shadow-lg:  0 8px 28px 0 rgba(0,0,0,.95), 0 4px 6px -1px rgba(0,0,0,.8);
+  --shadow-xl:  0 16px 44px 0 rgba(0,0,0,.95), 0 8px 10px -1px rgba(0,0,0,.8);
+  --shadow-2xl: 0 24px 60px 0 rgba(0,0,0,1);
+
+  --tracking-normal: -0.01em;
+  --spacing: 0.25rem;
+
+  --sidebar-primary-border:  hsl(var(--sidebar-primary));
+  --sidebar-accent-border:   hsl(var(--sidebar-accent));
+  --primary-border:          hsl(var(--primary));
+  --secondary-border:        hsl(var(--secondary));
+  --muted-border:            hsl(var(--muted));
+  --accent-border:           hsl(var(--accent));
+  --destructive-border:      hsl(var(--destructive));
+}
+
+/* Force dark mode always */
+html { color-scheme: dark; }
+
+@layer base {
+  * { @apply border-border; box-sizing: border-box; }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    letter-spacing: var(--tracking-normal);
+    background-color: #000;
+    background-image:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,255,255,0.022) 0%, transparent 55%);
+    background-attachment: fixed;
+  }
+  ::selection {
+    background: rgba(255,255,255,0.25);
+    color: black;
+  }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+}
+
+/* ═══════════════════════════════════════
+   LOGO — invert black ink → white
+   ═══════════════════════════════════════ */
+.sketch-logo {
+  display: block;
+  border-radius: 0.5rem;
+  object-fit: cover;
+}
+
+/* ═══════════════════════════════════════
+   GLOW EFFECTS — white only
+   ═══════════════════════════════════════ */
+.arc-glow {
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.12),
+    0 0 60px rgba(255,255,255,0.04);
+}
+.arc-glow-hover:hover {
+  box-shadow:
+    0 0 30px rgba(255,255,255,0.2),
+    0 0 80px rgba(255,255,255,0.06);
+}
+.arc-text-glow {
+  text-shadow:
+    0 0 20px rgba(255,255,255,0.6),
+    0 0 60px rgba(255,255,255,0.2);
+}
+
+/* ═══════════════════════════════════════
+   CARD — sketch outline
+   ═══════════════════════════════════════ */
+.arc-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--card-border));
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+.arc-card:hover {
+  border-color: rgba(255,255,255,0.45);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 8px 32px rgba(0,0,0,.7);
+}
+
+/* ═══════════════════════════════════════
+   PRIMARY BUTTON — outline highlight
+   transparent fill · white border + text
+   ═══════════════════════════════════════ */
+.arc-btn {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  color: #fff;
+  font-weight: 700;
+  transition: all 0.18s ease;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+}
+.arc-btn:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.85);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 0 16px rgba(255,255,255,0.06);
+  transform: translateY(-1px);
+}
+.arc-btn:active { transform: translateY(0); }
+.arc-btn:disabled {
+  background: transparent;
+  border-color: hsl(var(--border));
+  color: hsl(var(--muted-foreground));
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ═══════════════════════════════════════
+   HERO GRADIENT — pure black base
+   ═══════════════════════════════════════ */
+.hero-gradient {
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(255,255,255,0.012) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(255,255,255,0.012) 0%, transparent 50%);
+}
+
+/* ═══════════════════════════════════════
+   GRID PATTERN — precise sketch lines
+   ═══════════════════════════════════════ */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ═══════════════════════════════════════
+   GRADIENT TEXT — white only
+   ═══════════════════════════════════════ */
+.gradient-text {
+  background: linear-gradient(135deg,
+    hsl(0 0% 100%) 0%,
+    hsl(0 0% 70%)  100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-warm {
+  background: linear-gradient(135deg,
+    hsl(0 0% 100%) 0%,
+    hsl(0 0% 60%) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════
+   BOUNCING EMOJI / LOGO
+   ═══════════════════════════════════════ */
+@keyframes bounceEmoji {
+  0%, 100% { transform: translateY(0) rotate(-3deg) scale(1); }
+  25%       { transform: translateY(-20px) rotate(3deg) scale(1.06); }
+  50%       { transform: translateY(-8px)  rotate(-2deg) scale(1.02); }
+  75%       { transform: translateY(-16px) rotate(5deg) scale(1.05); }
+}
+.bouncing-emoji {
+  animation: bounceEmoji 2.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  display: inline-block;
+  filter: drop-shadow(0 8px 24px rgba(255,255,255,0.15));
+}
+.bouncing-logo {
+  animation: bounceEmoji 2.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  display: inline-block;
+  filter: drop-shadow(0 8px 24px rgba(255,255,255,0.2));
+}
+
+/* ═══════════════════════════════════════
+   PULSE RING — white
+   ═══════════════════════════════════════ */
+@keyframes pulseRing {
+  0%   { transform: scale(0.85); opacity: 0.7; }
+  100% { transform: scale(2.2);  opacity: 0; }
+}
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.5);
+  animation: pulseRing 1.6s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+}
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  animation: pulseRing 1.6s 0.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
+   SHIMMER — dark sketch
+   ═══════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer {
+  background: linear-gradient(90deg,
+    hsl(0 0% 8%)  0%,
+    hsl(0 0% 14%) 50%,
+    hsl(0 0% 8%)  100%);
+  background-size: 200% auto;
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* ═══════════════════════════════════════
+   SLIDE-IN ANIMATION
+   ═══════════════════════════════════════ */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide-in { animation: slideIn 0.25s ease forwards; }
+
+/* ═══════════════════════════════════════
+   SUPPLY PROGRESS BAR
+   ═══════════════════════════════════════ */
+.supply-bar {
+  height: 3px;
+  background: hsl(var(--border));
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.supply-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b8ef3, #60a5fa);
+  border-radius: 9999px;
+  transition: width 0.5s ease;
+}
+
+/* ═══════════════════════════════════════
+   SELECTOR PILL — subtle active state
+   replaces blinding bg-primary (white) on
+   small pills, tabs, and preset buttons
+   ═══════════════════════════════════════ */
+.arc-sel {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.14);
+  color: hsl(var(--muted-foreground));
+  transition: all 0.15s ease;
+}
+.arc-sel:hover {
+  color: hsl(var(--foreground));
+  border-color: rgba(255,255,255,0.22);
+}
+.arc-sel.active, .arc-sel[data-active="true"] {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.26);
+  color: hsl(var(--foreground));
+}
+
+/* ═══════════════════════════════════════
+   NEON PILL BADGE — sketch outline
+   ═══════════════════════════════════════ */
+.neon-pill {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.85);
+}
+
+/* ═══════════════════════════════════════
+   FLOATING DECORATION (removed orbs,
+   replaced with none / very subtle)
+   ═══════════════════════════════════════ */
+.orb-violet, .orb-magenta, .orb-cyan {
+  display: none;
+}
+
+@layer utilities {
+  .no-default-hover-elevate {}
+  .no-default-active-elevate {}
+  .toggle-elevate::before,
+  .toggle-elevate-2::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: -1;
+  }
+  .toggle-elevate.toggle-elevated::before { background-color: var(--elevate-2); }
+  .border.toggle-elevate::before { inset: -1px; }
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate),
+  .hover-elevate-2:not(.no-default-hover-elevate),
+  .active-elevate-2:not(.no-default-active-elevate) {
+    position: relative; z-index: 0;
+  }
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after,
+  .hover-elevate-2:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: 999;
+  }
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate:active:not(.no-default-active-elevate)::after { background-color: var(--elevate-1); }
+  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:active:not(.no-default-active-elevate)::after { background-color: var(--elevate-2); }
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after { inset: -1px; }
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  animation: ticker 28s linear infinite;
+}
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+/* ── Battle Mine campaign typography ─────────────────────────────────────── */
+.font-battle {
+  font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+}
+
+.battle-title {
+  font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: linear-gradient(160deg,
+    #ffffff  0%,
+    #e2e8f0 30%,
+    #94a3b8 55%,
+    #e2e8f0 75%,
+    #ffffff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 24px rgba(255,255,255,0.10));
+  animation: battle-shimmer 5s ease-in-out infinite alternate;
+}
+
+@keyframes battle-shimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 100% center; }
+}
+
+.battle-live {
+  font-family: 'Cinzel', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.battle-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.battle-divider::before,
+.battle-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+}
+
+/* ═══════════════════════════════════════
+   MARQUEE — infinite scroll tracks
+   ═══════════════════════════════════════ */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+.marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 36s linear infinite;
+}
+.marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 28s linear infinite;
+}
+.marquee-left:hover,
+.marquee-right:hover {
+  animation-play-state: paused;
+}
+.marquee-fade {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image:         linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+/* ── Ambient sound EQ bars ── */
+@keyframes eq-bar {
+  from { transform: scaleY(0.25); opacity: 0.5; }
+  to   { transform: scaleY(1);    opacity: 1;   }
+}
+
+/* ── Eyebrow pill — entrance + inner ticker ── */
+@keyframes eyebrow-slide {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes eyebrow-text {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}

@@ -1,0 +1,61 @@
+name: actfun-analytics
+resource_size: s
+sources:
+  actfun_logs:
+    type: dataset
+    dataset_name: arc_testnet.raw_logs
+    version: 1.0.0
+    # The arc_testnet.raw_logs dataset is a Kafka stream, so start_at maps to
+    # Kafka's auto.offset.reset and ONLY accepts "earliest" or "latest" (a block
+    # number panics the pipeline). "earliest" forces a multi-day backfill from
+    # block 0; "latest" streams new logs with ~1s lag. We use "latest" for live
+    # capture going forward and seed all pre-existing token history with a
+    # one-time RPC backfill (scripts/src/backfill-actfun-events.ts).
+    start_at: latest
+    # Capture only ACTFUN protocol logs by topic0 signature, so every current
+    # and future launcher/token/pool is indexed automatically (no static
+    # address list to maintain). The web client further filters by address.
+    #   ActedFun        0xbf17f40327ab4320cdfaa84231ada95fb1ba0d2d336edd47510a8207786f9c12
+    #   TokensBought    0x22f6af6e13430e3e7b6418d01e6a48c1fbce5e8cb1698901fc95134b4b1c58ad
+    #   TokensSold      0x6db63bebf1e6540277744df32846ebdb98385b1a73f2d5de49b28348add63f50
+    #   TokenGraduated  0x74ddd6b35eb9921605ec2cb7da4af12cd0020d2117b708ade1d30523471b7441
+    #   Swap (V3)       0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67
+    #   Swap (V2)       0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822
+    #   Swap (Stable)   0xcc65e4d9060ece2ecf63011ac580550b04c8daeba63fac4dfe8669353cd88859
+    # Synthra Perps OrderBook events (perps trading history).
+    # OrderBook contract: 0xea2bbb19595928f6265a21f5ee6fd4c4ec43acd4
+    # OrderRouter contract: 0xf58b435674d8e8e54865305f6548d3380ea94b55
+    # Pipeline captures by topic0 only (no address constraint — future-proof for upgrades).
+    # Confirmed on-chain from Arc testnet transaction receipts:
+    #   CreateIncreaseOrder  0x6f873764fe80151e6a8ec0446b912aa706eae681db0f4b0481b29dbc75ce79c3
+    #     Sig: CreateIncreaseOrder(address,uint256,address,address,uint256,address,address,uint256,bool,uint256,bool,uint256,bytes32)
+    #     (account indexed, then: orderIndex,poolToken,collateralToken,purchaseTokenAmount,purchaseToken,indexToken,sizeDelta,isLong,triggerPrice,triggerAboveThreshold,executionFee,positionKey)
+    #   CancelIncreaseOrder  0x27d46c2aeaa52b835d8925a895a6807ef2fd406b59ee9876fa695b7542910246
+    #     Sig: CancelIncreaseOrder(address,uint256,address,address,uint256,address,address,uint256,bool,uint256,bool,uint256)
+    #   ExecuteIncreaseOrder 0x7fb1c74d1ea6aa1c9c585e17ce8274c8ff98745e85e7459b73f87d784494f58e (unverified)
+    #   CreateDecreaseOrder  0x48ee333d2a65cc45fdb83bc012920d89181c3377390cd239d2b63f2bef67a02d (unverified)
+    #   CancelDecreaseOrder  0x1154174c82984656b028c8021671988f60a346497e56fe02554761184f82a075 (unverified)
+    #   ExecuteDecreaseOrder 0x9a382661d6573da86db000471303be6f0b2b1bb66089b08e3c16a85d7b6e94f8 (unverified)
+    filter: >-
+      topics like '0xbf17f40327ab4320cdfaa84231ada95fb1ba0d2d336edd47510a8207786f9c12%'
+      or topics like '0x22f6af6e13430e3e7b6418d01e6a48c1fbce5e8cb1698901fc95134b4b1c58ad%'
+      or topics like '0x6db63bebf1e6540277744df32846ebdb98385b1a73f2d5de49b28348add63f50%'
+      or topics like '0x74ddd6b35eb9921605ec2cb7da4af12cd0020d2117b708ade1d30523471b7441%'
+      or topics like '0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67%'
+      or topics like '0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822%'
+      or topics like '0xcc65e4d9060ece2ecf63011ac580550b04c8daeba63fac4dfe8669353cd88859%'
+      or topics like '0x6f873764fe80151e6a8ec0446b912aa706eae681db0f4b0481b29dbc75ce79c3%'
+      or topics like '0x27d46c2aeaa52b835d8925a895a6807ef2fd406b59ee9876fa695b7542910246%'
+      or topics like '0x7fb1c74d1ea6aa1c9c585e17ce8274c8ff98745e85e7459b73f87d784494f58e%'
+      or topics like '0x48ee333d2a65cc45fdb83bc012920d89181c3377390cd239d2b63f2bef67a02d%'
+      or topics like '0x1154174c82984656b028c8021671988f60a346497e56fe02554761184f82a075%'
+      or topics like '0x9a382661d6573da86db000471303be6f0b2b1bb66089b08e3c16a85d7b6e94f8%'
+transforms: {}
+sinks:
+  neon_sink:
+    type: postgres
+    from: actfun_logs
+    table: actfun_events
+    schema: public
+    secret_name: ACTFUN_NEON_SINK
+    primary_key: id

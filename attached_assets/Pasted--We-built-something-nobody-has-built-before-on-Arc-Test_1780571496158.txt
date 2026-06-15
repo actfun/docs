@@ -1,0 +1,157 @@
+🧵 We built something nobody has built before on Arc Testnet.
+
+It's called $ACTFUN — and it completely rewrites the rules of how a token launches, who earns it, and why it matters.
+
+We didn't just build a launchpad. We assembled the entire **Arc ecosystem** under one roof — every partner going mainnet with Arc on day one.
+
+Here's everything, from zero.
+
+
+First  the Arc ecosystem bet.
+Every protocol we integrated isn't just a tool we picked from the internet.
+They're all Arc ecosystem projects battle tested on testnet alongside us, and all going live on Arc mainnet on day one.
+1 goldskyio data infrastructure- 
+
+2 CurveFinance as our AMM and  UNIFLOW for deep liquidity routing-
+
+3 dynamic  wallet connection-
+
+4sherlockdefi  smart contract audits
+
+Same testnet. Same mainnet launch day. Same ecosystem.
+
+ACTFUN isn't just a launchpad. It's the first dApp to go live with the **full Arc ecosystem stack** assembled from day one.
+
+
+**4. GRADUATE**
+When 95% of supply is mined, the contract automatically calls `_graduate()`.
+
+No human triggers it. No multisig. No dev action needed. Pure smart contract logic.
+
+What happens at graduation:
+→ 5% minted as LP reserve
+→ All accumulated ARC fees become the initial DEX liquidity
+→ Contract opens as a live AMM
+
+Mining phase → live trading. One transaction.
+
+---
+
+**5. TRADE — powered by @CurveFinance + UNIFLOW** 🔁
+
+After graduation, liquidity doesn't sit in a basic AMM.
+Mining phase → live trading. One transaction.
+
+
+
+**5. TRADE — powered by @CurveFinance + UNIFLOW** 🔁
+
+After graduation, liquidity doesn't sit in a basic AMM.
+
+**Curve Finance** — battle-tested by billions in TVL  powers our liquidity pools on Arc. **UNIFLOW** handles the AMM routing, making sure every trade gets optimal execution.
+
+Both are Arc ecosystem projects. Both live on our testnet right now. Both go to Arc mainnet with us on day one.
+
+The LP pool was seeded by the community's own mining fees not a dev wallet, not a VC. Curve + UNIFLOW make that liquidity work as hard as possible.
+
+
+**6. DATA powered by @goldskyio** 
+
+Every mine, graduation, and trade is indexed in real-time by **Goldsky**  Arc ecosystem's data infrastructure layer, supporting 130+ chains.
+
+What Goldsky does for ACTFUN:
+
+ **Subgraph on Arc Testnet**
+Every `ActedFun` event  miner, funny post, tokens earned, timestamp  indexed into a GraphQL API. The leaderboard on actfun.xyz queries Goldsky, not raw RPC. Sub-100ms. Infinite scale.
+
+ **Turbo Pipelines**
+Every mine, graduation, and trade streams into our analytics layer with <1s latency. Live mining velocity, price charts, wallet stats  all real-time.
+
+ **Graduation Webhooks**
+The moment a token graduates — Goldsky detects it and fires instantly. Notifications. No polling. No delays.
+
+Goldsky is live on our testnet right now and goes to Arc mainnet with us on day one.
+
+
+**7. SECURITY audited by @sherlockdefi** 
+
+We don't ship mainnet until the code is bulletproof.
+
+**Sherlock** — the most rigorous smart contract audit and coverage protocol in DeFi — audits all three ACTFUN contracts before mainnet.
+
+- `LaunchToken.sol` — ERC-20
+- `TokenLauncher.sol` — miner + AMM
+- `LaunchpadFactory.sol` — registry + factory
+
+Sherlock is an Arc ecosystem project. On our testnet. Going to mainnet with us on day one.
+
+No "audit pending." No excuses. Sherlock on day one. Community funds protected from block zero.
+
+
+What makes ACTFUN different from anything else:
+
+
+•1 First dApp with the **full Arc ecosystem stack** assembled
+
+• 2 Zero insider advantage — mine to earn, no presale
+
+
+• 3 Community-funded liquidity — mining fees seed the DEX
+
+• 4 Battle-tested AMM — Curve Finance + UNIFLOW routing
+
+• 5 Seamless wallet UX  Dynamic from testnet to mainnet
+
+ • 6 Real-time indexed data  Goldsky on Arc testnet now
+ 
+• 7 Audited contracts  Sherlock on mainnet day one
+
+• 8 Fully onchain enforcement  all Solidity, zero backend
+
+• 9 Transparent forever  every funny post queryable on Goldsky
+
+The tokenomics (per launched token):
+
+- 95% → mined by community (funny posts)
+- 5% → LP reserve, minted at graduation
+- Each mine costs `feePerMine` ARC
+- All fees → initial DEX liquidity at graduation
+- Price discovery via Curve + UNIFLOW from graduation block
+
+
+(The full Arc ecosystem stack:)
+
+| Layer | Partner | Status |
+| --- | --- | --- |
+| Wallet connection | @dynamic_xyz |  Live on testnet |
+| AMM + Liquidity | @CurveFinance + UNITFLOW | 
+ Live on testnet |
+| Data infrastructure | @goldskyio |  Live on testnet |
+| Contract audit | @sherlockdefi |  Mainnet day one |
+| Chain | Arc Testnet → Mainnet |  Day one |
+
+All of them. One launchpad. One ecosystem)
+
+The leaderboard is onchain. Queried by Goldsky.
+
+Every mine emits `ActedFun`. Goldsky indexes it. The leaderboard reads from Goldsky's GraphQL endpoint  not RPC scans. Every post, every miner, every token  verifiable on Arcscan, queryable via Goldsky.
+
+---
+
+TL;DR:
+
+Most launchpads let devs dump on you.
+
+ACTFUN makes you earn tokens by being funny. The community mines 95% of supply. Mining fees seed the DEX. Curve + UNIFLOW route the liquidity. Dynamic connects your wallet. Goldsky indexes everything in real-time. Sherlock audits it before mainnet.
+
+Every partner is an Arc ecosystem project. All live on testnet. All going to mainnet on day one.
+
+Mine to earn. Write to win. Graduate together.
+
+ actfun.xyz
+ @Actfunmine
+ Data · @goldskyio
+AMM · @CurveFinance + UNIFLOW
+ Wallets · @dynamic_xyz
+ Audits · @sherlockdefi
+Arc Testnet → Mainnet Day One

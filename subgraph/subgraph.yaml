@@ -1,0 +1,70 @@
+specVersion: 1.0.0
+description: ACTFUN / MINEPAD mine-to-launch launchpad on Arc testnet
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LaunchpadFactory
+    network: arc-testnet
+    source:
+      address: "0x68aaEfa9A95AC4D648A33ed05cD9625EA4863B16"
+      abi: LaunchpadFactory
+      startBlock: 42227700
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Token
+      abis:
+        - name: LaunchpadFactory
+          file: ./abis/LaunchpadFactory.json
+      eventHandlers:
+        - event: TokenCreated(indexed address,indexed address,indexed address,string,string,string,uint256,uint256)
+          handler: handleTokenCreated
+      file: ./src/factory.ts
+templates:
+  - kind: ethereum
+    name: TokenLauncher
+    network: arc-testnet
+    source:
+      abi: TokenLauncher
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Token
+        - Mine
+        - Graduation
+        - RefundClaim
+      abis:
+        - name: TokenLauncher
+          file: ./abis/TokenLauncher.json
+      eventHandlers:
+        - event: ActedFun(indexed address,string,uint256,uint256)
+          handler: handleActedFun
+        - event: TokenGraduated(indexed address,uint256,uint256,uint256)
+          handler: handleTokenGraduated
+        - event: ArcRefundClaimed(indexed address,uint256,uint256)
+          handler: handleArcRefundClaimed
+      file: ./src/launcher.ts
+  - kind: ethereum
+    name: UnitFlowV3Pool
+    network: arc-testnet
+    source:
+      abi: UnitFlowV3Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Swap
+        - Token
+      abis:
+        - name: UnitFlowV3Pool
+          file: ./abis/UnitFlowV3Pool.json
+      eventHandlers:
+        - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
+          handler: handleSwap
+      file: ./src/pool.ts

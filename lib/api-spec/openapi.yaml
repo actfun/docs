@@ -1,0 +1,121 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: events
+    description: On-chain event data (indexed off-chain, served to the web client)
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /onchain-events:
+    get:
+      operationId: listOnchainEvents
+      tags: [events]
+      summary: List decoded on-chain events
+      description: >
+        Returns decoded launchpad and AMM-pool events for the requested contract
+        addresses, sourced from the off-chain analytics index (no RPC log scanning).
+        Events are returned most-recent-first.
+      parameters:
+        - name: addresses
+          in: query
+          required: true
+          description: Comma-separated list of contract addresses (launchers and/or pools).
+          schema:
+            type: string
+        - name: events
+          in: query
+          required: false
+          description: >
+            Comma-separated list of event names to include
+            (ActedFun, TokensBought, TokensSold, TokenGraduated, Swap).
+            When omitted, all supported event types are returned.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of events to return.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+            default: 500
+      responses:
+        "200":
+          description: Decoded events
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnchainEventsResponse"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    OnchainEvent:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Emitting contract address (lowercased).
+        eventName:
+          type: string
+          description: Decoded event name.
+        blockNumber:
+          type: integer
+          description: Block number the event was emitted in.
+        transactionHash:
+          type: string
+        logIndex:
+          type: integer
+        blockTimestamp:
+          type: integer
+          description: Block timestamp in unix seconds.
+        args:
+          type: object
+          description: >
+            Decoded event arguments. All numeric values (uint256/int256) are
+            serialized as decimal strings to preserve precision.
+          additionalProperties:
+            type: string
+      required:
+        - address
+        - eventName
+        - blockNumber
+        - transactionHash
+        - logIndex
+        - blockTimestamp
+        - args
+    OnchainEventsResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: "#/components/schemas/OnchainEvent"
+      required:
+        - events
